@@ -1,0 +1,25 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <Authors>Penzle Technologies</Authors>
+        <Product>Penzle Client for .NET</Product>
+        <PackageId>Penzle.Net</PackageId>
+        <RepositoryType>git</RepositoryType>
+        <PackageIconUrl>https://dev.azure.com/penzle/_apis/GraphProfile/MemberAvatars/e9c70b7c-622d-40be-947c-989027dbb95a</PackageIconUrl>
+        <AssemblyTitle>Penzle.Net</AssemblyTitle>
+        <Description>Penzle Content Delivery and Management API official Microsoft .NET SDK.</Description>
+        <Copyright>© Penzle Technologies 2022</Copyright>
+        <PackageProjectUrl>https://www.penzle.com</PackageProjectUrl>
+        <RepositoryUrl>https://www.penzle.com</RepositoryUrl>
+        <PackageLicenseExpression>MIT</PackageLicenseExpression>
+        <RepositoryUrl>https://dev.azure.com/penzle/_git/Penzle?path=/client/PenzleClient</RepositoryUrl>
+        <PackageTags>cms;net;netcore;penzle;penzle-technologies</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="System.Text.Json" Version="6.0.6"/>
+    </ItemGroup>
+
+</Project>
