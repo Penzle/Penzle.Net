@@ -26,50 +26,11 @@ content management for an exceptional online and mobile experience. Our cloud-ba
 code-free content editing across all devices. The outcome? You are able to save time and generate versatile,
 customizable content.
 
-<table>
-<tbody>
-<tr>
-<td style="text-align:center">
+|                       ![penzle-asset](./docs/images/asset.png "penzle-asset")                      |                                                     ![penzle-form](docs/images/form.png)                                                    |                                                 ![penzle-experience](./docs/images/experience.png)                                                |                             ![penzle-marketing](./docs/images/marketing.png)                            |
+|:--------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------:|
+|                                        **Asset Management**                                        |                                                               **Form Builder**                                                              |                                                               **Experience Manager**                                                              |                                          **Digital Marketing**                                          |
+| Locate digital asset filed quickly with our organized and centralized solution to file management. | Use forms across your website to perform surveys, gather leads, or take registrations. Penzle’s form builder makes building forms a breeze. | See what web visitors see, as you build it. Experience Manager is a user-friendly way for content managers to contribute to the building process. | Leverage insights and personalization capability to execute successful omnichannel marketing campaigns. |
 
-![penzle-asset](./docs/images/asset.png "penzle-asset") 
-
-#### Asset Management
-Locate digital asset filed quickly with our organized and centralized solution to file management.
-
-</td>
-
-<td style="text-align:center">
- 
-![penzle-form](docs/images/form.png)
-      
-#### Form Builder
-      
-Use forms across your website to perform surveys, gather leads, or take registrations. Penzle’s form builder makes building forms a breeze.
-
-</td>
-
-<td style="text-align:center">
-
-![penzle-marketing](./docs/images/marketing.png)
-      
-#### Digital Marketing
-      
-Leverage insights and personalization capability to execute successful omnichannel marketing campaigns.
-
-</td>
-<td style="text-align:center">
-
-![penzle-experience](./docs/images/experience.png)
-
-#### Experience Manager
-
-See what web visitors see, as you build it. Experience Manager is a user-friendly way for content managers to
-contribute to the building process.
-
-</td>
-  </tr>
-</tbody>
-</table>
 
 **Penzle.Net** & **Penzle.Net.Microsoft.DependencyInjection** is a client library that provides an easy method to
 communicate with the Penzle RESTFull API. It is designed to target versions of the.NET Framework that are greater than
