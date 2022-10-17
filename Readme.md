@@ -111,6 +111,20 @@ In order to find more developers material please visit next sections:
 - [The recommended procedure for carrying out unit tests.](./docs/unit-tests.md)
 - [Make sure your keys are safe.](./docs/azure-key-vault.md)
 
+## **Contributing to Penzle.Net**
+
+Your thoughts and ideas are much appreciated. If you're interested in helping out with this project in any way, we'd like to make it as clear and straightforward as possible for you to do so, whether that's by:
+
+- Bug reporting
+- Addressing the present codebase
+- Offering a patch
+- Advancing ideas for brand new capabilities
+- Taking on the role of a maintainer
+
+Github is where we host our code, manage bug reports and feature requests, and incorporate changes suggested by our users. 
+Report bugs using Github's issues. We host our code on Github, which is also where we manage user bug reports and feature requests and incorporate modifications made by users. In general, high-quality bug reports consist of the following components: background information; reproducible steps; an example of the code, if the reporter possesses such an example.
+
+
 ## **License**
 MIT License
 
