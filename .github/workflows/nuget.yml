@@ -20,7 +20,7 @@ jobs:
         id: publish_nuget
         uses: brandedoutcast/publish-nuget@v2
         with:
-          PROJECT_FILE_PATH: ../src/Penzle.Core.csproj
+          PROJECT_FILE_PATH: ../../src/Penzle.Core.csproj
           BUILD_CONFIGURATION: Release
           PACKAGE_NAME: Penzle.Net
           VERSION_STATIC: 1.0.0-beta0001
