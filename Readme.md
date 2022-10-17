@@ -1,32 +1,4 @@
-  <style>
-
-    table {
-        width: 100%;
-        text-align:left;
-        
-    }
-
-th {
-  text-align: left;
-  vertical-align: middle;
-}
-    td {
-  text-align: center;
-  vertical-align: middle;
-}
-</style>
-
-<div style="text-align:center;">
-
-![penzle-logo](./docs/images/logo.png)
-
-</div>
-
-<br/>
-
 <h1 style="text-align:center">Penzle Delivery and Management .NET SDK</h1>
-
-<br/>
 
 <h3 style="text-align:center">Status of .NET SDK</h3>
 <br/>
@@ -56,39 +28,44 @@ customizable content.
 
 <table>
 <tbody>
-  <tr>
+<tr>
 <td style="text-align:center">
 
-![penzle-asset](./docs/images/asset.png "penzle-asset")
+![penzle-asset](./docs/images/asset.png "penzle-asset") 
 
-<h2>Digital Asset Management</h2>
-<h4>Locate digital asset filed quickly with our organized and centralized solution to file management.<h5>
+#### Asset Management
+Locate digital asset filed quickly with our organized and centralized solution to file management.
+
 </td>
 
- <td style="text-align:center">
-
+<td style="text-align:center">
+ 
 ![penzle-form](docs/images/form.png)
+      
+#### Form Builder
+      
+Use forms across your website to perform surveys, gather leads, or take registrations. Penzle’s form builder makes building forms a breeze.
 
-<h2>Form Builder</h2>
-<h4>Use forms across your website to perform surveys, gather leads, or take registrations. Penzle’s form builder makes
-building forms a breeze.</h4>
-
- </td>
+</td>
 
 <td style="text-align:center">
 
 ![penzle-marketing](./docs/images/marketing.png)
+      
+#### Digital Marketing
+      
+Leverage insights and personalization capability to execute successful omnichannel marketing campaigns.
 
-<h2>Digital Marketing</h2>
-<h3>Leverage insights and personalization capability to execute successful omnichannel marketing campaigns.<h5>
 </td>
 <td style="text-align:center">
 
 ![penzle-experience](./docs/images/experience.png)
 
-<h2>Experience Manager</h2>
-<h3>See what web visitors see, as you build it. Experience Manager is a user-friendly way for content managers to
-contribute to the building process.<h5>
+#### Experience Manager
+
+See what web visitors see, as you build it. Experience Manager is a user-friendly way for content managers to
+contribute to the building process.
+
 </td>
   </tr>
 </tbody>
