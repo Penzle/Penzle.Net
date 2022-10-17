@@ -1,7 +1,5 @@
 <h1 style="text-align:center">Penzle Delivery and Management .NET SDK</h1>
 
-<h3 style="text-align:center">Status of .NET SDK</h3>
-<br/>
 <div style="text-align:center;">
 
 ![Build status](https://github.com/Penzle/Penzle.Net/actions/workflows/build.yml/badge.svg)
