@@ -4,7 +4,6 @@ on:
   push:
     tags:
     - 'v*'
-  workflow_dispatch:
 
 env:
   PROJECT_PATH: 'src/Penzle.Core.csproj'
