@@ -3,21 +3,21 @@ pool:
 
 variables:
   buildConfiguration: 'Release'
-  version: 'v1.0.0-preview.1
+  version: 'v1.0.0-preview.1'
 
 steps:
+
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
     feedsToUse: 'config'
     externalFeedCredentials: 'Nuget'
-
+  
 - task: DotNetCoreCLI@2
   displayName: Build
   inputs:
     command: build
     projects: '**/*.csproj'
-
     arguments: '--configuration $(buildConfiguration)'
 
 - task: DotNetCoreCLI@2
