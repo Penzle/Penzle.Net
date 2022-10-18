@@ -10,7 +10,6 @@ steps:
 - task: DotNetCoreCLI@2
   inputs:
     command: 'restore'
-    feedsToUse: 'config'
     externalFeedCredentials: 'Nuget'
   
 - task: DotNetCoreCLI@2
