@@ -5,17 +5,16 @@
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
         <Authors>Penzle Technologies</Authors>
-        <Product>Penzle Client for .NET</Product>
+        <Product>The Penzle Delivery and Management Software Development Kit (SKD) for .NET and DotNet Core tyoes of applications</Product>
         <PackageId>Penzle.Net</PackageId>
         <RepositoryType>git</RepositoryType>
-        <PackageIconUrl>https://dev.azure.com/penzle/_apis/GraphProfile/MemberAvatars/e9c70b7c-622d-40be-947c-989027dbb95a</PackageIconUrl>
+        <PackageIconUrl>https://penzleinternalassets.blob.core.windows.net/public-assets/mstile-150x150.png</PackageIconUrl>
         <AssemblyTitle>Penzle.Net</AssemblyTitle>
-        <Description>Penzle Content Delivery and Management API official Microsoft .NET SDK.</Description>
+        <Description>The official Penzle Delivery and Management Software Development Kit is a client library that makes it simple to get data from the Penzle API..</Description>
         <Copyright>© Penzle Technologies 2022</Copyright>
         <PackageProjectUrl>https://www.penzle.com</PackageProjectUrl>
-        <RepositoryUrl>https://www.penzle.com</RepositoryUrl>
+        <RepositoryUrl>https://github.com/penzle/penzle.net</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
-        <RepositoryUrl>https://dev.azure.com/penzle/_git/Penzle?path=/client/PenzleClient</RepositoryUrl>
         <PackageTags>cms;net;netcore;penzle;penzle-technologies</PackageTags>
     </PropertyGroup>
 
