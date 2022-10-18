@@ -20,5 +20,7 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-    - name: Pack
-      run: dotnet pack
+    - name: Pack Penzle.Net
+      run: dotnet add Penzle.Net --version 1.0.0-beta.1
+    - name: Pack Penzle.Net
+      run: dotnet nuget push Penzle.Net.1.0.0-beta.1.nupkg --api-key ${{secrets.NUGET_API_KEY}} --source https://api.nuget.org/v3/index.json
