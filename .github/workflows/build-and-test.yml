@@ -1,12 +1,13 @@
 name: "Deploy to NuGet"
 
 on:
+  workflow_dispatch:
   push:
     tags:
     - 'v*'
 
 env:
-  PROJECT_PATH: 'Penzle.Net/Penzle.Core.csproj'
+  PROJECT_PATH: 'src/Penzle.Core.csproj'
   PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}\output
   NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
 
