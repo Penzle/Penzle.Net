@@ -13,7 +13,7 @@ jobs:
       - name: Setup dotnet
         uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: 6.0.X
+          dotnet-version: 6.0.10
 
       - name: publish on version change
         id: publish_nuget
