@@ -4,7 +4,6 @@
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
-        <version>1.0.0-beta.9</version>
         <Authors>Penzle Technologies</Authors>
         <Product>The Penzle Delivery and Management Software Development Kit (SKD) for .NET and DotNet Core tyoes of applications</Product>
         <PackageId>Penzle.Net</PackageId>
