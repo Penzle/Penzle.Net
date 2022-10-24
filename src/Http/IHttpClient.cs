@@ -1,8 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-
-namespace Penzle.Core.Http;
+﻿namespace Penzle.Core.Http;
 
 /// <summary>
 ///     A general-purpose HTTP client. Useful resources for those seeking to influence default change. Uses its own version

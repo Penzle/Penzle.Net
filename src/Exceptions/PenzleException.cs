@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Net;
+﻿using System.Net;
 using System.Text;
 using System.Text.Json.Nodes;
 using Penzle.Core.Http;
@@ -10,7 +8,7 @@ using Penzle.Core.Utilities;
 namespace Penzle.Core.Exceptions;
 
 /// <summary>
-///     Represents errors that occur when the Penzle APIs are called.
+///     Errors that occur as a result of calling the Penzle APIs are represented by this class.
 /// </summary>
 [Serializable]
 public class PenzleException : Exception

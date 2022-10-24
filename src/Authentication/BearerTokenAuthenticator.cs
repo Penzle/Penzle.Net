@@ -4,7 +4,7 @@ using Penzle.Core.Utilities;
 
 namespace Penzle.Core.Authentication;
 
-internal class BearerTokenAuthenticator : IAuthenticationHandler
+internal sealed class BearerTokenAuthenticator : IAuthenticationHandler
 {
     public void Authenticate(IRequest request, Credentials credentials)
     {

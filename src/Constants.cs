@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Penzle.Core;
+﻿namespace Penzle.Core;
 
 internal static class Constants
 {

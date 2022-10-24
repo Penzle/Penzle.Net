@@ -1,14 +1,11 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Penzle.Core.Clients.Abstract;
+﻿using Penzle.Core.Clients.Abstract;
 using Penzle.Core.Http;
 using Penzle.Core.Models;
 using Penzle.Core.Utilities;
 
 namespace Penzle.Core.Clients.Rest;
 
-internal class RestTemplateClient : RestBaseClient, ITemplateClient
+internal sealed class RestTemplateClient : RestBaseClient, IDeliveryTemplateClient
 {
     public RestTemplateClient(IApiConnection apiConnection) : base(apiConnection: apiConnection)
     {

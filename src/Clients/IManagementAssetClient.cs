@@ -1,16 +1,13 @@
-﻿using System;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net;
 using Penzle.Core.Exceptions;
 using Penzle.Core.Models;
 
 namespace Penzle.Core.Clients;
 
 /// <summary>
-///     Represents set of Content Asset Management API requests.
+///     Represents the collection of queries sent to the Content Asset Management API.
 /// </summary>
-public interface IAssetClient
+public interface IManagementAssetClient
 {
     /// <summary>
     ///     Returns a collection of assets.

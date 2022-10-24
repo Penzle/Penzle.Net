@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-
-namespace Penzle.Core.Http;
+﻿namespace Penzle.Core.Http;
 
 /// <summary>
 ///     It is a representation of an interface that is intended to send requests to an HTTP server.

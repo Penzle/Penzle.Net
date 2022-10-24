@@ -1,7 +1,7 @@
 ﻿namespace Penzle.Core.Authentication;
 
 /// <summary>
-///     The Penzle API's supported authentication methods.
+///     The various authentication methods that are provided by the Penzle API.
 /// </summary>
 public enum AuthenticationType
 {

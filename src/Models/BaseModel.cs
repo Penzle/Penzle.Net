@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Penzle.Core.Models;
+﻿namespace Penzle.Core.Models;
 
 public abstract class BaseModel<TBaseSystemModel> where TBaseSystemModel : BaseSystem
 {

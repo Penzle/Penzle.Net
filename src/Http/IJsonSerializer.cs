@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Penzle.Core.Http;
+﻿namespace Penzle.Core.Http;
 
 /// <summary>
 ///     Offers both a serialization and deserialization service for JSON. enables the use of user-defined serializers.

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Penzle.Core.Http;
+﻿using Penzle.Core.Http;
 using Penzle.Core.Utilities;
 
 namespace Penzle.Core.Authentication;

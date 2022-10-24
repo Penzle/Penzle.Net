@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-
-namespace Penzle.Core.Utilities;
+﻿namespace Penzle.Core.Utilities;
 
 internal static partial class ApiUrls
 {

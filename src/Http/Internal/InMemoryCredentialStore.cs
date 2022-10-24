@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Penzle.Core.Utilities;
+﻿using Penzle.Core.Utilities;
 
 namespace Penzle.Core.Http.Internal;
 

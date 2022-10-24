@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-
-namespace Penzle.Core.Utilities;
+﻿namespace Penzle.Core.Utilities;
 
 internal static class Guard
 {

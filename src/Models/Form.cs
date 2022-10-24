@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Penzle.Core.Models;
+﻿namespace Penzle.Core.Models;
 
 public class Form<TEntity> : BaseModel<FormSystem> where TEntity : new()
 {

@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.Json.Nodes;
-using System.Threading;
-using System.Threading.Tasks;
 using Penzle.Core.Authentication;
 using Penzle.Core.Exceptions;
 using Penzle.Core.Models;
@@ -47,7 +41,7 @@ public sealed class Connection : IConnection
             baseAddress = new Uri(uriString: baseAddress.ToString().Remove(startIndex: baseAddress.ToString().Length - 1));
         }
 
-        UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: nameof(PenzleClient)));
+        UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
         BaseAddress = Constants.AddressTemplate.FormatUri(baseAddress, apiOptions.Project, apiOptions.Environment);
         _authenticator = new Authenticator(credentialStore: credentialStore);
         _httpClient = httpClient;
