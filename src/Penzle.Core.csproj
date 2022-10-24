@@ -8,6 +8,7 @@
         <Product>The Penzle Delivery and Management Software Development Kit (SKD) for .NET and DotNet Core tyoes of applications</Product>
         <PackageId>Penzle.Net</PackageId>
         <RepositoryType>git</RepositoryType>
+        <PackageIconUrl>https://penzleinternalassets.blob.core.windows.net/public-assets/mstile-150x150.png</PackageIconUrl>
         <IconUrl>https://penzleinternalassets.blob.core.windows.net/public-assets/mstile-150x150.png</IconUrl>
         <AssemblyTitle>Penzle.Net</AssemblyTitle>
         <Description>The official Penzle Delivery and Management Software Development Kit is a client library that makes it simple to get data from the Penzle API..</Description>
