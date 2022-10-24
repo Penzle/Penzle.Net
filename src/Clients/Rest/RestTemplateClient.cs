@@ -8,7 +8,7 @@ using Penzle.Core.Utilities;
 
 namespace Penzle.Core.Clients.Rest;
 
-internal class RestTemplateClient : RestBaseClient, ITemplateClient
+internal sealed class RestTemplateClient : RestBaseClient, IDeliveryTemplateClient
 {
     public RestTemplateClient(IApiConnection apiConnection) : base(apiConnection: apiConnection)
     {

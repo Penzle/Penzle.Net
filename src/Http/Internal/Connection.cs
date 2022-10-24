@@ -47,7 +47,7 @@ public sealed class Connection : IConnection
             baseAddress = new Uri(uriString: baseAddress.ToString().Remove(startIndex: baseAddress.ToString().Length - 1));
         }
 
-        UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: nameof(PenzleClient)));
+        UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
         BaseAddress = Constants.AddressTemplate.FormatUri(baseAddress, apiOptions.Project, apiOptions.Environment);
         _authenticator = new Authenticator(credentialStore: credentialStore);
         _httpClient = httpClient;

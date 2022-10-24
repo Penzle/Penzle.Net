@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Net;
 using System.Threading;
 using System.Threading.Tasks;
 using Penzle.Core.Exceptions;
@@ -9,9 +8,9 @@ using Penzle.Core.Models;
 namespace Penzle.Core.Clients;
 
 /// <summary>
-///     Represents set of Content Entry Management API requests.
+///     It represents a set of clients for the Content Entry Delivery API.
 /// </summary>
-public interface IEntryClient
+public interface IDeliveryEntryClient
 {
     /// <summary>
     ///     Retrieves all the entries of a template, optionally filtered by a querystring. Utilizing the class is more
@@ -50,7 +49,7 @@ public interface IEntryClient
     /// <param name="cancellationToken">The optional token used to cancel an operation.</param>
     /// <returns>A read only collection of <see cref="TEntry" /> of items.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(int fetch = 50, QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new();
+    Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(QueryEntryBuilder query = null, int fetch = 50,  CancellationToken cancellationToken = default) where TEntry : new();
 
     /// <summary>
     ///     Retrieves all the entries of a template, optionally filtered by a querystring. Utilizing the class is more
@@ -64,7 +63,7 @@ public interface IEntryClient
     /// <param name="cancellationToken">The optional token used to cancel an operation.</param>
     /// <returns>A read only collection of <see cref="TEntry" /> of items.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(string template, int fetch = 50, QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new();
+    Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(string template, QueryEntryBuilder query = null, int fetch = 50, CancellationToken cancellationToken = default) where TEntry : new();
 
 
     /// <summary>
@@ -92,32 +91,4 @@ public interface IEntryClient
     /// <returns>A <see cref="TEntry" /> of item.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
     Task<TEntry> GetEntry<TEntry>(string uri, QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new();
-
-    /// <summary>
-    ///     Creates content entry.
-    /// </summary>
-    /// <param name="entry">Represents content entry that will be created.</param>
-    /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
-    /// <returns>The <see cref="Guid" /> instance that represents the created content item.</returns>
-    /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    Task<Guid> CreateEntry(object entry, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    ///     Updated existing content entry by entry id.
-    /// </summary>
-    /// <param name="entryId">The ID of the entry.</param>
-    /// <param name="entry">Represents content entry that will be updated.</param>
-    /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
-    /// <returns>The <see cref="HttpStatusCode" /> instance that represents the status code of http request.</returns>
-    /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    ValueTask<HttpStatusCode> UpdateEntry(Guid entryId, object entry, CancellationToken cancellationToken = default);
-
-    /// <summary>
-    ///     Delete existing content entry by entry id.
-    /// </summary>
-    /// <param name="entryId">The ID of the entry.</param>
-    /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
-    /// <returns>The <see cref="HttpStatusCode" /> instance that represents the status code of http request.</returns>
-    /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    ValueTask<HttpStatusCode> DeleteEntry(Guid entryId, CancellationToken cancellationToken = default);
 }
