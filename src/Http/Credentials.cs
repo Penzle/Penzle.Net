@@ -1,5 +1,4 @@
-﻿using System;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using Penzle.Core.Authentication;
 
 namespace Penzle.Core.Http;

@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Net;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using System.Net;
 using Penzle.Core.Clients.Abstract;
 using Penzle.Core.Http;
 using Penzle.Core.Models;
@@ -57,7 +52,23 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
     /// <inheritdoc>
     ///     <cref>IManagementEntryClient.GetEntry{TEntry}(System.Guid,Penzle.Core.Models.QueryEntryBuilder,System.Threading.CancellationToken)</cref>
     /// </inheritdoc>
-    public Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(int fetch = 50, QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new()
+    public Task<TEntry> GetEntry<TEntry>(Guid entryId, string language = null, CancellationToken cancellationToken = default) where TEntry : new()
+    {
+        return Connection.Get<TEntry>(uri: ApiUrls.GetEntry(entryId: entryId, language: language), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
+    }
+
+    /// <inheritdoc>
+    ///     <cref>IManagementEntryClient.GetEntry{TEntry}(System.Guid,Penzle.Core.Models.QueryEntryBuilder,System.Threading.CancellationToken)</cref>
+    /// </inheritdoc>
+    public Task<TEntry> GetEntry<TEntry>(string uri, string language = null, CancellationToken cancellationToken = default) where TEntry : new()
+    {
+        return Connection.Get<TEntry>(uri: ApiUrls.GetEntryByAliasUrl(uri: uri, language: language), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
+    }
+
+    /// <inheritdoc>
+    ///     <cref>IManagementEntryClient.GetEntry{TEntry}(System.Guid,Penzle.Core.Models.QueryEntryBuilder,System.Threading.CancellationToken)</cref>
+    /// </inheritdoc>
+    public Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(QueryEntryBuilder query = null, int fetch = 50, CancellationToken cancellationToken = default) where TEntry : new()
     {
         var template = typeof(TEntry).IsGenericType ? typeof(TEntry).GenericTypeArguments[0].Name : typeof(TEntry).Name;
         return GetEntries<TEntry>(template: template, fetch: fetch, query: query, cancellationToken: cancellationToken);
@@ -66,7 +77,7 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
     /// <inheritdoc>
     ///     <cref>IManagementEntryClient.GetEntry{TEntry}(System.Guid,Penzle.Core.Models.QueryEntryBuilder,System.Threading.CancellationToken)</cref>
     /// </inheritdoc>
-    public async Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(string template, int fetch = 50, QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new()
+    public async Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(string template, QueryEntryBuilder query = null, int fetch = 50, CancellationToken cancellationToken = default) where TEntry : new()
     {
         query ??= new QueryEntryBuilder();
         query.Pagination.WithPageSize(pageSize: fetch);
@@ -81,24 +92,6 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
             var pagedList = await Connection.Get<PagedList<Entry<TEntry>>>(uri: ApiUrls.GetEntries(template: template, parentId: query.ParentId, language: query.Language, ids: query.Ids, page: query.Pagination.Page, pageSize: query.Pagination.PageSize), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
             return pagedList.Items.Select(selector: entry => entry.Fields).ToList();
         }
-    }
-
-    /// <inheritdoc>
-    ///     <cref>IManagementEntryClient.GetEntry{TEntry}(System.Guid,Penzle.Core.Models.QueryEntryBuilder,System.Threading.CancellationToken)</cref>
-    /// </inheritdoc>
-    public Task<TEntry> GetEntry<TEntry>(Guid entryId, QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new()
-    {
-        query ??= new QueryEntryBuilder();
-        return Connection.Get<TEntry>(uri: ApiUrls.GetEntry(entryId: entryId, language: query.Language), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
-    }
-
-    /// <inheritdoc>
-    ///     <cref>IManagementEntryClient.GetEntry{TEntry}(System.Guid,Penzle.Core.Models.QueryEntryBuilder,System.Threading.CancellationToken)</cref>
-    /// </inheritdoc>
-    public Task<TEntry> GetEntry<TEntry>(string uri, QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new()
-    {
-        query ??= new QueryEntryBuilder();
-        return Connection.Get<TEntry>(uri: ApiUrls.GetEntryByAliasUrl(uri: uri, language: query.Language), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc>

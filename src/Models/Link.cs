@@ -7,6 +7,6 @@ public class Link
     public string Target { get; set; }
     public string Anchor { get; set; }
     public string QueryString { get; set; }
-    public string NodeId { get; set; }
+    public Guid? NodeId { get; set; }
     public string Type { get; set; }
 }

@@ -1,6 +1,4 @@
-﻿using System.Threading.Tasks;
-
-namespace Penzle.Core.Http;
+﻿namespace Penzle.Core.Http;
 
 /// <summary>
 ///     Abstraction that makes it possible for credentials to communicate with one another.

@@ -1,7 +1,4 @@
-﻿using System;
-using System.Threading;
-using System.Threading.Tasks;
-using Penzle.Core.Clients.Abstract;
+﻿using Penzle.Core.Clients.Abstract;
 using Penzle.Core.Http;
 using Penzle.Core.Models;
 using Penzle.Core.Utilities;

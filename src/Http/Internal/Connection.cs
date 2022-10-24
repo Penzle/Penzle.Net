@@ -1,14 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
-using System.Linq;
+﻿using System.Globalization;
 using System.Net;
-using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Text.Json.Nodes;
-using System.Threading;
-using System.Threading.Tasks;
 using Penzle.Core.Authentication;
 using Penzle.Core.Exceptions;
 using Penzle.Core.Models;

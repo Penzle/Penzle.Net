@@ -1,5 +1,3 @@
-using System;
-
 namespace Penzle.Core.Utilities;
 
 internal static partial class Extensions

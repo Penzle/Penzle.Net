@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Net.Http;
-
-namespace Penzle.Core.Http.Internal;
+﻿namespace Penzle.Core.Http.Internal;
 
 internal class Request : IRequest
 {

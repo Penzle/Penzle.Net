@@ -1,6 +1,4 @@
-﻿using System;
-using System.Net.Http;
-using Penzle.Core.Clients;
+﻿using Penzle.Core.Clients;
 using Penzle.Core.Clients.Rest;
 using Penzle.Core.Http;
 using Penzle.Core.Http.Internal;

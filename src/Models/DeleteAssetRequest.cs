@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace Penzle.Core.Models;
+﻿namespace Penzle.Core.Models;
 
 public sealed class DeleteAssetRequest
 {
