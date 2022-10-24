@@ -1,15 +1,15 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <ImplicitUsings>enable</ImplicitUsings>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
         <TargetFramework>netstandard2.1</TargetFramework>
         <LangVersion>latest</LangVersion>
+        <version>1.0.0-beta.9</version>
         <Authors>Penzle Technologies</Authors>
         <Product>The Penzle Delivery and Management Software Development Kit (SKD) for .NET and DotNet Core tyoes of applications</Product>
         <PackageId>Penzle.Net</PackageId>
         <RepositoryType>git</RepositoryType>
-        <IconUrl>https://penzleinternalassets.blob.core.windows.net/public-assets/mstile-150x150.png</IconUrl>
+        <PackageIconUrl>https://penzleinternalassets.blob.core.windows.net/public-assets/mstile-150x150.png</PackageIconUrl>
         <AssemblyTitle>Penzle.Net</AssemblyTitle>
         <Description>The official Penzle Delivery and Management Software Development Kit is a client library that makes it simple to get data from the Penzle API..</Description>
         <Copyright>© Penzle Technologies 2022</Copyright>
@@ -17,9 +17,11 @@
         <RepositoryUrl>https://github.com/penzle/penzle.net</RepositoryUrl>
         <PackageLicenseExpression>MIT</PackageLicenseExpression>
         <PackageTags>cms;net;netcore;penzle;penzle-technologies</PackageTags>
+        <PackageReadmeFile>Readme.md</PackageReadmeFile>
     </PropertyGroup>
 
     <ItemGroup>
+        <None Include="..\Readme.md" Pack="true" PackagePath="\"/>
         <PackageReference Include="System.Text.Json" Version="6.0.6"/>
     </ItemGroup>
 
