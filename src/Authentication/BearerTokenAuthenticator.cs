@@ -16,8 +16,6 @@ internal sealed class BearerTokenAuthenticator : IAuthenticationHandler
             return;
         }
 
-        request.Headers[key: "Authorization"] = string.Format(provider: CultureInfo.InvariantCulture, format: "Bearer {0}", arg0: bearerCredentials.ApiDeliveryKey ?? bearerCredentials.ApiManagementKey);
-        request.Headers[key: "Authorization-ApiManagementKey"] = string.Format(provider: CultureInfo.InvariantCulture, format: "Bearer {0}", arg0: bearerCredentials.ApiManagementKey);
-        request.Headers[key: "Authorization-ApiDeliveryKey"] = string.Format(provider: CultureInfo.InvariantCulture, format: "Bearer {0}", arg0: bearerCredentials.ApiDeliveryKey);
+        request.Headers[key: "Authorization"] = string.Format(provider: CultureInfo.InvariantCulture, format: "Bearer {0}", arg0: bearerCredentials.ApiManagementKey ?? bearerCredentials.ApiDeliveryKey);
     }
 }
