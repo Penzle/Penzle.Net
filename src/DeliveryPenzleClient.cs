@@ -12,7 +12,7 @@ namespace Penzle.Core;
 /// </inheritdoc>
 public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
 {
-    private DeliveryPenzleClient(IConnection connection)
+    public DeliveryPenzleClient(IConnection connection)
     {
         Guard.ArgumentNotNull(value: connection, name: nameof(connection));
 
