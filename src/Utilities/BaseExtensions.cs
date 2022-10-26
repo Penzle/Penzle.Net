@@ -6,7 +6,7 @@ namespace Penzle.Core.Utilities;
 
 public static class BaseExtensions
 {
-    public static TEntity BaseEntityTo<TEntity>(this List<BaseTemplates> @base, string template)
+    public static TEntity BaseEntityTo<TEntity>(this IEnumerable<BaseTemplates> @base, string template)
     {
         @base ??= new List<BaseTemplates>();
         IJsonSerializer serializer = new MicrosoftJsonSerializer();
@@ -14,7 +14,7 @@ public static class BaseExtensions
         return json != null ? serializer.Deserialize<TEntity>(json: serializer.Serialize(item: json.Fields)) : default;
     }
 
-    public static TEntity BaseEntityTo<TEntity>(this List<BaseTemplates> @base)
+    public static TEntity BaseEntityTo<TEntity>(this IEnumerable<BaseTemplates> @base)
     {
         return BaseEntityTo<TEntity>(@base: @base, template: typeof(TEntity).Name.ToLower());
     }
