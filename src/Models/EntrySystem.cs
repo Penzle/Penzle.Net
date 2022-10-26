@@ -2,7 +2,7 @@
 
 namespace Penzle.Core.Models;
 
-public abstract class EntrySystem : BaseSystem
+public class EntrySystem : BaseSystem
 {
     [JsonPropertyName(name: "template")] public override string Template { get; set; }
 }

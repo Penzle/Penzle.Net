@@ -2,7 +2,7 @@
 
 namespace Penzle.Core.Models;
 
-public abstract class BaseSystem
+public class BaseSystem
 {
     public virtual string Template { get; set; }
     public virtual Guid Id { get; set; }
