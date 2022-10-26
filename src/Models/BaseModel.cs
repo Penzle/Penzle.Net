@@ -3,7 +3,7 @@
 public abstract class BaseModel<TBaseSystemModel> where TBaseSystemModel : BaseSystem
 {
     public TBaseSystemModel System { get; set; }
-    private IEnumerable<BaseTemplates> Base { get; } = new List<BaseTemplates>();
+    public IEnumerable<BaseTemplates> Base { get; } = new List<BaseTemplates>();
 
     public virtual object this[string template, string key] => Find(template: template, key: key);
 
