@@ -1,7 +1,7 @@
 # **Penzle Delivery and Management .NET SDK**
 
 ![Run Build and Test](https://github.com/Penzle/Penzle.Net/actions/workflows/run-build-and-test.ci.yml/badge.svg)
-![NuGet Downloads](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads&style=plastic)
+![NuGet Downloads]([https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads&style=plastic](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads))
 ![Licence](https://camo.githubusercontent.com/238290f8deb751619ca04ad3d316f1246a498b13d2ab49c0348e2b4311bd08f4/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6963656e73652f6a6f6e6772616365636f782f616e7962616467652e737667)
 ![W3C](https://img.shields.io/badge/w3c-validated-brightgreen)
 ![Paradigm](https://img.shields.io/badge/accessibility-yes-brightgreen)
