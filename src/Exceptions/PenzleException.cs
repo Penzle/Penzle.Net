@@ -1,5 +1,5 @@
-﻿using System;
-using System.Net;
+﻿using System.Net;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Text.Json.Nodes;
 using Penzle.Core.Http;
@@ -27,8 +27,16 @@ public class PenzleException : Exception
         HttpResponse = response;
     }
 
-    internal PenzleException()
+    public PenzleException()
     {
+    }
+
+    protected PenzleException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(info: serializationInfo, context: streamingContext)
+    {
+        Guard.ArgumentNotNull(value: serializationInfo, name: nameof(serializationInfo));
+        StatusCode = (HttpStatusCode)serializationInfo.GetValue(name: nameof(StatusCode), type: typeof(HttpStatusCode));
+        ApiError = (ApiError)serializationInfo.GetValue(name: nameof(ApiError), type: typeof(ApiError));
+        HttpResponse = (IResponse)serializationInfo.GetValue(name: nameof(HttpResponse), type: typeof(IResponse));
     }
 
     internal PenzleException(string message) : base(message: message)
@@ -42,7 +50,7 @@ public class PenzleException : Exception
     /// <summary>
     ///     The response from http request.
     /// </summary>
-    public IResponse HttpResponse { get; private set; }
+    public IResponse HttpResponse { get; }
 
     /// <summary>
     ///     The error general message.
@@ -52,14 +60,23 @@ public class PenzleException : Exception
     /// <summary>
     ///     The http status code of the exception.
     /// </summary>
-    public HttpStatusCode StatusCode { get; private set; }
+    public HttpStatusCode StatusCode { get; }
 
     /// <summary>
     ///     The details of the exception.
     /// </summary>
-    public ApiError ApiError { get; private set; }
+    public ApiError ApiError { get; }
 
     protected string ApiErrorMessageSafe => ApiError != null && !string.IsNullOrWhiteSpace(value: ApiError.Title) ? ApiError.Title : null;
+
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        base.GetObjectData(info: info, context: context);
+        info.AddValue(name: nameof(ApiError), value: ApiError);
+        info.AddValue(name: nameof(HttpResponse), value: HttpResponse);
+        info.AddValue(name: nameof(ApiError), value: ApiError);
+        info.AddValue(name: nameof(HttpResponse), value: HttpResponse);
+    }
 
     private static ApiError GetApiErrorFromExceptionMessage(IResponse response)
     {

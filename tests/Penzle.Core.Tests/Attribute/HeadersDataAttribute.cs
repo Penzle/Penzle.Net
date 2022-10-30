@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Xunit.Sdk;
 
-namespace Penzle.Net.Tests.Attribute;
+namespace Penzle.Core.Tests.Attribute;
 
 public class HeadersDataAttribute : DataAttribute
 {

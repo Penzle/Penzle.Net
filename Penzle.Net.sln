@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Penzle.Core", "src\Penzle.Core.csproj", "{CB1C7C2E-7CB1-4D87-9035-89771BCD7060}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Penzle.Net.Tests", "tests\Penzle.Net.Tests\Penzle.Net.Tests.csproj", "{E1F3D00F-D0C5-4526-A1A7-8985D700AB8B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Penzle.Core.Tests", "tests\Penzle.Core.Tests\Penzle.Core.Tests.csproj", "{E1F3D00F-D0C5-4526-A1A7-8985D700AB8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

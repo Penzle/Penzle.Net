@@ -1,4 +1,4 @@
-﻿namespace Penzle.Net.Tests;
+﻿namespace Penzle.Core.Tests;
 
 public static class TraitDefinitions
 {

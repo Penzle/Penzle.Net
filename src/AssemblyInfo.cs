@@ -1,3 +1,4 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("Penzle.Net.Tests")]
+[assembly: InternalsVisibleTo("Penzle.Core.Tests")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]

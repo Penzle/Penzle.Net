@@ -2,7 +2,7 @@
 using Penzle.Core.Authentication;
 using Penzle.Core.Http;
 
-namespace Penzle.Net.Tests;
+namespace Penzle.Core.Tests.Security;
 
 [Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Security))]
 public sealed class BearerCredentialsShould

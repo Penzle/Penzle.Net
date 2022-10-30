@@ -15,6 +15,10 @@ public class Connection : IConnection
     private readonly Authenticator _authenticator;
     private readonly IJsonSerializer _jsonSerializer;
 
+    public Connection()
+    {
+    }
+
     public Connection(
         Uri baseAddress,
         ApiOptions apiOptions,
@@ -46,10 +50,10 @@ public class Connection : IConnection
     }
 
     public string PlatformInformation { get; set; }
-    public IHttpClient HttpClient { get; }
-    public string UserAgent { get; }
+    public virtual IHttpClient HttpClient { get; }
+    public virtual string UserAgent { get; }
 
-    public ICredentialStore<BearerCredentials> CredentialStore => _authenticator.CredentialStore;
+    public virtual ICredentialStore<BearerCredentials> CredentialStore => _authenticator.CredentialStore;
 
     public async virtual Task<T> Get<T>(Uri uri, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
@@ -57,7 +61,7 @@ public class Connection : IConnection
         return await SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Get, body: null, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public async ValueTask<HttpStatusCode> Patch(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public async virtual ValueTask<HttpStatusCode> Patch(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -66,7 +70,7 @@ public class Connection : IConnection
         return HttpStatusCode.NoContent;
     }
 
-    public Task<T> Patch<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public virtual Task<T> Patch<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -74,7 +78,7 @@ public class Connection : IConnection
         return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Patch, body: body, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public async ValueTask<HttpStatusCode> Post(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public async virtual ValueTask<HttpStatusCode> Post(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -83,7 +87,7 @@ public class Connection : IConnection
         return HttpStatusCode.NoContent;
     }
 
-    public Task<T> Post<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public virtual Task<T> Post<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -91,7 +95,7 @@ public class Connection : IConnection
         return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Post, body: body, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public async ValueTask<HttpStatusCode> Put(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public async virtual ValueTask<HttpStatusCode> Put(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -100,7 +104,7 @@ public class Connection : IConnection
         return HttpStatusCode.NoContent;
     }
 
-    public Task<T> Put<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public virtual Task<T> Put<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -108,7 +112,7 @@ public class Connection : IConnection
         return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Put, body: body, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public async ValueTask<HttpStatusCode> Delete(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public async virtual ValueTask<HttpStatusCode> Delete(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
 
@@ -116,22 +120,22 @@ public class Connection : IConnection
         return HttpStatusCode.NoContent;
     }
 
-    public Task<T> Delete<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public virtual Task<T> Delete<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Delete, body: body, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public Uri BaseAddress { get; }
+    public virtual Uri BaseAddress { get; }
 
-    public Credentials Credentials => CredentialStore.GetCredentials().GetAwaiter().GetResult();
+    public virtual Credentials Credentials => CredentialStore.GetCredentials().GetAwaiter().GetResult();
 
-    public void SetRequestTimeout(TimeSpan timeout)
+    public virtual void SetRequestTimeout(TimeSpan timeout)
     {
         HttpClient.SetRequestTimeout(timeout: timeout);
     }
 
-    private Task<T> SendEntry<T>(Uri uri, HttpMethod method, object body, string accepts, string contentType, CancellationToken cancellationToken, Uri baseAddress = null)
+    internal virtual Task<T> SendEntry<T>(Uri uri, HttpMethod method, object body, string accepts, string contentType, CancellationToken cancellationToken, Uri baseAddress = null)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         var request = new Request
@@ -144,7 +148,7 @@ public class Connection : IConnection
         return SendEntryInternal<T>(body: body, cancellationToken: cancellationToken, request: request, accepts: accepts, contentType: contentType);
     }
 
-    private Task<T> SendEntryInternal<T>(object body, CancellationToken cancellationToken, Request request, string accepts = "*/*", string contentType = "application/json")
+    internal virtual Task<T> SendEntryInternal<T>(object body, CancellationToken cancellationToken, Request request, string accepts = "*/*", string contentType = "application/json")
     {
         request.Headers[key: "Accept"] = accepts ?? "*/*";
 
@@ -169,7 +173,7 @@ public class Connection : IConnection
         return Run<T>(request: request, cancellationToken: cancellationToken);
     }
 
-    private async Task<T> Run<T>(IRequest request, CancellationToken cancellationToken)
+    async internal virtual Task<T> Run<T>(IRequest request, CancellationToken cancellationToken)
     {
         var types = new[]
         {
@@ -204,7 +208,7 @@ public class Connection : IConnection
         return @object;
     }
 
-    private T SetProperty<T>(JsonObject jsonNode, T @object, string propertyType, Func<PropertyInfo, bool> predicate)
+    internal virtual T SetProperty<T>(JsonObject jsonNode, T @object, string propertyType, Func<PropertyInfo, bool> predicate)
     {
         var systemPropertyInfo = @object != null ? @object.GetProperties().FirstOrDefault(predicate: predicate) : null;
         if (systemPropertyInfo == null || !jsonNode.ContainsKey(propertyName: propertyType))
@@ -218,7 +222,7 @@ public class Connection : IConnection
         return @object;
     }
 
-    private async Task<IResponse> RunRequest(IRequest request, CancellationToken cancellationToken)
+    async internal virtual Task<IResponse> RunRequest(IRequest request, CancellationToken cancellationToken)
     {
         request.Headers.Add(key: "User-Agent", value: UserAgent);
         await _authenticator.Apply(request: request).ConfigureAwait(continueOnCapturedContext: false);
@@ -227,7 +231,7 @@ public class Connection : IConnection
         return response;
     }
 
-    private static void HandleErrors(IResponse response)
+    internal virtual void HandleErrors(IResponse response)
     {
         if (response.StatusCode == HttpStatusCode.NotFound)
         {
@@ -240,7 +244,7 @@ public class Connection : IConnection
         }
     }
 
-    private string FormatUserAgent(ProductHeaderValue productInformation)
+    internal virtual string FormatUserAgent(ProductHeaderValue productInformation)
     {
         return string.Format(provider: CultureInfo.InvariantCulture, format: "{0} ({1}; {2}; penzle.net {3})",
             productInformation,
@@ -249,7 +253,7 @@ public class Connection : IConnection
             GetVersionInformation());
     }
 
-    private string GetPlatformInformation()
+    internal virtual string GetPlatformInformation()
     {
         if (!string.IsNullOrEmpty(value: PlatformInformation))
         {
@@ -268,12 +272,12 @@ public class Connection : IConnection
         return PlatformInformation;
     }
 
-    private static string GetCultureInformation()
+    internal virtual string GetCultureInformation()
     {
         return CultureInfo.CurrentCulture.Name;
     }
 
-    private static string GetVersionInformation()
+    internal virtual string GetVersionInformation()
     {
         return Assembly.GetExecutingAssembly().GetName()?.Version?.ToString() ?? "1.0.0";
     }
