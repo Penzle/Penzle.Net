@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Net;
+using FluentAssertions;
 using Moq;
 using Penzle.Core.Authentication;
 using Penzle.Core.Http;
@@ -41,11 +42,37 @@ public class ApiConnectionShould
         apiConnection.Connection.BaseAddress.Should().Be(expected: new Uri(uriString: "https://api.penzle.com"));
         apiConnection.Connection.UserAgent.Should().Be(expected: "Penzle.Core.Tests/1.0.0");
         apiConnection.Connection.PlatformInformation.Should().Be(expected: "Penzle.Net-1.0.0");
-        
+
         apiConnection.Connection.CredentialStore.Should().NotBeNull();
         apiConnection.Connection.CredentialStore.Should().BeOfType<InMemoryCredentialStore>();
-        
+
         apiConnection.Connection.HttpClient.Should().NotBeNull();
         apiConnection.Connection.HttpClient.Should().BeOfType<HttpClientAdapter>();
+    }
+
+    [Fact]
+    public async Task Fetch_Resource_With_Generic_Parameters_With_Status_Ok()
+    {
+        // Arrange
+        var apiConnection = new ApiConnection(connection: _mockConnection.Object);
+        const string contentType = "text/plain";
+
+        _mockConnection.Setup(expression: connection => connection.Get<Response>(
+                It.IsAny<Uri>(),
+                It.IsAny<Dictionary<string, string>>(),
+                It.IsAny<string>(),
+                It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(valueFunction: () => new Response(statusCode: HttpStatusCode.OK, body: "OK", headers: new Dictionary<string, string>(), contentType: contentType));
+
+        // Act
+        var response = await apiConnection.Get<Response>(uri: new Uri(uriString: "api/endpoint", uriKind: UriKind.Relative), parameters: new Dictionary<string, string>(), accepts: null, contentType: null, cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().NotBeNull();
+        response.Body.Should().NotBeNull();
+        response.ContentType.Should().Be(expected: contentType);
+        response.Headers.Should().BeEmpty();
+        response.StatusCode.Should().Be(expected: HttpStatusCode.OK);
     }
 }
