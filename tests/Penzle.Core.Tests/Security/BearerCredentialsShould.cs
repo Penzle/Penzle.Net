@@ -19,9 +19,9 @@ public sealed class BearerCredentialsShould
 
         // Assert
         credentials.ApiDeliveryKey.Should().NotBeNullOrWhiteSpace();
-        credentials.ApiDeliveryKey.Should().Be(apiDeliveryKey);
+        credentials.ApiDeliveryKey.Should().Be(expected: apiDeliveryKey);
         credentials.ApiManagementKey.Should().NotBeNullOrWhiteSpace();
-        credentials.ApiManagementKey.Should().Be(apiManagementKey);
+        credentials.ApiManagementKey.Should().Be(expected: apiManagementKey);
     }
 
     [Fact]
@@ -34,6 +34,6 @@ public sealed class BearerCredentialsShould
         var authenticationType = sut.AuthenticationType;
 
         // Assert
-        authenticationType.Should().Be(AuthenticationType.Bearer);
+        authenticationType.Should().Be(expected: AuthenticationType.Bearer);
     }
 }

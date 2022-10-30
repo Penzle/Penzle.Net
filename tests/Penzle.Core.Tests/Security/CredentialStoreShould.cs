@@ -17,8 +17,8 @@ public sealed class CredentialStoreShould
     public async Task Get_Bearer_Credentials_From_A_Secured_Storage()
     {
         // Arrange
-        _sut.Setup(store => store.GetCredentials())
-            .ReturnsAsync(() => new BearerCredentials(apiDeliveryKey: It.IsAny<string>(), apiManagementKey: It.IsAny<string>()));
+        _sut.Setup(expression: store => store.GetCredentials())
+            .ReturnsAsync(valueFunction: () => new BearerCredentials(apiDeliveryKey: It.IsAny<string>(), apiManagementKey: It.IsAny<string>()));
 
         // Act      
         await _sut.Object.GetCredentials();

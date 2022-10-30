@@ -42,7 +42,6 @@ public class Connection : IConnection
             baseAddress = new Uri(uriString: baseAddress.ToString().Remove(startIndex: baseAddress.ToString().Length - 1));
         }
 
-        UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
         BaseAddress = Constants.AddressTemplate.FormatUri(baseAddress, apiOptions.Project, apiOptions.Environment);
         _authenticator = new Authenticator(credentialStore: credentialStore);
         HttpClient = httpClient;
@@ -50,18 +49,27 @@ public class Connection : IConnection
     }
 
     public string PlatformInformation { get; set; }
-    public virtual IHttpClient HttpClient { get; }
-    public virtual string UserAgent { get; }
+    public virtual IHttpClient HttpClient { get; set; }
 
-    public virtual ICredentialStore<BearerCredentials> CredentialStore => _authenticator.CredentialStore;
+    public virtual string UserAgent
+    {
+        get => FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
+        set => throw new NotSupportedException(message: "The UserAgent property is read-only.");
+    }
 
-    public async virtual Task<T> Get<T>(Uri uri, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public virtual ICredentialStore<BearerCredentials> CredentialStore
+    {
+        get => _authenticator.CredentialStore;
+        set => _authenticator.CredentialStore = value;
+    }
+
+    public virtual async Task<T> Get<T>(Uri uri, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         return await SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Get, body: null, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public async virtual ValueTask<HttpStatusCode> Patch(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public virtual async ValueTask<HttpStatusCode> Patch(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -78,7 +86,7 @@ public class Connection : IConnection
         return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Patch, body: body, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public async virtual ValueTask<HttpStatusCode> Post(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public virtual async ValueTask<HttpStatusCode> Post(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -95,7 +103,7 @@ public class Connection : IConnection
         return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Post, body: body, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public async virtual ValueTask<HttpStatusCode> Put(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public virtual async ValueTask<HttpStatusCode> Put(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -112,7 +120,7 @@ public class Connection : IConnection
         return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Put, body: body, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public async virtual ValueTask<HttpStatusCode> Delete(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public virtual async ValueTask<HttpStatusCode> Delete(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
 
@@ -126,9 +134,13 @@ public class Connection : IConnection
         return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Delete, body: body, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);
     }
 
-    public virtual Uri BaseAddress { get; }
+    public virtual Uri BaseAddress { get; set; }
 
-    public virtual Credentials Credentials => CredentialStore.GetCredentials().GetAwaiter().GetResult();
+    public virtual Credentials Credentials
+    {
+        get => CredentialStore.GetCredentials().GetAwaiter().GetResult();
+        set => throw new NotSupportedException(message: "The Credentials property is read-only.");
+    }
 
     public virtual void SetRequestTimeout(TimeSpan timeout)
     {
@@ -173,7 +185,7 @@ public class Connection : IConnection
         return Run<T>(request: request, cancellationToken: cancellationToken);
     }
 
-    async internal virtual Task<T> Run<T>(IRequest request, CancellationToken cancellationToken)
+    internal virtual async Task<T> Run<T>(IRequest request, CancellationToken cancellationToken)
     {
         var types = new[]
         {
@@ -222,7 +234,7 @@ public class Connection : IConnection
         return @object;
     }
 
-    async internal virtual Task<IResponse> RunRequest(IRequest request, CancellationToken cancellationToken)
+    internal virtual async Task<IResponse> RunRequest(IRequest request, CancellationToken cancellationToken)
     {
         request.Headers.Add(key: "User-Agent", value: UserAgent);
         await _authenticator.Apply(request: request).ConfigureAwait(continueOnCapturedContext: false);
@@ -255,7 +267,7 @@ public class Connection : IConnection
 
     internal virtual string GetPlatformInformation()
     {
-        if (!string.IsNullOrEmpty(value: PlatformInformation))
+        if (!string.IsNullOrWhiteSpace(value: PlatformInformation))
         {
             return PlatformInformation;
         }
