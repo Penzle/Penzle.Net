@@ -10,20 +10,20 @@ public interface IResponse
     /// <summary>
     ///     Raw response body. Typically a string.
     /// </summary>
-    object Body { get; }
+    object Body { get; set; }
 
     /// <summary>
     ///     Information about the API.
     /// </summary>
-    IReadOnlyDictionary<string, string> Headers { get; }
+    IReadOnlyDictionary<string, string> Headers { get; set; }
 
     /// <summary>
     ///     The response status code.
     /// </summary>
-    HttpStatusCode StatusCode { get; }
+    HttpStatusCode StatusCode { get; set; }
 
     /// <summary>
     ///     The content type of the response.
     /// </summary>
-    string ContentType { get; }
+    string ContentType { get; set; }
 }

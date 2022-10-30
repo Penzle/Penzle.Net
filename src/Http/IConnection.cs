@@ -4,9 +4,12 @@ namespace Penzle.Core.Http;
 
 public interface IConnection
 {
-    Uri BaseAddress { get; }
-    ICredentialStore<BearerCredentials> CredentialStore { get; }
-    Credentials Credentials { get; }
+    public string PlatformInformation { get; set; }
+    public string UserAgent { get; set; }
+    public IHttpClient HttpClient { get; set; }
+    Uri BaseAddress { get; set; }
+    ICredentialStore<BearerCredentials> CredentialStore { get; set; }
+    Credentials Credentials { get; set; }
     Task<T> Get<T>(Uri uri, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default);
     ValueTask<HttpStatusCode> Patch(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default);
     Task<T> Patch<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default);

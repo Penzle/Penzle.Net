@@ -1,3 +1,4 @@
+using System.Runtime.Serialization;
 using System.Text.Json.Nodes;
 using Penzle.Core.Http;
 using Penzle.Core.Http.Internal;
@@ -5,7 +6,7 @@ using Penzle.Core.Http.Internal;
 namespace Penzle.Core.Models;
 
 [Serializable]
-public class ApiError
+public class ApiError : ISerializable
 {
     private static readonly IJsonSerializer JsonSerializer = new MicrosoftJsonSerializer();
 
@@ -16,6 +17,13 @@ public class ApiError
     public ApiError(string title)
     {
         Title = title;
+    }
+
+    protected ApiError(SerializationInfo serializationInfo, StreamingContext streamingContext)
+    {
+        Title = serializationInfo.GetString(nameof(Title));
+        Detail = serializationInfo.GetString(nameof(Detail));
+        Instance = serializationInfo.GetString(nameof(Instance));
     }
 
     public ApiError(JsonObject jsonNode)
@@ -48,7 +56,11 @@ public class ApiError
 
                 foreach (var error in errors)
                 {
-                    Errors.Add(item: new ApiErrorDetail { Field = error.Key, Message = error.Value.ToList() });
+                    Errors.Add(item: new ApiErrorDetail
+                    {
+                        Field = error.Key,
+                        Message = error.Value.ToList()
+                    });
                 }
             }
             catch (Exception)
@@ -62,4 +74,12 @@ public class ApiError
     public string Instance { get; set; }
     public string Detail { get; set; }
     public List<ApiErrorDetail> Errors { get; private set; } = new();
+
+    public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue(name: nameof(Title), value: Title);
+        info.AddValue(name: nameof(Instance), value: Instance);
+        info.AddValue(name: nameof(Detail), value: Detail);
+        info.AddValue(name: nameof(Errors), value: Errors);
+    }
 }

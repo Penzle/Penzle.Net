@@ -100,7 +100,6 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
     ///     Create instance of Penzle Client Management API.
     /// </summary>
     /// <param name="baseAddress">The base address of api endpoint.</param>
-    /// <param name="apiDeliveryKey">The key for delivery.</param>
     /// <param name="apiManagementKey">The key for management.</param>
     /// <param name="apiOptions">Pass additional options as project id and environments id.</param>
     /// <param name="httpClient">Pass your own implementation of http client.</param>
@@ -126,7 +125,6 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
     ///     Create instance of Penzle Client Management API.
     /// </summary>
     /// <param name="baseAddress">The base address of api endpoint.</param>
-    /// <param name="apiDeliveryKey">The key for delivery.</param>
     /// <param name="apiManagementKey">The key for management.</param>
     /// <param name="apiOptions">Pass additional options as project id and environments id.</param>
     /// <param name="httpClient">Pass your own implementation of http client.</param>

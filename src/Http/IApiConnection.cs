@@ -4,7 +4,7 @@ namespace Penzle.Core.Http;
 
 internal interface IApiConnection
 {
-    IConnection Connection { get; }
+    IConnection Connection { get; set; }
     Task<T> Get<T>(Uri uri, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default);
     ValueTask<HttpStatusCode> Patch(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default);
     Task<T> Patch<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default);

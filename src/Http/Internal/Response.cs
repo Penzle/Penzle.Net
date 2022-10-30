@@ -22,20 +22,20 @@ internal class Response : IResponse
     /// <summary>
     ///     Raw response body. Typically a string, but when requesting images, it will be a byte array.
     /// </summary>
-    public object Body { get; }
+    public object Body { get; set; }
 
     /// <summary>
     ///     Information about the API.
     /// </summary>
-    public IReadOnlyDictionary<string, string> Headers { get; }
+    public IReadOnlyDictionary<string, string> Headers { get; set; }
 
     /// <summary>
     ///     The response status code.
     /// </summary>
-    public HttpStatusCode StatusCode { get; }
+    public HttpStatusCode StatusCode { get; set; }
 
     /// <summary>
     ///     The content type of the response.
     /// </summary>
-    public string ContentType { get; }
+    public string ContentType { get; set; }
 }
