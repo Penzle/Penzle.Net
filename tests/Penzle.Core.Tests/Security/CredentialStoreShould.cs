@@ -1,5 +1,8 @@
+using FluentAssertions;
 using Moq;
+using Penzle.Core.Authentication;
 using Penzle.Core.Http;
+using Penzle.Core.Http.Internal;
 
 namespace Penzle.Core.Tests.Security;
 
@@ -25,5 +28,21 @@ public sealed class CredentialStoreShould
 
         // Arrange
         _sut.Verify(expression: store => store.GetCredentials(), times: Times.Once);
+    }
+
+    [Fact]
+    public async Task Get_Bearer_Credentials_From_A_Secured_Storage_With_BearerCredentials()
+    {
+        // Arrange
+        var bearerCredentials = new BearerCredentials(apiDeliveryKey: "1b42f8488e7f49f494694d028d1f918c", apiManagementKey: "b09b93dc0a944399a6c1c9b24308773f");
+        var credentialStore = new InMemoryCredentialStore(credentials: bearerCredentials);
+
+        // Act
+        var credentials = await credentialStore.GetCredentials();
+
+        // Arrange
+        credentials.AuthenticationType.Should().Be(expected: AuthenticationType.Bearer);
+        credentials.ApiDeliveryKey.Should().Be(expected: bearerCredentials.ApiDeliveryKey);
+        credentials.ApiManagementKey.Should().Be(expected: bearerCredentials.ApiManagementKey);
     }
 }
