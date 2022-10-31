@@ -10,7 +10,7 @@ using Penzle.Core.Tests.Attribute;
 
 namespace Penzle.Core.Tests.Connections;
 
-[Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Connections))]
+[Trait(nameof(TraitDefinitions.Category), nameof(TraitDefinitions.Connections))]
 public class ConnectionMockShould
 {
     [Fact]
@@ -19,15 +19,15 @@ public class ConnectionMockShould
         // Arrange
         var stu = new Mock<Connection>();
         stu.SetupAllProperties();
-        stu.SetupGet(expression: connection => connection.BaseAddress).Returns(valueFunction: () => new Uri(uriString: "https://api.penzle.com"));
+        stu.SetupGet(connection => connection.BaseAddress).Returns(() => new Uri("https://api.penzle.com"));
 
         // Act
         var result = stu.Object.BaseAddress;
 
         // Assert
         result.Should().NotBeNull();
-        result.Should().Be(expected: "https://api.penzle.com");
-        result.Scheme.StartsWith(value: "https").Should().BeTrue();
+        result.Should().Be("https://api.penzle.com");
+        result.Scheme.StartsWith("https").Should().BeTrue();
     }
 
     [Fact]
@@ -36,7 +36,8 @@ public class ConnectionMockShould
         // Arrange
         var stu = new Mock<Connection>();
         stu.SetupAllProperties();
-        stu.SetupGet(expression: connection => connection.CredentialStore).Returns(valueFunction: () => new InMemoryCredentialStore(credentials: new BearerCredentials(apiDeliveryKey: string.Empty, apiManagementKey: string.Empty)));
+        stu.SetupGet(connection => connection.CredentialStore).Returns(() =>
+            new InMemoryCredentialStore(new BearerCredentials(string.Empty, string.Empty)));
 
         // Act
         var result = stu.Object.CredentialStore;
@@ -52,7 +53,8 @@ public class ConnectionMockShould
         // Arrange
         var stu = new Mock<Connection>();
         stu.SetupAllProperties();
-        stu.SetupGet(expression: connection => connection.Credentials).Returns(valueFunction: () => new BearerCredentials(apiDeliveryKey: string.Empty, apiManagementKey: string.Empty));
+        stu.SetupGet(connection => connection.Credentials)
+            .Returns(() => new BearerCredentials(string.Empty, string.Empty));
 
         // Act
         var result = stu.Object.Credentials;
@@ -61,41 +63,49 @@ public class ConnectionMockShould
         result.Should().NotBeNull();
         result.Should().BeAssignableTo<Credentials>();
         result.Should().BeOfType<BearerCredentials>();
-        result.AuthenticationType.Should().Be(expected: AuthenticationType.Bearer);
+        result.AuthenticationType.Should().Be(AuthenticationType.Bearer);
     }
 
     [Theory]
     [HeadersData]
-    public async Task Must_Pass_Checks_Before_Send_Request_For_Updating_Non_Generic_Resource_Fields(IDictionary<string, string> headers)
+    public async Task Must_Pass_Checks_Before_Send_Request_For_Updating_Non_Generic_Resource_Fields(
+        IDictionary<string, string> headers)
     {
         // Arrange
         var stu = new Mock<Connection>();
         stu
-            .Setup(expression: connection => connection.Patch(It.IsAny<Uri>(), It.IsAny<object>(), It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(valueFunction: () => HttpStatusCode.NoContent);
+            .Setup(connection => connection.Patch(It.IsAny<Uri>(), It.IsAny<object>(),
+                It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() => HttpStatusCode.NoContent);
         // Act
-        var result = await stu.Object.Patch(uri: new Uri(uriString: "https://api.penzle.com"), body: new object(), parameters: headers, accepts: string.Empty, contentType: string.Empty, cancellationToken: CancellationToken.None);
+        var result = await stu.Object.Patch(new Uri("https://api.penzle.com"), new object(), headers, string.Empty,
+            string.Empty, CancellationToken.None);
 
         // Assert
-        result.Should().Be(expected: HttpStatusCode.NoContent);
+        result.Should().Be(HttpStatusCode.NoContent);
     }
 
     [Theory]
     [HeadersData]
-    public async Task Must_Pass_Checks_Before_Send_Request_For_Updating_Generic_Resource_Fields(IDictionary<string, string> headers)
+    public async Task Must_Pass_Checks_Before_Send_Request_For_Updating_Generic_Resource_Fields(
+        IDictionary<string, string> headers)
     {
         // Arrange
         var stu = new Mock<Connection>();
         stu
-            .Setup(expression: connection => connection.Patch<Response>(It.IsAny<Uri>(), It.IsAny<object>(), It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(valueFunction: () => new Response(statusCode: HttpStatusCode.NoContent, body: new object(), headers: headers, contentType: string.Empty));
+            .Setup(connection => connection.Patch<Response>(It.IsAny<Uri>(), It.IsAny<object>(),
+                It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() => new Response(HttpStatusCode.NoContent, new object(), headers, string.Empty));
 
         // Act
-        var result = await stu.Object.Patch<Response>(uri: new Uri(uriString: "https://api.penzle.com"), body: new object(), parameters: null, accepts: null, contentType: null, cancellationToken: CancellationToken.None);
+        var result = await stu.Object.Patch<Response>(new Uri("https://api.penzle.com"), new object(), null, null, null,
+            CancellationToken.None);
 
         // Assert
         result.Should().NotBeNull();
-        result.StatusCode.Should().Be(expected: HttpStatusCode.NoContent);
+        result.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 
     [Theory]
@@ -105,31 +115,38 @@ public class ConnectionMockShould
         // Arrange
         var stu = new Mock<Connection>();
         stu
-            .Setup(expression: connection => connection.Post<Response>(It.IsAny<Uri>(), It.IsAny<object>(), It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(valueFunction: () => new Response(statusCode: HttpStatusCode.OK, body: new object(), headers: headers, contentType: string.Empty));
+            .Setup(connection => connection.Post<Response>(It.IsAny<Uri>(), It.IsAny<object>(),
+                It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() => new Response(HttpStatusCode.OK, new object(), headers, string.Empty));
 
         // Act
-        var result = await stu.Object.Post<Response>(uri: new Uri(uriString: "https://api.penzle.com"), body: new object(), parameters: null, accepts: null, contentType: null, cancellationToken: CancellationToken.None);
+        var result = await stu.Object.Post<Response>(new Uri("https://api.penzle.com"), new object(), null, null, null,
+            CancellationToken.None);
 
         // Assert
         result.Should().NotBeNull();
-        result.StatusCode.Should().Be(expected: HttpStatusCode.OK);
+        result.StatusCode.Should().Be(HttpStatusCode.OK);
     }
 
     [Theory]
     [HeadersData]
-    public async Task Must_Pass_Checks_Before_Send_Request_None_Generic_For_Creation_Resource(IDictionary<string, string> headers)
+    public async Task Must_Pass_Checks_Before_Send_Request_None_Generic_For_Creation_Resource(
+        IDictionary<string, string> headers)
     {
         // Arrange
         var stu = new Mock<Connection>();
         stu
-            .Setup(expression: connection => connection.Post(It.IsAny<Uri>(), It.IsAny<object>(), It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(valueFunction: () => HttpStatusCode.OK);
+            .Setup(connection => connection.Post(It.IsAny<Uri>(), It.IsAny<object>(),
+                It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() => HttpStatusCode.OK);
         // Act
-        var result = await stu.Object.Post(uri: new Uri(uriString: "https://api.penzle.com"), body: new object(), parameters: headers, accepts: string.Empty, contentType: string.Empty, cancellationToken: CancellationToken.None);
+        var result = await stu.Object.Post(new Uri("https://api.penzle.com"), new object(), headers, string.Empty,
+            string.Empty, CancellationToken.None);
 
         // Assert
-        result.Should().Be(expected: HttpStatusCode.OK);
+        result.Should().Be(HttpStatusCode.OK);
     }
 
     [Theory]
@@ -139,31 +156,38 @@ public class ConnectionMockShould
         // Arrange
         var stu = new Mock<Connection>();
         stu
-            .Setup(expression: connection => connection.Put<Response>(It.IsAny<Uri>(), It.IsAny<object>(), It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(valueFunction: () => new Response(statusCode: HttpStatusCode.NoContent, body: new object(), headers: headers, contentType: string.Empty));
+            .Setup(connection => connection.Put<Response>(It.IsAny<Uri>(), It.IsAny<object>(),
+                It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() => new Response(HttpStatusCode.NoContent, new object(), headers, string.Empty));
 
         // Act
-        var result = await stu.Object.Put<Response>(uri: new Uri(uriString: "https://api.penzle.com"), body: new object(), parameters: null, accepts: null, contentType: null, cancellationToken: CancellationToken.None);
+        var result = await stu.Object.Put<Response>(new Uri("https://api.penzle.com"), new object(), null, null, null,
+            CancellationToken.None);
 
         // Assert
         result.Should().NotBeNull();
-        result.StatusCode.Should().Be(expected: HttpStatusCode.NoContent);
+        result.StatusCode.Should().Be(HttpStatusCode.NoContent);
     }
 
     [Theory]
     [HeadersData]
-    public async Task Must_Pass_Checks_Before_Send_Request_None_Generic_For_Update_Resource(IDictionary<string, string> headers)
+    public async Task Must_Pass_Checks_Before_Send_Request_None_Generic_For_Update_Resource(
+        IDictionary<string, string> headers)
     {
         // Arrange
         var stu = new Mock<Connection>();
         stu
-            .Setup(expression: connection => connection.Put(It.IsAny<Uri>(), It.IsAny<object>(), It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(valueFunction: () => HttpStatusCode.NoContent);
+            .Setup(connection => connection.Put(It.IsAny<Uri>(), It.IsAny<object>(),
+                It.IsAny<IDictionary<string, string>>(), It.IsAny<string>(), It.IsAny<string>(),
+                It.IsAny<CancellationToken>()))
+            .ReturnsAsync(() => HttpStatusCode.NoContent);
         // Act
-        var result = await stu.Object.Put(uri: new Uri(uriString: "https://api.penzle.com"), body: new object(), parameters: headers, accepts: string.Empty, contentType: string.Empty, cancellationToken: CancellationToken.None);
+        var result = await stu.Object.Put(new Uri("https://api.penzle.com"), new object(), headers, string.Empty,
+            string.Empty, CancellationToken.None);
 
         // Assert
-        result.Should().Be(expected: HttpStatusCode.NoContent);
+        result.Should().Be(HttpStatusCode.NoContent);
     }
 
     [Fact]
@@ -171,13 +195,13 @@ public class ConnectionMockShould
     {
         // Arrange
         var stu = new Mock<Connection>();
-        stu.Setup(expression: connection => connection.SetRequestTimeout(It.IsAny<TimeSpan>()));
+        stu.Setup(connection => connection.SetRequestTimeout(It.IsAny<TimeSpan>()));
 
         // Act
-        stu.Object.SetRequestTimeout(timeout: TimeSpan.FromSeconds(value: 10));
+        stu.Object.SetRequestTimeout(TimeSpan.FromSeconds(10));
 
         // Assert
-        stu.Verify(expression: connection => connection.SetRequestTimeout(TimeSpan.FromSeconds(10)), times: Times.Once);
+        stu.Verify(connection => connection.SetRequestTimeout(TimeSpan.FromSeconds(10)), Times.Once);
     }
 
     [Fact]
@@ -187,15 +211,15 @@ public class ConnectionMockShould
         var mockResponse = new Mock<IResponse>();
         mockResponse
             .SetupAllProperties()
-            .SetupProperty(property: response => response.StatusCode, initialValue: HttpStatusCode.BadRequest);
+            .SetupProperty(response => response.StatusCode, HttpStatusCode.BadRequest);
 
         var mockConnection = new Mock<Connection>();
         mockConnection
-            .Setup(expression: connection => connection.HandleErrors(mockResponse.Object))
+            .Setup(connection => connection.HandleErrors(mockResponse.Object))
             .Throws<PenzleException>();
 
         // Act
-        var handleErrors = () => mockConnection.Object.HandleErrors(response: mockResponse.Object);
+        var handleErrors = () => mockConnection.Object.HandleErrors(mockResponse.Object);
 
         // Assert
         handleErrors.Should().Throw<PenzleException>();
@@ -208,15 +232,15 @@ public class ConnectionMockShould
         var mockResponse = new Mock<IResponse>();
         mockResponse
             .SetupAllProperties()
-            .SetupProperty(property: response => response.StatusCode, initialValue: HttpStatusCode.NotFound);
+            .SetupProperty(response => response.StatusCode, HttpStatusCode.NotFound);
 
         var mockConnection = new Mock<Connection>();
         mockConnection
-            .Setup(expression: connection => connection.HandleErrors(mockResponse.Object))
+            .Setup(connection => connection.HandleErrors(mockResponse.Object))
             .Verifiable();
 
         // Act
-        var handleErrors = () => mockConnection.Object.HandleErrors(response: mockResponse.Object);
+        var handleErrors = () => mockConnection.Object.HandleErrors(mockResponse.Object);
 
         // Assert
         handleErrors.Should().NotThrow<PenzleException>();
@@ -228,14 +252,14 @@ public class ConnectionMockShould
         // Arrange
         var mockConnection = new Mock<Connection>();
         mockConnection
-            .Setup(expression: connection => connection.GetVersionInformation())
-            .Returns(value: "1.0.0");
+            .Setup(connection => connection.GetVersionInformation())
+            .Returns("1.0.0");
 
         // Act
         var version = mockConnection.Object.GetVersionInformation();
 
         // Assert
-        version.Should().Be(expected: "1.0.0");
+        version.Should().Be("1.0.0");
     }
 
     [Fact]
@@ -244,14 +268,14 @@ public class ConnectionMockShould
         // Arrange
         var mockConnection = new Mock<Connection>();
         mockConnection
-            .Setup(expression: connection => connection.GetVersionInformation())
-            .Returns(valueFunction: () => Assembly.GetExecutingAssembly().GetName().Version!.ToString());
+            .Setup(connection => connection.GetVersionInformation())
+            .Returns(() => Assembly.GetExecutingAssembly().GetName().Version!.ToString());
 
         // Act
         var version = mockConnection.Object.GetVersionInformation();
 
         // Assert
-        version.Should().Be(expected: "2.0.1.0");
+        version.Should().Be("2.0.1.0");
     }
 
     [Fact]
@@ -261,30 +285,31 @@ public class ConnectionMockShould
         const string CurrentCulture = "en-US";
         var mockConnection = new Mock<Connection>();
         mockConnection
-            .Setup(expression: connection => connection.GetCultureInformation())
-            .Returns(value: CurrentCulture);
+            .Setup(connection => connection.GetCultureInformation())
+            .Returns(CurrentCulture);
 
         // Act
         var culture = mockConnection.Object.GetCultureInformation();
 
         // Assert
-        culture.Should().Be(expected: CurrentCulture);
+        culture.Should().Be(CurrentCulture);
     }
 
     [Fact]
     public void Display_The_Current_Platform_Information_Of_SDK()
     {
         // Arrange
+        Environment.SetEnvironmentVariable("OS", "Windows_NT");
         const string CurrentPlatform = "Windows";
         var mockConnection = new Mock<Connection>();
         mockConnection
-            .Setup(expression: connection => connection.GetPlatformInformation())
-            .Returns(value: CurrentPlatform);
+            .Setup(connection => connection.GetPlatformInformation())
+            .Returns(CurrentPlatform);
 
         // Act
         var platform = mockConnection.Object.GetPlatformInformation();
 
         // Assert
-        platform.Should().Be(expected: CurrentPlatform);
+        platform.Should().Be(CurrentPlatform);
     }
 }
