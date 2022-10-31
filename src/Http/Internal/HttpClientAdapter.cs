@@ -4,57 +4,62 @@ using Penzle.Core.Utilities;
 
 namespace Penzle.Core.Http.Internal;
 
-public sealed class HttpClientAdapter : IHttpClient
+public class HttpClientAdapter : IHttpClient
 {
-    private readonly HttpClient _http;
+    public HttpClientAdapter()
+    {
+        Http = new HttpClient(new RedirectHandler());
+    }
 
     public HttpClientAdapter(Func<HttpMessageHandler> getHandler)
     {
-        Guard.ArgumentNotNull(value: getHandler, name: nameof(getHandler));
-        _http = new HttpClient(handler: new RedirectHandler { InnerHandler = getHandler() });
+        Guard.ArgumentNotNull(getHandler, nameof(getHandler));
+        Http = new HttpClient(new RedirectHandler {InnerHandler = getHandler()});
     }
 
-    public async Task<IResponse> Send(IRequest request, CancellationToken cancellationToken)
+    internal virtual HttpClient Http { get; }
+
+    public virtual async Task<IResponse> Send(IRequest request, CancellationToken cancellationToken)
     {
-        Guard.ArgumentNotNull(value: request, name: nameof(request));
+        Guard.ArgumentNotNull(request, nameof(request));
 
-        var cancellationTokenForRequest = GetCancellationTokenForRequest(request: request, cancellationToken: cancellationToken);
+        var cancellationTokenForRequest = GetCancellationTokenForRequest(request, cancellationToken);
 
-        using var requestMessage = BuildRequestMessage(request: request);
-        var responseMessage = await SendAsync(request: requestMessage, cancellationToken: cancellationTokenForRequest).ConfigureAwait(continueOnCapturedContext: false);
-        return await BuildResponse(responseMessage: responseMessage).ConfigureAwait(continueOnCapturedContext: false);
+        using var requestMessage = BuildRequestMessage(request);
+        var responseMessage = await SendAsync(requestMessage, cancellationTokenForRequest).ConfigureAwait(false);
+        return await BuildResponse(responseMessage).ConfigureAwait(false);
     }
 
     public void Dispose()
     {
-        Dispose(disposing: true);
-        GC.SuppressFinalize(obj: this);
+        Dispose(true);
+        GC.SuppressFinalize(this);
     }
 
-    public void SetRequestTimeout(TimeSpan timeout)
+    public virtual void SetRequestTimeout(TimeSpan timeout)
     {
-        _http.Timeout = timeout;
+        Http.Timeout = timeout;
     }
 
-    private static CancellationToken GetCancellationTokenForRequest(IRequest request, CancellationToken cancellationToken)
+    internal virtual CancellationToken GetCancellationTokenForRequest(IRequest request,
+        CancellationToken cancellationToken)
     {
         var cancellationTokenForRequest = cancellationToken;
 
         if (request.Timeout == TimeSpan.Zero)
-        {
             return cancellationTokenForRequest;
-        }
 
-        var timeoutCancellation = new CancellationTokenSource(delay: request.Timeout);
-        var unifiedCancellationToken = CancellationTokenSource.CreateLinkedTokenSource(token1: cancellationToken, token2: timeoutCancellation.Token);
+        var timeoutCancellation = new CancellationTokenSource(request.Timeout);
+        var unifiedCancellationToken =
+            CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCancellation.Token);
 
         cancellationTokenForRequest = unifiedCancellationToken.Token;
         return cancellationTokenForRequest;
     }
 
-    private async Task<IResponse> BuildResponse(HttpResponseMessage responseMessage)
+    internal virtual async Task<IResponse> BuildResponse(HttpResponseMessage responseMessage)
     {
-        Guard.ArgumentNotNull(value: responseMessage, name: nameof(responseMessage));
+        Guard.ArgumentNotNull(responseMessage, nameof(responseMessage));
 
         object responseBody = null;
         string contentType = null;
@@ -63,28 +68,25 @@ public sealed class HttpClientAdapter : IHttpClient
         {
             if (content != null)
             {
-                contentType = GetContentAssetType(httpContent: responseMessage.Content);
-                responseBody = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(continueOnCapturedContext: false);
+                contentType = GetContentAssetType(responseMessage.Content);
+                responseBody = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
             }
         }
 
-        var responseHeaders = responseMessage.Headers.ToDictionary(keySelector: h => h.Key, elementSelector: h => h.Value.First());
-        return new Response(statusCode: responseMessage.StatusCode, body: responseBody, headers: responseHeaders, contentType: contentType);
+        var responseHeaders = responseMessage.Headers.ToDictionary(h => h.Key, h => h.Value.First());
+        return new Response(responseMessage.StatusCode, responseBody, responseHeaders, contentType);
     }
 
-    private HttpRequestMessage BuildRequestMessage(IRequest request)
+    internal virtual HttpRequestMessage BuildRequestMessage(IRequest request)
     {
-        Guard.ArgumentNotNull(value: request, name: nameof(request));
+        Guard.ArgumentNotNull(request, nameof(request));
         HttpRequestMessage requestMessage = null;
         try
         {
-            var fullUri = new Uri(baseUri: request.BaseAddress, relativeUri: request.Endpoint);
-            requestMessage = new HttpRequestMessage(method: request.Method, requestUri: fullUri);
+            var fullUri = new Uri(request.BaseAddress, request.Endpoint);
+            requestMessage = new HttpRequestMessage(request.Method, fullUri);
 
-            foreach (var header in request.Headers)
-            {
-                requestMessage.Headers.Add(name: header.Key, value: header.Value);
-            }
+            foreach (var header in request.Headers) requestMessage.Headers.Add(header.Key, header.Value);
 
             switch (request.Body)
             {
@@ -92,11 +94,11 @@ public sealed class HttpClientAdapter : IHttpClient
                     requestMessage.Content = httpContent;
                     break;
                 case string body:
-                    requestMessage.Content = new StringContent(content: body, encoding: Encoding.UTF8, mediaType: request.ContentType);
+                    requestMessage.Content = new StringContent(body, Encoding.UTF8, request.ContentType);
                     break;
                 case Stream bodyStream:
-                    requestMessage.Content = new StreamContent(content: bodyStream);
-                    requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType: request.ContentType);
+                    requestMessage.Content = new StreamContent(bodyStream);
+                    requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(request.ContentType);
                     break;
             }
         }
@@ -109,24 +111,21 @@ public sealed class HttpClientAdapter : IHttpClient
         return requestMessage;
     }
 
-    private static string GetContentAssetType(HttpContent httpContent)
+    internal virtual string GetContentAssetType(HttpContent httpContent)
     {
-        return httpContent.Headers is { ContentType: { } } ? httpContent.Headers.ContentType.MediaType : null;
+        return httpContent.Headers is {ContentType: { }} ? httpContent.Headers.ContentType.MediaType : null;
     }
 
-    private void Dispose(bool disposing)
+    protected virtual void Dispose(bool disposing)
     {
-        if (!disposing)
-        {
-            return;
-        }
-
-        _http?.Dispose();
+        if (!disposing) return;
+        Http?.Dispose();
     }
 
-    public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+    internal virtual async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+        CancellationToken cancellationToken)
     {
-        var response = await _http.SendAsync(request: request, cancellationToken: cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+        var response = await Http.SendAsync(request, cancellationToken).ConfigureAwait(false);
         return response;
     }
 }
