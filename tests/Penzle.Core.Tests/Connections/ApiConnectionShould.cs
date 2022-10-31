@@ -7,6 +7,7 @@ using Penzle.Core.Http.Internal;
 
 namespace Penzle.Core.Tests.Connections;
 
+[Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Connections))]
 public class ApiConnectionShould
 {
     private readonly BearerCredentials _credentials;

@@ -6,6 +6,7 @@ using Penzle.Core.Http.Internal;
 
 namespace Penzle.Core.Tests.Http;
 
+[Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Http))]
 public class RequestShould
 {
     [Fact]
