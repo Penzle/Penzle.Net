@@ -8,16 +8,22 @@ public class HttpClientAdapter : IHttpClient
 {
     public HttpClientAdapter()
     {
-        Http = new HttpClient(handler: new RedirectHandler());
+        HttpClient = new HttpClient(handler: new RedirectHandler());
     }
 
     public HttpClientAdapter(Func<HttpMessageHandler> getHandler)
     {
         Guard.ArgumentNotNull(value: getHandler, name: nameof(getHandler));
-        Http = new HttpClient(handler: new RedirectHandler { InnerHandler = getHandler() });
+        HttpClient = new HttpClient(handler: new RedirectHandler { InnerHandler = getHandler() });
     }
 
-    internal virtual HttpClient Http { get; }
+    public HttpClientAdapter(HttpClient httpClient)
+    {
+        Guard.ArgumentNotNull(value: httpClient, name: nameof(httpClient));
+        HttpClient = httpClient;
+    }
+
+    public virtual HttpClient HttpClient { get; }
 
     public virtual async Task<IResponse> Send(IRequest request, CancellationToken cancellationToken)
     {
@@ -38,7 +44,7 @@ public class HttpClientAdapter : IHttpClient
 
     public virtual void SetRequestTimeout(TimeSpan timeout)
     {
-        Http.Timeout = timeout;
+        HttpClient.Timeout = timeout;
     }
 
     internal virtual CancellationToken GetCancellationTokenForRequest(IRequest request,
@@ -128,13 +134,13 @@ public class HttpClientAdapter : IHttpClient
             return;
         }
 
-        Http?.Dispose();
+        HttpClient?.Dispose();
     }
 
     internal virtual async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
-        var response = await Http.SendAsync(request: request, cancellationToken: cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+        var response = await HttpClient.SendAsync(request: request, cancellationToken: cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         return response;
     }
 }
