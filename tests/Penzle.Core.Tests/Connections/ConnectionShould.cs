@@ -257,33 +257,33 @@ public class ConnectionShould
     public void Display_The_Current_Culture_Info_Of_SDK()
     {
         // Arrange
-        const string currentCulture = "en-US";
+        const string CurrentCulture = "en-US";
         var mockConnection = new Mock<Connection>();
         mockConnection
             .Setup(expression: connection => connection.GetCultureInformation())
-            .Returns(value: currentCulture);
+            .Returns(value: CurrentCulture);
 
         // Act
         var culture = mockConnection.Object.GetCultureInformation();
 
         // Assert
-        culture.Should().Be(expected: currentCulture);
+        culture.Should().Be(expected: CurrentCulture);
     }
 
     [Fact]
     public void Display_The_Current_Platform_Information_Of_SDK()
     {
         // Arrange
-        const string currentPlatform = "Windows";
+        const string CurrentPlatform = "Windows";
         var mockConnection = new Mock<Connection>();
         mockConnection
             .Setup(expression: connection => connection.GetPlatformInformation())
-            .Returns(value: currentPlatform);
+            .Returns(value: CurrentPlatform);
 
         // Act
         var platform = mockConnection.Object.GetPlatformInformation();
 
         // Assert
-        platform.Should().Be(expected: currentPlatform);
+        platform.Should().Be(expected: CurrentPlatform);
     }
 }

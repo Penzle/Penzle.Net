@@ -29,26 +29,6 @@ public sealed class MimeType
     public string[] Type { get; }
     private string Extension { get; }
 
-    private static IEnumerable<MimeType> All => new List<MimeType>
-    {
-        Pdf,
-        Doc,
-        Docx,
-        Xls,
-        Xlsx,
-        Jpe,
-        Jpeg,
-        Jpg,
-        Png,
-        Bmp,
-        Mp3,
-        Mp4,
-        Zip,
-        Ppt,
-        Pptx,
-        Txt
-    };
-
     public static MimeType Parse(string value)
     {
         return value switch

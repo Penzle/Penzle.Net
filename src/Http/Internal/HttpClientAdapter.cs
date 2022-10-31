@@ -8,32 +8,32 @@ public class HttpClientAdapter : IHttpClient
 {
     public HttpClientAdapter()
     {
-        Http = new HttpClient(new RedirectHandler());
+        Http = new HttpClient(handler: new RedirectHandler());
     }
 
     public HttpClientAdapter(Func<HttpMessageHandler> getHandler)
     {
-        Guard.ArgumentNotNull(getHandler, nameof(getHandler));
-        Http = new HttpClient(new RedirectHandler {InnerHandler = getHandler()});
+        Guard.ArgumentNotNull(value: getHandler, name: nameof(getHandler));
+        Http = new HttpClient(handler: new RedirectHandler { InnerHandler = getHandler() });
     }
 
     internal virtual HttpClient Http { get; }
 
     public virtual async Task<IResponse> Send(IRequest request, CancellationToken cancellationToken)
     {
-        Guard.ArgumentNotNull(request, nameof(request));
+        Guard.ArgumentNotNull(value: request, name: nameof(request));
 
-        var cancellationTokenForRequest = GetCancellationTokenForRequest(request, cancellationToken);
+        var cancellationTokenForRequest = GetCancellationTokenForRequest(request: request, cancellationToken: cancellationToken);
 
-        using var requestMessage = BuildRequestMessage(request);
-        var responseMessage = await SendAsync(requestMessage, cancellationTokenForRequest).ConfigureAwait(false);
-        return await BuildResponse(responseMessage).ConfigureAwait(false);
+        using var requestMessage = BuildRequestMessage(request: request);
+        var responseMessage = await SendAsync(request: requestMessage, cancellationToken: cancellationTokenForRequest).ConfigureAwait(continueOnCapturedContext: false);
+        return await BuildResponse(responseMessage: responseMessage).ConfigureAwait(continueOnCapturedContext: false);
     }
 
     public void Dispose()
     {
-        Dispose(true);
-        GC.SuppressFinalize(this);
+        Dispose(disposing: true);
+        GC.SuppressFinalize(obj: this);
     }
 
     public virtual void SetRequestTimeout(TimeSpan timeout)
@@ -47,11 +47,13 @@ public class HttpClientAdapter : IHttpClient
         var cancellationTokenForRequest = cancellationToken;
 
         if (request.Timeout == TimeSpan.Zero)
+        {
             return cancellationTokenForRequest;
+        }
 
-        var timeoutCancellation = new CancellationTokenSource(request.Timeout);
+        var timeoutCancellation = new CancellationTokenSource(delay: request.Timeout);
         var unifiedCancellationToken =
-            CancellationTokenSource.CreateLinkedTokenSource(cancellationToken, timeoutCancellation.Token);
+            CancellationTokenSource.CreateLinkedTokenSource(token1: cancellationToken, token2: timeoutCancellation.Token);
 
         cancellationTokenForRequest = unifiedCancellationToken.Token;
         return cancellationTokenForRequest;
@@ -59,7 +61,7 @@ public class HttpClientAdapter : IHttpClient
 
     internal virtual async Task<IResponse> BuildResponse(HttpResponseMessage responseMessage)
     {
-        Guard.ArgumentNotNull(responseMessage, nameof(responseMessage));
+        Guard.ArgumentNotNull(value: responseMessage, name: nameof(responseMessage));
 
         object responseBody = null;
         string contentType = null;
@@ -68,25 +70,28 @@ public class HttpClientAdapter : IHttpClient
         {
             if (content != null)
             {
-                contentType = GetContentAssetType(responseMessage.Content);
-                responseBody = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(false);
+                contentType = GetContentAssetType(httpContent: responseMessage.Content);
+                responseBody = await responseMessage.Content.ReadAsStringAsync().ConfigureAwait(continueOnCapturedContext: false);
             }
         }
 
-        var responseHeaders = responseMessage.Headers.ToDictionary(h => h.Key, h => h.Value.First());
-        return new Response(responseMessage.StatusCode, responseBody, responseHeaders, contentType);
+        var responseHeaders = responseMessage.Headers.ToDictionary(keySelector: h => h.Key, elementSelector: h => h.Value.First());
+        return new Response(statusCode: responseMessage.StatusCode, body: responseBody, headers: responseHeaders, contentType: contentType);
     }
 
     internal virtual HttpRequestMessage BuildRequestMessage(IRequest request)
     {
-        Guard.ArgumentNotNull(request, nameof(request));
+        Guard.ArgumentNotNull(value: request, name: nameof(request));
         HttpRequestMessage requestMessage = null;
         try
         {
-            var fullUri = new Uri(request.BaseAddress, request.Endpoint);
-            requestMessage = new HttpRequestMessage(request.Method, fullUri);
+            var fullUri = new Uri(baseUri: request.BaseAddress, relativeUri: request.Endpoint);
+            requestMessage = new HttpRequestMessage(method: request.Method, requestUri: fullUri);
 
-            foreach (var header in request.Headers) requestMessage.Headers.Add(header.Key, header.Value);
+            foreach (var header in request.Headers)
+            {
+                requestMessage.Headers.Add(name: header.Key, value: header.Value);
+            }
 
             switch (request.Body)
             {
@@ -94,11 +99,11 @@ public class HttpClientAdapter : IHttpClient
                     requestMessage.Content = httpContent;
                     break;
                 case string body:
-                    requestMessage.Content = new StringContent(body, Encoding.UTF8, request.ContentType);
+                    requestMessage.Content = new StringContent(content: body, encoding: Encoding.UTF8, mediaType: request.ContentType);
                     break;
                 case Stream bodyStream:
-                    requestMessage.Content = new StreamContent(bodyStream);
-                    requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(request.ContentType);
+                    requestMessage.Content = new StreamContent(content: bodyStream);
+                    requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue(mediaType: request.ContentType);
                     break;
             }
         }
@@ -113,19 +118,23 @@ public class HttpClientAdapter : IHttpClient
 
     internal virtual string GetContentAssetType(HttpContent httpContent)
     {
-        return httpContent.Headers is {ContentType: { }} ? httpContent.Headers.ContentType.MediaType : null;
+        return httpContent.Headers is { ContentType: { } } ? httpContent.Headers.ContentType.MediaType : null;
     }
 
     protected virtual void Dispose(bool disposing)
     {
-        if (!disposing) return;
+        if (!disposing)
+        {
+            return;
+        }
+
         Http?.Dispose();
     }
 
     internal virtual async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
-        var response = await Http.SendAsync(request, cancellationToken).ConfigureAwait(false);
+        var response = await Http.SendAsync(request: request, cancellationToken: cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
         return response;
     }
 }

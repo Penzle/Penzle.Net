@@ -117,9 +117,4 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
     {
         return Connection.Delete(uri: ApiUrls.DeleteEntry(entryId: entryId), body: null, parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
     }
-
-    private async Task<TEntry> FetchEntries<TEntry>(string template, int fetch, QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new()
-    {
-        return await Connection.Get<TEntry>(uri: ApiUrls.GetEntries(template: template, parentId: query.ParentId, language: query.Language, ids: query.Ids, page: query.Pagination.Page, pageSize: fetch), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
-    }
 }

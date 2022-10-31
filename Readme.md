@@ -19,7 +19,10 @@ customizable content.
 | -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
 | Locate digital asset filed quickly with our organized and centralized solution to file management. | Use forms across your website to perform surveys, gather leads, or take registrations. Penzle’s form builder makes building forms a breeze. | See what web visitors see, as you build it. Experience Manager is a user-friendly way for content managers to contribute to the building process. | Leverage insights and personalization capability to execute successful omnichannel marketing campaigns. |
 
-Penzle represent client library that makes it simple to communicate with the Penzle RESTFull API. It was developed with the intention of targeting versions of the .NET Framework that are greater than or equal to 4.6, as well as versions of DotNet Core and .NET Standard. Simply going to the [website](https://www.penzle.com) for Penzle Tech Stack will allow you to acquire further knowledge regarding the product.
+Penzle represent client library that makes it simple to communicate with the Penzle RESTFull API. It was developed with
+the intention of targeting versions of the .NET Framework that are greater than or equal to 4.6, as well as versions of
+DotNet Core and .NET Standard. Simply going to the [website](https://www.penzle.com) for Penzle Tech Stack will allow
+you to acquire further knowledge regarding the product.
 
 ## **Getting started**
 
@@ -100,7 +103,8 @@ In order to find more developers material please visit next sections:
 
 ## **Contributing to Penzle.Net**
 
-Your thoughts and ideas are much appreciated. If you're interested in helping out with this project in any way, we'd like to make it as clear and straightforward as possible for you to do so, whether that's by:
+Your thoughts and ideas are much appreciated. If you're interested in helping out with this project in any way, we'd
+like to make it as clear and straightforward as possible for you to do so, whether that's by:
 
 - Bug reporting
 - Addressing the present codebase
@@ -108,8 +112,12 @@ Your thoughts and ideas are much appreciated. If you're interested in helping ou
 - Advancing ideas for brand new capabilities
 - Taking on the role of a maintainer
 
-Github is where we host our code, manage bug reports and feature requests, and incorporate changes suggested by our users.
-Report bugs using Github's issues. We host our code on Github, which is also where we manage user bug reports and feature requests and incorporate modifications made by users. In general, high-quality bug reports consist of the following components: background information; reproducible steps; an example of the code, if the reporter possesses such an example.
+Github is where we host our code, manage bug reports and feature requests, and incorporate changes suggested by our
+users.
+Report bugs using Github's issues. We host our code on Github, which is also where we manage user bug reports and
+feature requests and incorporate modifications made by users. In general, high-quality bug reports consist of the
+following components: background information; reproducible steps; an example of the code, if the reporter possesses such
+an example.
 
 ## **License**
 

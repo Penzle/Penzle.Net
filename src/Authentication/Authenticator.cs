@@ -6,10 +6,7 @@ namespace Penzle.Core.Authentication;
 internal sealed class Authenticator
 {
     private readonly Dictionary<AuthenticationType, IAuthenticationHandler> _authenticators =
-        new()
-        {
-            { AuthenticationType.Bearer, new BearerTokenAuthenticator() }
-        };
+        new() { { AuthenticationType.Bearer, new BearerTokenAuthenticator() } };
 
     public Authenticator(ICredentialStore<BearerCredentials> credentialStore)
     {

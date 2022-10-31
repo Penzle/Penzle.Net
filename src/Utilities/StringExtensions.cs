@@ -7,7 +7,7 @@ namespace Penzle.Core.Utilities;
 
 internal static partial class Extensions
 {
-    private static readonly Regex OptionalQueryStringRegex = new(pattern: "\\{\\?([^}]+)\\}");
+    private static readonly Regex s_optionalQueryStringRegex = new(pattern: "\\{\\?([^}]+)\\}");
 
     public static string Repeat(this string @this, int repeatCount)
     {
@@ -50,7 +50,7 @@ internal static partial class Extensions
 
     public static Uri ExpandUriTemplate(this string template, object values)
     {
-        var optionalQueryStringMatch = OptionalQueryStringRegex.Match(input: template);
+        var optionalQueryStringMatch = s_optionalQueryStringRegex.Match(input: template);
         if (!optionalQueryStringMatch.Success)
         {
             return new Uri(uriString: template);
@@ -67,11 +67,13 @@ internal static partial class Extensions
                 continue;
             }
 
-            expansion += string.IsNullOrWhiteSpace(value: expansion) ? "?" : "&";
-            expansion += $"{parameter}={Uri.EscapeDataString(stringToEscape: "" + parameterProperty.GetValue(obj: values, index: Array.Empty<object>()))}";
+            var sb = new StringBuilder();
+            sb.Append(value: string.IsNullOrWhiteSpace(value: expansion) ? "?" : "&");
+            sb.Append(value: $"{parameter}={Uri.EscapeDataString(stringToEscape: $"{parameterProperty.GetValue(obj: values, index: Array.Empty<object>())}")}");
+            expansion = sb.ToString();
         }
 
-        template = OptionalQueryStringRegex.Replace(input: template, replacement: expansion);
+        template = s_optionalQueryStringRegex.Replace(input: template, replacement: expansion);
         return new Uri(uriString: template);
     }
 }

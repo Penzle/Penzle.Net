@@ -21,13 +21,21 @@ internal static class UriExtensions
             return uri;
         }
 
-        IDictionary<string, string> p = new Dictionary<string, string>(dictionary: parameters);
+        var p = new Dictionary<string, string>(dictionary: parameters);
 
         var hasQueryString = uri.OriginalString.IndexOf(value: "?", comparisonType: StringComparison.Ordinal);
 
         var uriWithoutQuery = hasQueryString == -1 ? uri.ToString() : uri.OriginalString[..hasQueryString];
 
-        var queryString = uri.IsAbsoluteUri ? uri.Query : hasQueryString == -1 ? "" : uri.OriginalString[hasQueryString..];
+        var queryString = uri.IsAbsoluteUri switch
+        {
+            true => uri.Query,
+            _ => hasQueryString switch
+            {
+                -1 => string.Empty,
+                _ => uri.OriginalString[hasQueryString..]
+            }
+        };
 
         var values = queryString.Replace(oldValue: "?", newValue: "")
             .Split(separator: new[] { '&' }, options: StringSplitOptions.RemoveEmptyEntries);
@@ -38,7 +46,7 @@ internal static class UriExtensions
 
         foreach (var existing in existingParameters.Where(predicate: existing => !p.ContainsKey(key: existing.Key)))
         {
-            p.Add(item: existing);
+            p.Add(key: existing.Key, value: existing.Value);
         }
 
         string MapValueFunction(string key, string value)
@@ -50,13 +58,10 @@ internal static class UriExtensions
         switch (uri.IsAbsoluteUri)
         {
             case true:
-            {
-                var uriBuilder = new UriBuilder(uri: uri)
                 {
-                    Query = query
-                };
-                return uriBuilder.Uri;
-            }
+                    var uriBuilder = new UriBuilder(uri: uri) { Query = query };
+                    return uriBuilder.Uri;
+                }
             default:
                 return new Uri(uriString: $"{uriWithoutQuery}?{query}", uriKind: UriKind.Relative);
         }

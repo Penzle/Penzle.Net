@@ -11,17 +11,17 @@ public sealed class BearerCredentialsShould
     public void Set_Delivery_And_Management_Key_Properly()
     {
         // Act
-        const string apiDeliveryKey = "6a15d038f0d443fe84a10e001579a7ea";
-        const string apiManagementKey = "41ba2bdc160a4d63ac9c510b13870bcd";
+        const string ApiDeliveryKey = "6a15d038f0d443fe84a10e001579a7ea";
+        const string ApiManagementKey = "41ba2bdc160a4d63ac9c510b13870bcd";
 
         // Arrange
-        var credentials = new BearerCredentials(apiDeliveryKey: apiDeliveryKey, apiManagementKey: apiManagementKey);
+        var credentials = new BearerCredentials(apiDeliveryKey: ApiDeliveryKey, apiManagementKey: ApiManagementKey);
 
         // Assert
         credentials.ApiDeliveryKey.Should().NotBeNullOrWhiteSpace();
-        credentials.ApiDeliveryKey.Should().Be(expected: apiDeliveryKey);
+        credentials.ApiDeliveryKey.Should().Be(expected: ApiDeliveryKey);
         credentials.ApiManagementKey.Should().NotBeNullOrWhiteSpace();
-        credentials.ApiManagementKey.Should().Be(expected: apiManagementKey);
+        credentials.ApiManagementKey.Should().Be(expected: ApiManagementKey);
     }
 
     [Fact]
