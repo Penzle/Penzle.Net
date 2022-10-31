@@ -10,7 +10,8 @@ using Penzle.Core.Tests.Attribute;
 
 namespace Penzle.Core.Tests.Connections;
 
-public class ConnectionShould
+[Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Connections))]
+public class ConnectionMockShould
 {
     [Fact]
     public void The_BaseAddress_Has_To_Be_Populated_With_Secured_TLS()

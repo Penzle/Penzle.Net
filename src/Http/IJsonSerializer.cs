@@ -1,10 +1,17 @@
-﻿namespace Penzle.Core.Http;
+﻿using System.Text.Json;
+
+namespace Penzle.Core.Http;
 
 /// <summary>
 ///     Offers both a serialization and deserialization service for JSON. enables the use of user-defined serializers.
 /// </summary>
 public interface IJsonSerializer
 {
+    /// <summary>
+    ///     Provides options to be used with <see cref="JsonSerializer" />.
+    /// </summary>
+    JsonSerializerOptions Options { get; }
+
     /// <summary>
     ///     Creates a JSON string representation of an object.
     /// </summary>

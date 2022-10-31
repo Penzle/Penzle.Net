@@ -5,7 +5,7 @@ namespace Penzle.Core.Http.Internal;
 
 public sealed class MicrosoftJsonSerializer : IJsonSerializer
 {
-    private JsonSerializerOptions Options { get; } = new() { PropertyNameCaseInsensitive = true, ReferenceHandler = ReferenceHandler.IgnoreCycles };
+    public JsonSerializerOptions Options { get; } = new() { PropertyNameCaseInsensitive = true, ReferenceHandler = ReferenceHandler.IgnoreCycles };
 
     public string Serialize(object item)
     {
