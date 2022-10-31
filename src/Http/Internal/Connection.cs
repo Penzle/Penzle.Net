@@ -48,6 +48,7 @@ public class Connection : IConnection
         BaseAddress = Constants.AddressTemplate.FormatUri(baseAddress, apiOptions.Project, apiOptions.Environment);
         UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
         Credentials = credentialStore.GetCredentials().GetAwaiter().GetResult();
+        CredentialStore = credentialStore;
         _authenticator = new Authenticator(credentialStore: credentialStore);
         _jsonSerializer = serializer;
     }
@@ -58,16 +59,25 @@ public class Connection : IConnection
     public virtual string UserAgent { get; set; }
     public virtual ICredentialStore<BearerCredentials> CredentialStore { get; set; }
 
-    public virtual async Task<T> Get<T>(Uri uri, IDictionary<string, string> parameters, string accepts,
-        string contentType, CancellationToken cancellationToken = default)
+    public async virtual Task<T> Get<T>(
+        Uri uri,
+        IDictionary<string, string> parameters,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         return await SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Get, body: null, accepts: accepts, contentType: contentType,
             cancellationToken: cancellationToken);
     }
 
-    public virtual async ValueTask<HttpStatusCode> Patch(Uri uri, object body, IDictionary<string, string> parameters,
-        string accepts, string contentType, CancellationToken cancellationToken = default)
+    public async virtual ValueTask<HttpStatusCode> Patch(
+        Uri uri,
+        object body,
+        IDictionary<string, string> parameters,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -77,8 +87,13 @@ public class Connection : IConnection
         return HttpStatusCode.NoContent;
     }
 
-    public virtual Task<T> Patch<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts,
-        string contentType, CancellationToken cancellationToken = default)
+    public virtual Task<T> Patch<T>(
+        Uri uri,
+        object body,
+        IDictionary<string, string> parameters,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -87,8 +102,13 @@ public class Connection : IConnection
             cancellationToken: cancellationToken);
     }
 
-    public virtual async ValueTask<HttpStatusCode> Post(Uri uri, object body, IDictionary<string, string> parameters,
-        string accepts, string contentType, CancellationToken cancellationToken = default)
+    public async virtual ValueTask<HttpStatusCode> Post(
+        Uri uri,
+        object body,
+        IDictionary<string, string> parameters,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -98,8 +118,13 @@ public class Connection : IConnection
         return HttpStatusCode.NoContent;
     }
 
-    public virtual Task<T> Post<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts,
-        string contentType, CancellationToken cancellationToken = default)
+    public virtual Task<T> Post<T>(
+        Uri uri,
+        object body,
+        IDictionary<string, string> parameters,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -108,8 +133,13 @@ public class Connection : IConnection
             cancellationToken: cancellationToken);
     }
 
-    public virtual async ValueTask<HttpStatusCode> Put(Uri uri, object body, IDictionary<string, string> parameters,
-        string accepts, string contentType, CancellationToken cancellationToken = default)
+    public async virtual ValueTask<HttpStatusCode> Put(
+        Uri uri,
+        object body,
+        IDictionary<string, string> parameters,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -119,8 +149,13 @@ public class Connection : IConnection
         return HttpStatusCode.NoContent;
     }
 
-    public virtual Task<T> Put<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts,
-        string contentType, CancellationToken cancellationToken = default)
+    public virtual Task<T> Put<T>(
+        Uri uri,
+        object body,
+        IDictionary<string, string> parameters,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         Guard.ArgumentNotNull(value: uri, name: nameof(body));
@@ -129,8 +164,13 @@ public class Connection : IConnection
             cancellationToken: cancellationToken);
     }
 
-    public virtual async ValueTask<HttpStatusCode> Delete(Uri uri, object body, IDictionary<string, string> parameters,
-        string accepts, string contentType, CancellationToken cancellationToken = default)
+    public async virtual ValueTask<HttpStatusCode> Delete(
+        Uri uri,
+        object body,
+        IDictionary<string, string> parameters,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
 
@@ -139,8 +179,13 @@ public class Connection : IConnection
         return HttpStatusCode.NoContent;
     }
 
-    public virtual Task<T> Delete<T>(Uri uri, object body, IDictionary<string, string> parameters, string accepts,
-        string contentType, CancellationToken cancellationToken = default)
+    public virtual Task<T> Delete<T>(
+        Uri uri,
+        object body,
+        IDictionary<string, string> parameters,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Delete, body: body, accepts: accepts, contentType: contentType,
@@ -155,17 +200,30 @@ public class Connection : IConnection
         HttpClient.SetRequestTimeout(timeout: timeout);
     }
 
-    internal virtual Task<T> SendEntry<T>(Uri uri, HttpMethod method, object body, string accepts, string contentType,
-        CancellationToken cancellationToken, Uri baseAddress = null)
+    internal virtual Task<T> SendEntry<T>(
+        Uri uri,
+        HttpMethod method,
+        object body,
+        string accepts,
+        string contentType,
+        CancellationToken cancellationToken,
+        Uri baseAddress = null)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        var request = new Request { Method = method, BaseAddress = baseAddress ?? BaseAddress, Endpoint = uri };
+        var request = new Request
+        {
+            Method = method, BaseAddress = baseAddress ?? BaseAddress, Endpoint = uri
+        };
 
         return SendEntryInternal<T>(body: body, cancellationToken: cancellationToken, request: request, accepts: accepts, contentType: contentType);
     }
 
-    internal virtual Task<T> SendEntryInternal<T>(object body, CancellationToken cancellationToken, Request request,
-        string accepts = "*/*", string contentType = "application/json")
+    internal virtual Task<T> SendEntryInternal<T>(
+        object body,
+        CancellationToken cancellationToken,
+        Request request,
+        string accepts = "*/*",
+        string contentType = "application/json")
     {
         request.Headers[key: "Accept"] = accepts ?? "*/*";
 
@@ -190,9 +248,12 @@ public class Connection : IConnection
         return Run<T>(request: request, cancellationToken: cancellationToken);
     }
 
-    internal virtual async Task<T> Run<T>(IRequest request, CancellationToken cancellationToken)
+    async internal virtual Task<T> Run<T>(IRequest request, CancellationToken cancellationToken)
     {
-        var types = new[] { typeof(Template), typeof(Asset), typeof(Guid) };
+        var types = new[]
+        {
+            typeof(Template), typeof(Asset), typeof(Guid)
+        };
         T @object = default;
 
         var response = await RunRequest(request: request, cancellationToken: cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
@@ -222,7 +283,10 @@ public class Connection : IConnection
         return @object;
     }
 
-    internal virtual T SetProperty<T>(JsonObject jsonNode, T @object, string propertyType,
+    internal virtual T SetProperty<T>(
+        JsonObject jsonNode,
+        T @object,
+        string propertyType,
         Func<PropertyInfo, bool> predicate)
     {
         var systemPropertyInfo = @object != null ? @object.GetProperties().FirstOrDefault(predicate: predicate) : null;
@@ -238,7 +302,7 @@ public class Connection : IConnection
         return @object;
     }
 
-    internal virtual async Task<IResponse> RunRequest(IRequest request, CancellationToken cancellationToken)
+    async internal virtual Task<IResponse> RunRequest(IRequest request, CancellationToken cancellationToken)
     {
         request.Headers.Add(key: "User-Agent", value: UserAgent);
         await _authenticator.Apply(request: request).ConfigureAwait(continueOnCapturedContext: false);
