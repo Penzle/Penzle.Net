@@ -7,6 +7,11 @@
 public interface IHttpClient : IDisposable
 {
     /// <summary>
+    ///     Default http client for SDK communication with API
+    /// </summary>
+    HttpClient HttpClient { get; }
+
+    /// <summary>
     ///     Sends the request that has been specified and returns a response.
     /// </summary>
     /// <param name="request">A <see cref="IRequest" /> that represents the HTTP request</param>
