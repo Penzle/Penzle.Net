@@ -141,7 +141,7 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
         var options = ApiOptions.Default;
         apiOptions?.Invoke(obj: options);
 
-        IConnection connection = new Connection(baseAddress: baseAddress, apiOptions: options, credentialStore: credentialStore, httpClient: httpClient, serializer: jsonSerializer);
+        IConnection connection = new Connection(baseAddress: baseAddress, apiOptions: options, credentialStore: credentialStore, httpClient: httpClient, serializer: jsonSerializer, platformInformation: new SdkPlatformInformation());
         connection.SetRequestTimeout(timeout: timeOut);
 
         return new ManagementPenzleClient(connection: connection);

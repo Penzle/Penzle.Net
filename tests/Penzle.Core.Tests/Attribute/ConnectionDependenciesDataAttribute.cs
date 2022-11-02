@@ -16,9 +16,7 @@ public sealed class ConnectionDependenciesDataAttribute : DataAttribute
         {
             new object[]
             {
-                new Uri("https://api.penzle.com"), new ApiOptions("main", "staging"),
-                new InMemoryCredentialStore(new BearerCredentials("54573d95", "5d954573")),
-                new HttpClientAdapter(new HttpClient()), new MicrosoftJsonSerializer()
+                new Uri("https://api.penzle.com"), new ApiOptions(project: "main", environment: "staging"), new InMemoryCredentialStore(new BearerCredentials(apiDeliveryKey: "54573d95", apiManagementKey: "5d954573")), new HttpClientAdapter(new HttpClient()), new MicrosoftJsonSerializer(), new SdkPlatformInformation()
             }
         };
     }

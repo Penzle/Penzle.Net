@@ -25,7 +25,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\Readme.md" Pack="true" PackagePath="\"/>
+    <None Include="..\Readme.md" Pack="true" PackagePath="\" />
     <None Update="logo.png">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
@@ -33,6 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="System.Text.Json" Version="6.0.6"/>
+    <PackageReference Include="System.Text.Json" Version="6.0.6" />
   </ItemGroup>
 </Project>
