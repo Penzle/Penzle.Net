@@ -8,13 +8,10 @@ public class BaseSystem
     public virtual Guid Id { get; set; }
     public virtual Guid ParentId { get; set; }
     public virtual string Name { get; set; }
-    public virtual string RecentVersion { get; set; }
+    public virtual string Version { get; set; }
     [JsonPropertyName(name: "language")] public virtual string Language { get; set; }
     public virtual string AliasPath { get; set; }
-    public virtual string UrlAlias { get; set; }
-    public virtual bool EnabledUrlAlias { get; set; }
-    public virtual bool EnabledParentAliasInheritance { get; set; }
-    public virtual bool IsCheckedOut { get; set; }
-    public virtual bool HasWorkflowApplied { get; set; }
-    public virtual string Icon { get; set; }
+    public virtual string Slug { get; set; }
+    public virtual DateTime ModifiedAt { get; set; }
+    public virtual DateTime CreatedAt { get; set; }
 }
