@@ -3,7 +3,7 @@
 ![Run Build and Test](https://github.com/Penzle/Penzle.Net/actions/workflows/run-build-and-test.ci.yml/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/edbdt6fl1omedpfi/branch/main?svg=true)](https://ci.appveyor.com/project/admir-live/penzle-net/branch/main)
 
-![NuGet Downloads](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads&style=plastic](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads))
+![NuGet Downloads](<https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads&style=plastic](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads)>)
 ![Licence](https://camo.githubusercontent.com/238290f8deb751619ca04ad3d316f1246a498b13d2ab49c0348e2b4311bd08f4/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6963656e73652f6a6f6e6772616365636f782f616e7962616467652e737667)
 ![W3C](https://img.shields.io/badge/w3c-validated-brightgreen)
 ![Paradigm](https://img.shields.io/badge/accessibility-yes-brightgreen)
@@ -54,39 +54,110 @@ Installation using .NET CLI:
 dotnet add <your project> package Penzle.Net.Microsoft.DependencyInjection
 ```
 
-## **Simple usage example**
+## **Recommended & minimum configuration example**
 
-To begin, create a DTO model that is compatible with your data template.
+Create a strong type model that is compatible with your data template first before you do anything else.
 
 ```csharp
-public class Student
+public sealed class Author
 {
-    public DateTime DateOfBirth { get; set; }
-    public decimal NumberOfIndex { get; set; }
-    public string Title { get; set; }
-    public EntrySystem System { get; set; }
-    public List<BaseTemplates> Base { get; set; };
+    public string? Summary { get; set; }
 }
 ```
 
-If you want to retrieve data from the Penzle API, all you have to do is make a call using the `IPenzleClient`:
+```csharp
+public sealed class Address
+{
+    public string? Street { get; set; }
+    public string? City { get; set; }
+    public string? State { get; set; }
+    public string? Zip { get; set; }
+}
+```
+
+Our secure architecture served as the foundation for the creation of clients for delivery and management. The key must be different for delivery and managament client. Otherwise, the system will return a forbidden response. Please click the following [link](https://docs.penzle.com/api/authentication-and-authorization/index.html) to learn more about it.
+
+To retrieve data from the Penzle API, you must make a call using the `IDeliveryPenzleClient`.
+
+If you're using our package for IoC, you need to set it up the way recommended in the documentation. If not, you can use the static method `Factory`, which can be accessed through `DeliveryPenzleClient` and has multiple overloads. There is an example of how to set up the minimum configuration.
 
 ```csharp
-var student = await penzleClient
-                .Entry
-                .GetEntry<Student>
-                (
-                     entryId: new Guid(g: "b30f6a28-e8b9-4886-ac28-0109aaf959af"),
-                     cancellationToken: CancellationToken.None
-                );
 
-Console.WriteLine(student.Title);
-Console.WriteLine(student.DateOfBirth);
+// You should use this url from configuration for actual world usage, such as production, or even just for best practices.
+const string DefaultUrl = "https://api-{your-tenant-name}.penzle.com";
+var apiAddress = new Uri(uriString: DefaultUrl, uriKind: UriKind.Absolute);
+
+// You should use this key from a secure configuration, such as Azure Key Vault, following the best security practice.
+const string ApiKey = "<your-key" > ;
+
+// Use the Factory method to create a new instance of the Penzle API client, giving the API address and API key.
+var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: apiAddress, apiDeliveryKey: ApiKey, apiOptions: options =>
+{
+	options.Project = "default"; // Define the project name which you want to use.
+	options.Environment = "main"; // Define the environment name which you want to use for the project.
+});
+
+// Using query builder to define request parameters.
+var query = QueryEntryBuilder.Instance
+            .WithParentId(parentId: new Guid(g: "2e2c2146-15b1-41ed-9bca-b77e346f8f0a"))
+            .WithPagination(pagination:QueryPaginationBuilder.Default
+                            .WithPage(page: 1)
+                            .WithPageSize(pageSize: 10));
+
+try
+{
+
+    // You can call the API methods for fetching the entry data with pagination using an instance of the Penzle API client that you have created.
+	var entries = await deliveryPenzleClient.Entry.GetPaginationListEntries<Entry<Author>>(query: query);
+
+    // Print the total number of entries.
+	Console.WriteLine(value: $"Total count of entries: {entries.TotalCount}");
+
+    // Print the entries to the console.
+	foreach (var entry in entries.Items)
+	{
+		// Print the entry system fields.
+		Console.WriteLine(value: $"Entry {entry.System.Name} system fields:");
+		Console.WriteLine(value: $"System Id: {entry.System.Id}");
+		Console.WriteLine(value: $"System Template: {entry.System.Template}");
+		Console.WriteLine(value: $"System Language: {entry.System.Language}");
+		Console.WriteLine(value: $"System Version: {entry.System.Version}");
+		Console.WriteLine(value: $"System CreatedAt: {entry.System.CreatedAt}");
+		Console.WriteLine(value: $"System ModifiedAt: {entry.System.ModifiedAt}");
+
+        // Print the entry fields.
+		Console.WriteLine(value: $"Entry {entry.System.Name} fields:");
+		Console.WriteLine(value: $"Summary: {entry.Fields.Summary}");
+
+        // Print the entry base collection fields.
+		foreach (var @base in entry.Base)
+		{
+			Console.WriteLine(value: "Entry base fields:");
+			Console.WriteLine(value: $"Fields dictionary: {@base.Fields}");
+		}
+
+		// Get strong type base object.
+		var address = entries.Items.First().Base.BaseEntityTo<Address>();
+
+        // Print base address object
+		Console.WriteLine(value: address.City);
+		Console.WriteLine(value: address.State);
+		Console.WriteLine(value: address.Zip);
+		Console.WriteLine(value: address.Street);
+	}
+}
+catch (PenzleException exception) // Handle exceptions.
+{
+	Console.WriteLine(value: exception);
+	throw;
+}
 ```
 
 ## **Usage system assets and resources using SDK**
 
-- [Delivery and management entries](https://github.com/Penzle/Penzle.Net/blob/main/docs/entries.md)
+- [Introduce into authentication and authorization](/docs/authentication-and-authorization/index.md)
+- [Review query builder and pagination](/docs/query-builder-and-pagination/index.md)
+- [Delivery and management entries](/doc/entries/index.md)
 - [Delivery and management forms - TODO]()
 - [Delivery and management assets- TODO]()
 - [Delivery and management templates - TODO]()
