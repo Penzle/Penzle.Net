@@ -156,7 +156,7 @@ catch (PenzleException exception) // Handle exceptions.
 ## **Usage system assets and resources using SDK**
 
 - [Introduce into authentication and authorization](/docs/authentication-and-authorization/index.md)
-- [Review query builder and pagination](/docs/authentication-and-authorization/index.md)
+- [Review query builder and pagination](/docs/query-builder-and-pagination/index.md)
 - [Delivery and management entries](/doc/entries/index.md)
 - [Delivery and management forms - TODO]()
 - [Delivery and management assets- TODO]()
