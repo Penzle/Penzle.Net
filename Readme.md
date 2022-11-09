@@ -155,7 +155,8 @@ catch (PenzleException exception) // Handle exceptions.
 
 ## **Usage system assets and resources using SDK**
 
-- [Delivery and management entries](https://github.com/Penzle/Penzle.Net/blob/main/docs/entries.md)
+- [Introduce into authentication and authorization] (/docs/index.md)
+- [Delivery and management entries](/docs/entries.md)
 - [Delivery and management forms - TODO]()
 - [Delivery and management assets- TODO]()
 - [Delivery and management templates - TODO]()
