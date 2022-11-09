@@ -65,7 +65,7 @@ public sealed class Author
 }
 ```
 
-```cs
+```csharp
 public sealed class Address
 {
     public string? Street { get; set; }
@@ -82,77 +82,75 @@ To retrieve data from the Penzle API, you must make a call using the `IDeliveryP
 If you're using our package for IoC, you need to set it up the way recommended in the documentation. If not, you can use the static method `Factory`, which can be accessed through `DeliveryPenzleClient` and has multiple overloads. There is an example of how to set up the minimum configuration.
 
 ```csharp
-/// You should use this url from configuration for actual world usage, such as production, or even just for best practices.
+
+// You should use this url from configuration for actual world usage, such as production, or even just for best practices.
 const string DefaultUrl = "https://api-{your-tenant-name}.penzle.com";
 var apiAddress = new Uri(uriString: DefaultUrl, uriKind: UriKind.Absolute);
 
 // You should use this key from a secure configuration, such as Azure Key Vault, following the best security practice.
-const string ApiKey = "<your-key">;
+const string ApiKey = "<your-key" > ;
 
 // Use the Factory method to create a new instance of the Penzle API client, giving the API address and API key.
 var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: apiAddress, apiDeliveryKey: ApiKey, apiOptions: options =>
 {
-    options.Project = "default"; // Define the project name which you want to use.
-    options.Environment = "main"; // Define the environment name which you want to use for the project.
+	options.Project = "default"; // Define the project name which you want to use.
+	options.Environment = "main"; // Define the environment name which you want to use for the project.
 });
 
 // Using query builder to define request parameters.
 var query = QueryEntryBuilder.Instance
-    .WithParentId(parentId: new Guid(g: "2e2c2146-15b1-41ed-9bca-b77e346f8f0a"))
-    .WithPagination(
-        pagination: QueryPaginationBuilder.Default
-            .WithPage(page: 1)
-            .WithPageSize(pageSize: 10));
-
-
+            .WithParentId(parentId: new Guid(g: "2e2c2146-15b1-41ed-9bca-b77e346f8f0a"))
+            .WithPagination(pagination:QueryPaginationBuilder.Default
+                            .WithPage(page: 1)
+                            .WithPageSize(pageSize: 10));
 
 try
 {
-// You can call the API methods for fetching the entry data with pagination using an instance of the Penzle API client that you have created.
-    var entries = await deliveryPenzleClient.Entry.GetPaginationListEntries<Entry<Author>>(query: query);
 
-// Print the total number of entries.
-    Console.WriteLine(value: $"Total count of entries: {entries.TotalCount}");
+    // You can call the API methods for fetching the entry data with pagination using an instance of the Penzle API client that you have created.
+	var entries = await deliveryPenzleClient.Entry.GetPaginationListEntries<Entry<Author>>(query: query);
 
-// Print the entries to the console.
-    foreach (var entry in entries.Items)
-    {
-        // Print the entry system fields.
-        Console.WriteLine(value: $"Entry {entry.System.Name} system fields:");
-        Console.WriteLine(value: $"System Id: {entry.System.Id}");
-        Console.WriteLine(value: $"System Template: {entry.System.Template}");
-        Console.WriteLine(value: $"System Language: {entry.System.Language}");
-        Console.WriteLine(value: $"System Version: {entry.System.Version}");
-        Console.WriteLine(value: $"System CreatedAt: {entry.System.CreatedAt}");
-        Console.WriteLine(value: $"System ModifiedAt: {entry.System.ModifiedAt}");
+    // Print the total number of entries.
+	Console.WriteLine(value: $"Total count of entries: {entries.TotalCount}");
+
+    // Print the entries to the console.
+	foreach (var entry in entries.Items)
+	{
+		// Print the entry system fields.
+		Console.WriteLine(value: $"Entry {entry.System.Name} system fields:");
+		Console.WriteLine(value: $"System Id: {entry.System.Id}");
+		Console.WriteLine(value: $"System Template: {entry.System.Template}");
+		Console.WriteLine(value: $"System Language: {entry.System.Language}");
+		Console.WriteLine(value: $"System Version: {entry.System.Version}");
+		Console.WriteLine(value: $"System CreatedAt: {entry.System.CreatedAt}");
+		Console.WriteLine(value: $"System ModifiedAt: {entry.System.ModifiedAt}");
 
         // Print the entry fields.
-        Console.WriteLine(value: $"Entry {entry.System.Name} fields:");
-        Console.WriteLine(value: $"Summary: {entry.Fields.Summary}");
+		Console.WriteLine(value: $"Entry {entry.System.Name} fields:");
+		Console.WriteLine(value: $"Summary: {entry.Fields.Summary}");
 
         // Print the entry base collection fields.
-        foreach (var @base in entry.Base)
-        {
-            Console.WriteLine(value: "Entry base fields:");
-            Console.WriteLine(value: $"Fields dictionary: {@base.Fields}");
-        }
+		foreach (var @base in entry.Base)
+		{
+			Console.WriteLine(value: "Entry base fields:");
+			Console.WriteLine(value: $"Fields dictionary: {@base.Fields}");
+		}
 
-        // Get strong type base object.
-        var address = entries.Items.First().Base.BaseEntityTo<Address>();
+		// Get strong type base object.
+		var address = entries.Items.First().Base.BaseEntityTo<Address>();
 
         // Print base address object
-        Console.WriteLine(value: address.City);
-        Console.WriteLine(value: address.State);
-        Console.WriteLine(value: address.Zip);
-        Console.WriteLine(value: address.Street);
-    }
+		Console.WriteLine(value: address.City);
+		Console.WriteLine(value: address.State);
+		Console.WriteLine(value: address.Zip);
+		Console.WriteLine(value: address.Street);
+	}
 }
 catch (PenzleException exception) // Handle exceptions.
 {
-    Console.WriteLine(value: exception);
-    throw;
+	Console.WriteLine(value: exception);
+	throw;
 }
-
 ```
 
 ## **Usage system assets and resources using SDK**
