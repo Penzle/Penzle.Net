@@ -39,8 +39,21 @@ The language code represents the international standard code. If your content is
 ```csharp
 ...
 var query = QueryEntryBuilder.Instance
-         .WithLanguage("en-US")
+        .WithLanguage("en-US")
 ...
 ```
 
 There is the capability to extend languages and regions within the CMS, allowing you to target audience very precisely.
+
+#### Filter by collection of entries id
+
+The SDK give a possiblities to define specific entries using the WithIds method, which requires the entry ids. Separate them with a semicolon for the sake of simplicity.
+
+```csharp
+...
+var query = QueryEntryBuilder.Instance
+        .WithIds("A672BEEB-E887-4F60-9E28-47F7C614DB92;E932D185-9E4B-4B03-B0B2-DEA6D26E6F56")
+...
+```
+
+Please note that once ids have been defined, the parent is ignored and the entire tree is searched.
