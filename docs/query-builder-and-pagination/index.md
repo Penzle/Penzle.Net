@@ -4,6 +4,8 @@ To accommodate the use of the SDK, we have included a different types of query p
 
 Penzle.NET SKD supply multiple query builders, each with their own set of options, exist to help with the retrieval of specific object types, such as entries, forms, or assets.
 
+### Entry query builder
+
 For example, for entries types, there is a complex query that is configured with AND operator:
 
 ```csharp
