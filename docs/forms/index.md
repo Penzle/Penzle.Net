@@ -97,7 +97,7 @@ var medicalRelease = new MedicalRelease
 };
 
 // Using created instance of the Penzle API client, you can call the API methods for creating the form entry.
-var formId = await managementPenzleClient.Form.CreateForm(form: medicalRelease);
+var formId = await managementPenzleClient.Form.CreateForm(form: medicalRelease, CancellationToken.None);
 
 // Print the form id to the console.
 Console.WriteLine(value: formId);
