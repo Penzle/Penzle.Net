@@ -11,7 +11,7 @@ using Penzle.Core.Tests.Attribute;
 
 namespace Penzle.Core.Tests.Connections;
 
-[Trait(nameof(TraitDefinitions.Category), nameof(TraitDefinitions.Connections))]
+[Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Connections))]
 public class ConnectionShould
 {
     [Fact]
@@ -30,12 +30,16 @@ public class ConnectionShould
 
     [Theory]
     [ConnectionDependenciesData]
-    public void Construct_Connection_With_Custom_Settings(Uri baseAddress,
-        ApiOptions apiOptions, ICredentialStore<BearerCredentials> credentialStore, IHttpClient httpClientAdapter,
-        IJsonSerializer jsonSerializer)
+    public void Construct_Connection_With_Custom_Settings(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
     {
         // Arrange
-        var connection = new Connection(baseAddress, apiOptions, credentialStore, httpClientAdapter, jsonSerializer);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
 
         // Assert
         connection.Should().NotBeNull();
@@ -48,16 +52,20 @@ public class ConnectionShould
 
     [Theory]
     [ConnectionDependenciesData]
-    public void Construct_Connection_With_Custom_Settings_Should_Protect_If_Not_AbsoluteUri(Uri baseAddress,
-        ApiOptions apiOptions, ICredentialStore<BearerCredentials> credentialStore, IHttpClient httpClientAdapter,
-        IJsonSerializer jsonSerializer)
+    public void Construct_Connection_With_Custom_Settings_Should_Protect_If_Not_AbsoluteUri(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
     {
         // Arrange
-        baseAddress = new Uri("/endpoint", UriKind.Relative);
+        baseAddress = new Uri(uriString: "/endpoint", uriKind: UriKind.Relative);
 
         // Act
         Action connection = () =>
-            new Connection(baseAddress, apiOptions, credentialStore, httpClientAdapter, jsonSerializer);
+            new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
 
         // Assert
         connection.Should().Throw<ArgumentException>();
@@ -68,7 +76,10 @@ public class ConnectionShould
     {
         // Arrange
         const string UserAgent = "Penzle/1.0.0";
-        var connection = new Connection {UserAgent = UserAgent};
+        var connection = new Connection
+        {
+            UserAgent = UserAgent
+        };
 
         // Assert
         connection.Should().NotBeNull();
@@ -82,7 +93,10 @@ public class ConnectionShould
         // Arrange
         const string ApiUri = "https://api.penzle.com/";
         var baseAddress = new Uri(ApiUri);
-        var connection = new Connection {BaseAddress = baseAddress};
+        var connection = new Connection
+        {
+            BaseAddress = baseAddress
+        };
 
         // Assert
         connection.Should().NotBeNull();
@@ -90,34 +104,24 @@ public class ConnectionShould
         connection.BaseAddress.Should().Be(ApiUri);
     }
 
-    [Fact]
-    public void Display_The_Connection_Current_Platform_Information_Of_SDK()
-    {
-        // Arrange
-        const string PlatformInformation = "v1.0.0-rc.1";
-        var connection = new Connection {PlatformInformation = PlatformInformation};
-
-        // Act
-        var platformInformation = connection.GetPlatformInformation();
-
-        // Assert
-        platformInformation.Should().NotBeNull();
-        platformInformation.Should().Be(PlatformInformation);
-    }
 
     [Theory]
     [ConnectionDependenciesData]
-    public void Ability_To_Handle_Connection_Errors_When_Bad_Request_Occurred_Throw_PenzleException(Uri baseAddress,
-        ApiOptions apiOptions, ICredentialStore<BearerCredentials> credentialStore, IHttpClient httpClientAdapter,
-        IJsonSerializer jsonSerializer)
+    public void Ability_To_Handle_Connection_Errors_When_Bad_Request_Occurred_Throw_PenzleException(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
     {
         // Arrange
-        var connection = new Connection(baseAddress, apiOptions, credentialStore, httpClientAdapter, jsonSerializer);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
 
         var mockResponse = new Mock<IResponse>();
         mockResponse
             .SetupAllProperties()
-            .SetupProperty(response => response.StatusCode, HttpStatusCode.BadRequest);
+            .SetupProperty(property: response => response.StatusCode, initialValue: HttpStatusCode.BadRequest);
 
         // Act
         var action = () => connection.HandleErrors(mockResponse.Object);
@@ -128,17 +132,21 @@ public class ConnectionShould
 
     [Theory]
     [ConnectionDependenciesData]
-    public void Ability_To_Handle_Errors_When_Not_Found_Resources_Should_Exit_From_Execution(Uri baseAddress,
-        ApiOptions apiOptions, ICredentialStore<BearerCredentials> credentialStore, IHttpClient httpClientAdapter,
-        IJsonSerializer jsonSerializer)
+    public void Ability_To_Handle_Errors_When_Not_Found_Resources_Should_Exit_From_Execution(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
     {
         // Arrange
-        var connection = new Connection(baseAddress, apiOptions, credentialStore, httpClientAdapter, jsonSerializer);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
 
         var mockResponse = new Mock<IResponse>();
         mockResponse
             .SetupAllProperties()
-            .SetupProperty(response => response.StatusCode, HttpStatusCode.NotFound);
+            .SetupProperty(property: response => response.StatusCode, initialValue: HttpStatusCode.NotFound);
 
         // Act
         var action = () => connection.HandleErrors(mockResponse.Object);

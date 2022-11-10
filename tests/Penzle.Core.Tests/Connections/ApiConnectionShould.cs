@@ -22,8 +22,7 @@ public class ApiConnectionShould
             .SetupProperty(property: connection => connection.CredentialStore, initialValue: new InMemoryCredentialStore(credentials: _credentials))
             .SetupProperty(property: connection => connection.Credentials, initialValue: _credentials)
             .SetupProperty(property: connection => connection.UserAgent, initialValue: "Penzle.Core.Tests/1.0.0")
-            .SetupProperty(property: connection => connection.HttpClient, initialValue: new HttpClientAdapter(getHandler: () => new RedirectHandler()))
-            .SetupProperty(property: connection => connection.PlatformInformation, initialValue: "Penzle.Net-1.0.0");
+            .SetupProperty(property: connection => connection.HttpClient, initialValue: new HttpClientAdapter(getHandler: () => new RedirectHandler()));
     }
 
     [Fact]
@@ -65,7 +64,6 @@ public class ApiConnectionShould
 
         apiConnection.Connection.BaseAddress.Should().Be(expected: new Uri(uriString: "https://api.penzle.com"));
         apiConnection.Connection.UserAgent.Should().Be(expected: "Penzle.Core.Tests/1.0.0");
-        apiConnection.Connection.PlatformInformation.Should().Be(expected: "Penzle.Net-1.0.0");
 
         apiConnection.Connection.CredentialStore.Should().NotBeNull();
         apiConnection.Connection.CredentialStore.Should().BeOfType<InMemoryCredentialStore>();

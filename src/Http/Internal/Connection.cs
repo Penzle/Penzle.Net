@@ -14,9 +14,12 @@ public class Connection : IConnection
 {
     private readonly Authenticator _authenticator;
     private readonly IJsonSerializer _jsonSerializer;
+    private readonly IPlatformInformation _platformInformation;
 
     public Connection()
     {
+        _jsonSerializer = new MicrosoftJsonSerializer();
+        _platformInformation = new SdkPlatformInformation();
     }
 
     public Connection(
@@ -24,13 +27,15 @@ public class Connection : IConnection
         ApiOptions apiOptions,
         ICredentialStore<BearerCredentials> credentialStore,
         IHttpClient httpClient,
-        IJsonSerializer serializer)
+        IJsonSerializer serializer,
+        IPlatformInformation platformInformation)
     {
         Guard.ArgumentNotNull(value: baseAddress, name: nameof(baseAddress));
         Guard.ArgumentNotNull(value: apiOptions, name: nameof(apiOptions));
         Guard.ArgumentNotNull(value: credentialStore, name: nameof(credentialStore));
         Guard.ArgumentNotNull(value: httpClient, name: nameof(httpClient));
         Guard.ArgumentNotNull(value: serializer, name: nameof(serializer));
+        Guard.ArgumentNotNull(value: platformInformation, name: nameof(platformInformation));
 
         if (!baseAddress.IsAbsoluteUri)
         {
@@ -44,18 +49,17 @@ public class Connection : IConnection
             baseAddress = new Uri(uriString: baseAddress.ToString().Remove(startIndex: baseAddress.ToString().Length - 1));
         }
 
+        _authenticator = new Authenticator(credentialStore: credentialStore);
+        _jsonSerializer = serializer;
+        _platformInformation = platformInformation;
         HttpClient = httpClient;
         BaseAddress = Constants.AddressTemplate.FormatUri(baseAddress, apiOptions.Project, apiOptions.Environment);
         UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
         Credentials = credentialStore.GetCredentials().GetAwaiter().GetResult();
         CredentialStore = credentialStore;
-        _authenticator = new Authenticator(credentialStore: credentialStore);
-        _jsonSerializer = serializer;
     }
 
-    public virtual string PlatformInformation { get; set; }
     public virtual IHttpClient HttpClient { get; set; }
-
     public virtual string UserAgent { get; set; }
     public virtual ICredentialStore<BearerCredentials> CredentialStore { get; set; }
 
@@ -328,30 +332,9 @@ public class Connection : IConnection
     {
         return string.Format(provider: CultureInfo.InvariantCulture, format: "{0} ({1}; {2}; penzle.net {3})",
             productInformation,
-            GetPlatformInformation(),
+            _platformInformation.GetPlatformInformation(),
             GetCultureInformation(),
             GetVersionInformation());
-    }
-
-    internal virtual string GetPlatformInformation()
-    {
-        if (!string.IsNullOrWhiteSpace(value: PlatformInformation))
-        {
-            return PlatformInformation;
-        }
-
-        try
-        {
-            PlatformInformation = string.Format(provider: CultureInfo.InvariantCulture, format: "{0} {1}; {2}",
-                arg0: Environment.OSVersion.Platform, arg1: Environment.OSVersion.Version.ToString(fieldCount: 3),
-                arg2: Environment.Is64BitOperatingSystem ? "amd64" : "x86");
-        }
-        catch
-        {
-            PlatformInformation = "Unknown Platform";
-        }
-
-        return PlatformInformation;
     }
 
     internal virtual string GetCultureInformation()

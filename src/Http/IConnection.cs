@@ -4,7 +4,6 @@ namespace Penzle.Core.Http;
 
 public interface IConnection
 {
-    public string PlatformInformation { get; set; }
     public string UserAgent { get; set; }
     public IHttpClient HttpClient { get; set; }
     Uri BaseAddress { get; set; }
