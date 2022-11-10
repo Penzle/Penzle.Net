@@ -82,4 +82,38 @@ Console.WriteLine(assetCollection.Items); // Returns the collection of Penzle.Co
 
 > ⚠️ An increased page size while pulling the asset will reduce the number of calls to the API endpoint but double the quantity of data provided for each API call. Please keep this in mind when defining pageSize, since it could affect performance and the end-user experience.
 
- ### **Get a single asset by id**
+ ### **Get a single asset**
+
+ In the scenario that you need to return a single asset, you can do so by using the asset unique id. Using CMS, the Id can be located quickly and without much difficulty, just like it is shown on the screenshot in the upper-right corner of the information section.
+
+ ![im](../images/asset-id.png)
+
+There is an example of how to do this in C#:
+
+ ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
+ // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
+{
+    options.Project = "main"; // Define the project name which you want to use.
+    options.Environment = "default"; // Define the environment name which you want to use for the project.
+});
+
+
+var assetId = new Guid(g: "F078FC7D-C3E6-459F-AD21-D34F71E6195B");
+var asset = await managementPenzleClient.Asset.GetAsset(id: assetId, cancellationToken: CancellationToken.None);
+
+// Print the response of returned asset to the console.
+Console.WriteLine(value: asset.Id); // Returns the unique identifier of the asset.
+Console.WriteLine(value: asset.Name); // Returns the name of the asset.
+Console.WriteLine(value: asset.Description); // Returns the description of the asset.
+Console.WriteLine(value: asset.Tags); // Returns the tags of the asset and it can be enumerated.
+Console.WriteLine(value: asset.CreatedAt); // Returns the date and time when the asset was created.
+Console.WriteLine(value: asset.ModifiedAt); // Returns the date and time when the asset was last updated.
+Console.WriteLine(value: asset.AssetMimeType); // Returns the mime type of the asset. This is complex object and be access to own properties.
+Console.WriteLine(value: asset.Size); // Returns the content length size of the asset.
+Console.WriteLine(value: asset.Url); // Returns the url from CDN of the asset.
+Console.WriteLine(value: asset.Type); // Returns the type of the asset it can be folder or file.
+```

@@ -7,7 +7,7 @@ namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
 {
     internal class AssetsExamples
     {
-        public static async Task ExampleHowToAssets(Uri uri, string apiKey)
+        public static async Task ExampleHowToGetAssetCollection(Uri uri, string apiKey)
         {
             // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
             var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
@@ -27,6 +27,33 @@ namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
             Console.WriteLine(value: assetCollection.PageSize); //Returns the number of items in the current page.
             Console.WriteLine(value: assetCollection.TotalCount); //Returns the total number of items in the superset.
             Console.WriteLine(value: assetCollection.TotalPages); //Returns the total number of pages in the superset.
+            Console.WriteLine(value: assetCollection.Items); // Returns the collection of Penzle.Core.Model.Asset in the current page.
+        }
+
+        public static async Task ExampleHowToGetAsset(Uri uri, string apiKey)
+        {
+            // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+            var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
+            {
+                options.Project = "main"; // Define the project name which you want to use.
+                options.Environment = "default"; // Define the environment name which you want to use for the project.
+            });
+
+
+            var assetId = new Guid(g: "F078FC7D-C3E6-459F-AD21-D34F71E6195B");
+            var asset = await managementPenzleClient.Asset.GetAsset(id: assetId, cancellationToken: CancellationToken.None);
+
+            // Print the response of returned asset to the console.
+            Console.WriteLine(value: asset.Id); // Returns the unique identifier of the asset.
+            Console.WriteLine(value: asset.Name); // Returns the name of the asset.
+            Console.WriteLine(value: asset.Description); // Returns the description of the asset.
+            Console.WriteLine(value: asset.Tags); // Returns the tags of the asset and it can be enumerated.
+            Console.WriteLine(value: asset.CreatedAt); // Returns the date and time when the asset was created.
+            Console.WriteLine(value: asset.ModifiedAt); // Returns the date and time when the asset was last updated.
+            Console.WriteLine(value: asset.AssetMimeType); // Returns the mime type of the asset. This is complex object and be access to own properties.
+            Console.WriteLine(value: asset.Size); // Returns the content length size of the asset.
+            Console.WriteLine(value: asset.Url); // Returns the url from CDN of the asset.
+            Console.WriteLine(value: asset.Type); // Returns the type of the asset it can be folder or file.
         }
     }
 }
