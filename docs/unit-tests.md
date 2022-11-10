@@ -17,7 +17,7 @@ to this:
 ```csharp
 // Arrange
 var mockHttp = new MockHttpMessageHandler();
-mockHttp.When("https://{yourname}.api.penzle.com.com*").Respond("application/json", "<desired json>");
+mockHttp.When("https://<api-url>.penzle.com").Respond("application/json", "<desired json>");
 ```
 
 and then you can create a client that will use the fake handler.
