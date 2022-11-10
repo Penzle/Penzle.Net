@@ -154,10 +154,10 @@ catch (PenzleException exception) // Handle exceptions.
 
 ## **Usage system assets and resources using SDK**
 
-- [Recommendation for how to handle authentication and authorization](./docs/authentication-and-authorization/index.md)
-- [Recommendation how to use query builder and pagination](./docs/query-builder-and-pagination/index.md)
-- - [Recommendation how to handle unit tests.](./docs/query-builder-and-pagination/index.md)
-- [Recommendation how to handle errors using SDK.]()
+- [The recommendation procedure how to handle authentication and authorization](./docs/authentication-and-authorization/index.md)
+- [The recommendation procedure how to use query builder and pagination](./docs/query-builder-and-pagination/index.md)
+- [The recommended procedure for carrying out unit tests.](./docs/unit-tests.md)
+- [Recommendation how to handle errors using SDK.](./docs/status-code-and-errors.md)
 - [How to using SKD to manage entries.](./docs/entries/index.md)
 - [How to using SKD to manage forms.](./docs/forms/index.md)
 - [How to using SKD to manage assets.](./docs/assets/index.md)
@@ -171,8 +171,6 @@ In order to find more developers material please visit next sections:
 - [Increasing modularity through the use of dependency injection.](https://github.com/Penzle/Penzle.Net/blob/main/docs/configuration.md)
 - [Utilize HttpClientFactory to improve the overall performance of your application as well as its stability.](https://github.com/Penzle/Penzle.Net/blob/main/docs/http-client-and-penzle-client.md)
 - [Utilize models with strong typing to ensure that you get the most out of all of the benefits from string typeping models.](https://github.com/Penzle/Penzle.Net/blob/main/docs/models-with-strong-typing.md)
-- [Handling errors in accordance with recommended practices](./docs/status-code-and-errors.md)
-- [The recommended procedure for carrying out unit tests.](https://github.com/Penzle/Penzle.Net/blob/main/docs/unit-tests.md)
 - [Make sure your keys are safe.](https://github.com/Penzle/Penzle.Net/blob/main/docs/azure-key-vault.md)
 
 ## **Contributing to Penzle.Net**
