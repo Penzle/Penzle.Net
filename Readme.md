@@ -155,10 +155,10 @@ catch (PenzleException exception) // Handle exceptions.
 
 ## **Usage system assets and resources using SDK**
 
-    - [Introduce into authentication and authorization]("./doc/authentication-and-authorization/index.md")
-- [Review query builder and pagination](./docs/query-builder-and-pagination/index.md)
+- [Recommendation for how to handle authentication and authorization]("./doc/authentication-and-authorization/index.md")
+- [Recommendation for wo use query builder and pagination](./docs/query-builder-and-pagination/index.md)
 - [Delivery and management entries](./docs/entries/index.md)
-- [Delivery and management forms - TODO]()
+- [Delivery and management form](./docs/forms/index.md)
 - [Delivery and management assets- TODO]()
 - [Delivery and management templates - TODO]()
 
@@ -215,3 +215,4 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
