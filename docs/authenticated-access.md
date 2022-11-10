@@ -20,12 +20,12 @@ To begin, you will want a Penzle account that should be already open (if not, pl
 website). After successfully logging in, navigate to your Settings and pick the Project tab. After that, select the "API
 Tokens" option. See next screen for more details.
 
-<img alt="penzle-create-api-key" src="../docs/images/projectkey.png" title="penzle-create-api-key"/>
+<img alt="penzle-create-api-key" src="./images/projectkey.png" title="penzle-create-api-key"/>
 
 After the key has been successfully produced, you are free to copy it and incorporate it into the section of your
 application that handles consumption for Penzle Client.
 
-![penzle-key](../docs/images/key.png "penzle-key")
+![penzle-key](./images/key.png)
 
 > ⚠️ WARNING: **Once they have been generated, all of the app's keys and tokens need to be kept in a safe place!**
 > Please use the **revoke** option in the event that your key has been compromised so that it can be turned invalid.
