@@ -5,7 +5,7 @@ using Penzle.Core.Models;
 
 namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
 {
-    internal class AssetsExamples
+    internal class AssetExamples
     {
         public static async Task ExampleHowToGetAssetCollection(Uri uri, string apiKey)
         {
@@ -54,6 +54,26 @@ namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
             Console.WriteLine(value: asset.Size); // Returns the content length size of the asset.
             Console.WriteLine(value: asset.Url); // Returns the url from CDN of the asset.
             Console.WriteLine(value: asset.Type); // Returns the type of the asset it can be folder or file.
+        }
+
+        public static async Task ExampleHowToCreateAsset(Uri uri, string apiKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static async Task ExampleHowToUpdateAsset(Uri uri, string apiKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static async Task ExampleHowToDeleteAsset(Uri uri, string apiKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static async Task ExampleHowMoveAsset(Uri uri, string apiKey)
+        {
+            throw new NotImplementedException();
         }
     }
 }

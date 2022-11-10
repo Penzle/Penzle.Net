@@ -8,6 +8,8 @@
 ![W3C](https://img.shields.io/badge/w3c-validated-brightgreen)
 ![Paradigm](https://img.shields.io/badge/accessibility-yes-brightgreen)
 
+> ⚠️ The SDK for .NET and the underlying documentation are still in the developing phase, and we are working very hard to finish them as quickly as we possibly can.
+
 ## **Penzle Headless CMS**
 
 ### Our technologies can help you build next generation of your apps
@@ -152,12 +154,12 @@ catch (PenzleException exception) // Handle exceptions.
 }
 ```
 
-## **Usage system assets and resources using SDK**
+## **SDK integration recommendation for .NET applications**
 
-- [The recommendation procedure how to handle authentication and authorization](./docs/authentication-and-authorization/index.md)
-- [The recommendation procedure how to use query builder and pagination](./docs/query-builder-and-pagination/index.md)
+- [The recommendation procedure how to handle authentication and authorization.](./docs/authentication-and-authorization/index.md)
+- [The recommendation procedure how to use query builder and pagination.](./docs/query-builder-and-pagination/index.md)
 - [The recommended procedure for carrying out unit tests.](./docs/unit-tests.md)
-- [Recommendation how to handle errors using SDK.](./docs/status-code-and-errors.md)
+- [The recommendation how to handle errors using SDK.](./docs/status-code-and-errors.md)
 - [How to using SKD to manage entries.](./docs/entries/index.md)
 - [How to using SKD to manage forms.](./docs/forms/index.md)
 - [How to using SKD to manage assets.](./docs/assets/index.md)

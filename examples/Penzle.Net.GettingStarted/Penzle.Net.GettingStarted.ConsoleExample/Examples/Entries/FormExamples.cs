@@ -7,7 +7,7 @@ using Penzle.Net.GettingStarted.ConsoleExample.Models;
 
 namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
 {
-    internal class FormsExamples
+    internal class FormExamples
     {
         public static async Task ExampleHowToCreateFormEntry(Uri uri, string apiKey)
         {

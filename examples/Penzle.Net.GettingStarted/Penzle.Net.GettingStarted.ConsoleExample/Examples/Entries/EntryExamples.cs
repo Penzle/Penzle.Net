@@ -8,9 +8,9 @@ using Penzle.Net.GettingStarted.ConsoleExample.Models;
 
 namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
 {
-    internal record EntriesExample
+    internal record EntryExamples
     {
-        public static async Task ExampleHowToPullEntryData(Uri uri, string apiKey)
+        public static async Task ExampleHowToGetEntryCollection(Uri uri, string apiKey)
         {
             // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
             var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
@@ -72,6 +72,26 @@ namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
                 Console.WriteLine(value: exception);
                 throw;
             }
+        }
+
+        public static async Task ExampleHowToCreateEntry(Uri uri, string apiKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static async Task ExampleHowToUpdateEntry(Uri uri, string apiKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static async Task ExampleHowToDeleteEntry(Uri uri, string apiKey)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static async Task ExampleHowToGetEntry(Uri uri, string apiKey)
+        {
+            throw new NotImplementedException();
         }
     }
 }
