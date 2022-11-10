@@ -154,8 +154,9 @@ catch (PenzleException exception) // Handle exceptions.
 
 ## **Usage system assets and resources using SDK**
 
-- [Recommendation for how to handle authentication and authorization]("./doc/authentication-and-authorization/index.md")
+- [Recommendation for how to handle authentication and authorization](./docs/authentication-and-authorization/index.md)
 - [Recommendation for wo use query builder and pagination](./docs/query-builder-and-pagination/index.md)
+- [Recommendation how to handle errors using SDK.]()
 - [Delivery and management entries](./docs/entries/index.md)
 - [Delivery and management form](./docs/forms/index.md)
 - [Delivery and management assets](./docs/assets/index.md)
