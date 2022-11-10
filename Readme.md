@@ -10,7 +10,7 @@
 
 ## **Penzle Headless CMS**
 
-#### Our technologies can help you build next generation of your apps
+### Our technologies can help you build next generation of your apps
 
 At Penzle, we aimed to develop the best headless CMS system that enables seamless, safe, and efficient API-driven
 content management for an exceptional online and mobile experience. Our cloud-based headless CMS permits advanced,
@@ -155,9 +155,9 @@ catch (PenzleException exception) // Handle exceptions.
 
 ## **Usage system assets and resources using SDK**
 
-- [Introduce into authentication and authorization](/docs/authentication-and-authorization/index.md)
-- [Review query builder and pagination](/docs/query-builder-and-pagination/index.md)
-- [Delivery and management entries](/doc/entries/index.md)
+    - [Introduce into authentication and authorization]("./doc/authentication-and-authorization/index.md")
+- [Review query builder and pagination](./docs/query-builder-and-pagination/index.md)
+- [Delivery and management entries](./docs/entries/index.md)
 - [Delivery and management forms - TODO]()
 - [Delivery and management assets- TODO]()
 - [Delivery and management templates - TODO]()
