@@ -158,7 +158,7 @@ catch (PenzleException exception) // Handle exceptions.
 - [Recommendation for wo use query builder and pagination](./docs/query-builder-and-pagination/index.md)
 - [Delivery and management entries](./docs/entries/index.md)
 - [Delivery and management form](./docs/forms/index.md)
-- [Delivery and management assets- TODO]()
+- [Delivery and management assets](./docs/assets/index.md)
 - [Delivery and management templates - TODO]()
 
 ## **Additional information**
