@@ -135,3 +135,52 @@ var httpStatusCode = await managementPenzleClient.Form.UpdateForm(formId: medica
 // Print the True. If record has been successfully updated expected http status code is 204.
 Console.WriteLine(value: httpStatusCode == HttpStatusCode.NoContent);
 ```
+
+### **Get a single form entry by id**
+
+By using its specific id, this SDK client can retrieve a single form. A parameter that is optional is the language code. In order to access a resource, you must supply a minimal key for API reading and form entry id.
+
+```csharp
+// Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
+{
+    options.Project = "main"; // Define the project name which you want to use.
+    options.Environment = "default"; // Define the environment name which you want to use for the project.
+});
+
+var medicalReleaseId = new Guid(g: "8CE106F3-1F66-47EF-B9DD-D3EA2B8FD686");
+
+// Using created instance of the Penzle API client, you can call the API methods for creating the form entry.
+var medicalRelease = await managementPenzleClient.Form.GetForm<MedicalRelease>(medicalReleaseId, language: "en-US", CancellationToken.None);
+
+// Print the return object to the console.
+Console.WriteLine(medicalRelease.ParentName);
+Console.WriteLine(medicalRelease.EmailAddress);
+Console.WriteLine(medicalRelease.FirstName);
+Console.WriteLine(medicalRelease.LastName);
+Console.WriteLine(medicalRelease.DateOfBirth);
+Console.WriteLine(medicalRelease.PostTreatmentTherapy);
+```
+
+### **Delete existing form entry id** 
+
+Using the Penzle.NET SDK, delete operations are possible. If everything works as expected, you should receive HTTP Status code 204 - No Content. Here is C# example how to do that.
+
+```csharp
+// Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiManagementKey: apiKey, apiOptions: options =>
+{
+    options.Project = "main"; // Define the project name which you want to use.
+    options.Environment = "default"; // Define the environment name which you want to use for the project.
+});
+
+var medicalReleaseId = new Guid(g: "8CE106F3-1F66-47EF-B9DD-D3EA2B8FD686");
+
+// Using created instance of the Penzle API client, you can call the API methods for creating the form entry.
+var httpStatusCode = await managementPenzleClient.Form.DeleteForm(formId: medicalReleaseId, cancellationToken: CancellationToken.None);
+
+// Print the True. If record has been successfully deleted expected http status code is 204.
+Console.WriteLine(value: httpStatusCode == HttpStatusCode.NoContent);
+```
+
+> ![s](../images/info.svg) Due to the fact that it is still being developed, you should anticipate new features, abilities, and other things to be added to this section very soon. If you have any questions, please contact us as soon as possible by sending an email to hello@penzle.com or directly chatting with our support team using the chat feature on our [website](https://www.penzle.com)
