@@ -1,9 +1,3 @@
-using FluentAssertions;
-using Moq;
-using Penzle.Core.Authentication;
-using Penzle.Core.Http;
-using Penzle.Core.Http.Internal;
-
 namespace Penzle.Core.Tests.Security;
 
 [Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Security))]

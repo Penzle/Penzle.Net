@@ -1,13 +1,6 @@
 ﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
 
-using System.Net;
-using FluentAssertions;
-using Moq;
 using Penzle.Core.Exceptions;
-using Penzle.Core.Http;
-using Penzle.Core.Http.Internal;
-using Penzle.Core.Models;
-using Penzle.Core.Tests.Attribute;
 
 namespace Penzle.Core.Tests.Connections;
 
