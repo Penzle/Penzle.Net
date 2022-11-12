@@ -43,7 +43,7 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
             },
             httpClient: new HttpClientAdapter(getHandler: () => new HttpClientHandler()),
             jsonSerializer: new MicrosoftJsonSerializer(),
-            timeOut: TimeSpan.FromSeconds(value: 30)
+            timeOut: FromSeconds(value: 30)
         );
     }
 
@@ -63,7 +63,7 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
             apiOptions: apiOptions,
             httpClient: new HttpClientAdapter(getHandler: () => new HttpClientHandler()),
             jsonSerializer: new MicrosoftJsonSerializer(),
-            timeOut: TimeSpan.FromSeconds(value: 30)
+            timeOut: FromSeconds(value: 30)
         );
     }
 
@@ -84,7 +84,7 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
             apiOptions: apiOptions,
             httpClient: httpClient,
             jsonSerializer: new MicrosoftJsonSerializer(),
-            timeOut: TimeSpan.FromSeconds(value: 30)
+            timeOut: FromSeconds(value: 30)
         );
     }
 
@@ -110,7 +110,7 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
             apiOptions: apiOptions,
             httpClient: httpClient,
             jsonSerializer: jsonSerializer,
-            timeOut: TimeSpan.FromSeconds(value: 30)
+            timeOut: FromSeconds(value: 30)
         );
     }
 

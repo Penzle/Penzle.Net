@@ -146,7 +146,7 @@ file_header_template = Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licen
 dotnet_diagnostic.IDE0035.severity = warning
 
 # IDE0036: Order modifiers
-dotnet_diagnostic.IDE0036.severity = noone
+dotnet_diagnostic.IDE0036.severity = none
 
 # IDE0043: Format string contains invalid placeholder
 dotnet_diagnostic.IDE0043.severity = warning

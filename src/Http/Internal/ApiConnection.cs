@@ -13,7 +13,7 @@ internal class ApiConnection : IApiConnection
 
     public virtual IConnection Connection { get; set; }
 
-    public virtual async Task<T> Get<T>(Uri uri, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
+    public async virtual Task<T> Get<T>(Uri uri, IDictionary<string, string> parameters, string accepts, string contentType, CancellationToken cancellationToken = default)
     {
         Guard.ArgumentNotNull(value: uri, name: nameof(uri));
         return await Connection.Get<T>(uri: uri, parameters: parameters, accepts: accepts, contentType: contentType, cancellationToken: cancellationToken);

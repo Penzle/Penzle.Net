@@ -24,7 +24,7 @@ public class HttpClientAdapter : IHttpClient
 
     public virtual HttpClient HttpClient { get; }
 
-    public virtual async Task<IResponse> Send(IRequest request, CancellationToken cancellationToken)
+    public async virtual Task<IResponse> Send(IRequest request, CancellationToken cancellationToken)
     {
         Guard.ArgumentNotNull(value: request, name: nameof(request));
 
@@ -52,7 +52,7 @@ public class HttpClientAdapter : IHttpClient
     {
         var cancellationTokenForRequest = cancellationToken;
 
-        if (request.Timeout == TimeSpan.Zero)
+        if (request.Timeout == Zero)
         {
             return cancellationTokenForRequest;
         }
@@ -65,7 +65,7 @@ public class HttpClientAdapter : IHttpClient
         return cancellationTokenForRequest;
     }
 
-    internal virtual async Task<IResponse> BuildResponse(HttpResponseMessage responseMessage)
+    async internal virtual Task<IResponse> BuildResponse(HttpResponseMessage responseMessage)
     {
         Guard.ArgumentNotNull(value: responseMessage, name: nameof(responseMessage));
 
@@ -137,7 +137,7 @@ public class HttpClientAdapter : IHttpClient
         HttpClient?.Dispose();
     }
 
-    internal virtual async Task<HttpResponseMessage> SendAsync(
+    async internal virtual Task<HttpResponseMessage> SendAsync(
         HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
