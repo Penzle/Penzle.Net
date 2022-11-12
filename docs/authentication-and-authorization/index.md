@@ -72,6 +72,12 @@ public interface ICredentialStore<T>
 The below example of how to implement Azure Key Value shows how to this.
 
 ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
+...
+
+
 public sealed class KeyVaultCredentialStore : ICredentialStore<BearerCredentials>
 {
     const string uri = $ "https://{keyVaultName}.vault.azure.net";

@@ -28,4 +28,3 @@ await AssetExamples.ExampleHowToGetAsset(uri: apiAddress, apiKey: ApiKey);
 await AssetExamples.ExampleHowToCreateAsset(uri: apiAddress, apiKey: ApiKey);
 await AssetExamples.ExampleHowToUpdateAsset(uri: apiAddress, apiKey: ApiKey);
 await AssetExamples.ExampleHowToDeleteAsset(uri: apiAddress, apiKey: ApiKey);
-await AssetExamples.ExampleHowMoveAsset(uri: apiAddress, apiKey: ApiKey);

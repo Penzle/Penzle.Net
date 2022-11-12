@@ -2,7 +2,7 @@
 
 Forms are used to collect information from users. They are essential components of any online application. This section provides examples of how to create, retrieve, and remove form entries. To understand more about form templates and how to manage them, we recommend visiting our official [documentation](https://docs.penzle.com/).
 
-### **Create a form entry**
+### **Create form entry**
 This Penzle.NET SDK makes it possible to create a new form entry based on a previously specified template with the ability to return a newly created form entry id. To gain access to a resource, you will need a minimum API key for writing and the project and environment. 
 
 Following procedure from recommended with minimum configuration example you can factory the instance and the next example will show how to create entry form.
@@ -77,6 +77,9 @@ internal class MedicalRelease
 Once signatures have been created, you can build the root object like in this case "MedicalRelease" and simply call the SKD method.
 
 ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
 // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
 var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiManagementKey: apiKey, apiOptions: options =>
 {
@@ -103,11 +106,26 @@ var formId = await managementPenzleClient.Form.CreateForm(form: medicalRelease, 
 Console.WriteLine(value: formId);
 ```
 
-### **Update an existing form entry**
+##### **Response status code**
+
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 200  | Returns the id of the newly created form.                       |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 500  | There was a communication error with the Penzle API.            |
+
+
+### **Update form entry**
 
 An existing form may be updated using this Penzle.NET SDK. The main distinction between this approach and form creation entry is that we must supply the form record id that will be updated. An API write key is a requirement to be able successfully execute this method.
 
 ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
 // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
 var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiManagementKey: apiKey, apiOptions: options =>
 {
@@ -136,11 +154,25 @@ var httpStatusCode = await managementPenzleClient.Form.UpdateForm(formId: medica
 Console.WriteLine(value: httpStatusCode == HttpStatusCode.NoContent);
 ```
 
-### **Get a single form entry by id**
+##### **Response status code**
+
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 204  | The form was successfully updated.                              |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 500  | There was a communication error with the Penzle API.            |
+
+### **Get a form entry**
 
 By using its specific id, this SDK client can retrieve a single form. A parameter that is optional is the language code. In order to access a resource, you must supply a minimal key for API reading and form entry id.
 
 ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
 // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
 var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
 {
@@ -162,11 +194,26 @@ Console.WriteLine(medicalRelease.DateOfBirth);
 Console.WriteLine(medicalRelease.PostTreatmentTherapy);
 ```
 
-### **Delete existing form entry id** 
+##### **Response status code**
+
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 200  | Returns a single form.                                          |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 404  | The requested resource was not found.                           |
+| 500  | There was a communication error with the Penzle API.            |
+
+### **Delete form entry** 
 
 Using the Penzle.NET SDK, delete operations are possible. If everything works as expected, you should receive HTTP Status code 204 - No Content. Here is C# example how to do that.
 
 ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
 // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
 var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiManagementKey: apiKey, apiOptions: options =>
 {
@@ -182,5 +229,16 @@ var httpStatusCode = await managementPenzleClient.Form.DeleteForm(formId: medica
 // Print the True. If record has been successfully deleted expected http status code is 204.
 Console.WriteLine(value: httpStatusCode == HttpStatusCode.NoContent);
 ```
+
+##### **Response status code**
+
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 204  | The form was successfully deleted.                              |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 500  | There was a communication error with the Penzle API.            |
 
 > ![s](../images/info.svg) Due to the fact that it is still being developed, you should anticipate new features, abilities, and other things to be added to this section very soon. If you have any questions, please contact us as soon as possible by sending an email to hello@penzle.com or directly chatting with our support team using the chat feature on our [website](https://www.penzle.com)

@@ -1,5 +1,7 @@
 ﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
 
+using System.IO.IsolatedStorage;
+using System.Net;
 using Penzle.Core;
 using Penzle.Core.Models;
 
@@ -7,7 +9,7 @@ namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
 {
     internal class AssetExamples
     {
-        public static async Task ExampleHowToGetAssetCollection(Uri uri, string apiKey)
+        public async static Task ExampleHowToGetAssetCollection(Uri uri, string apiKey)
         {
             // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
             var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
@@ -30,7 +32,7 @@ namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
             Console.WriteLine(value: assetCollection.Items); // Returns the collection of Penzle.Core.Model.Asset in the current page.
         }
 
-        public static async Task ExampleHowToGetAsset(Uri uri, string apiKey)
+        public async static Task ExampleHowToGetAsset(Uri uri, string apiKey)
         {
             // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
             var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
@@ -56,22 +58,84 @@ namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries
             Console.WriteLine(value: asset.Type); // Returns the type of the asset it can be folder or file.
         }
 
-        public static async Task ExampleHowToCreateAsset(Uri uri, string apiKey)
+        public async static Task ExampleHowToCreateAsset(Uri uri, string apiKey)
         {
-            throw new NotImplementedException();
+            // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+            var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+            {
+                options.Project = "main"; // Define the project name which you want to use.
+                options.Environment = "default"; // Define the environment name which you want to use for the project.
+            });
+
+
+            var asset = new AddAssetRequest()
+            {
+                FolderId = new Guid("B140B0E8-C1CB-4E98-95A1-74EE8D9437E5"), // Represents the unique identifier of the parent folder. In case if this value is null then the asset will be created against to root folder.
+                Description = "This is a description of the asset.", // Represents the description of the asset.
+                Language = "en-US", // Represents the language of the asset.
+            };
+
+            await using (var file = new FileStream("Penzle.png", FileMode.Open, FileAccess.Read)) // Load file stream from disk.
+            {
+                asset!.Payload = file; // Represents the file stream of the asset.
+            }
+
+            // Create a new asset.
+            var assetId = await managementPenzleClient.Asset.AddAsset(asset, CancellationToken.None);
+
+            // Print the response of returned asset to the console.
+            Console.WriteLine(value: assetId); // Returns the unique identifier of the asset.
         }
 
-        public static async Task ExampleHowToUpdateAsset(Uri uri, string apiKey)
+        public async static Task ExampleHowToUpdateAsset(Uri uri, string apiKey)
         {
-            throw new NotImplementedException();
+            // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+            var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+            {
+                options.Project = "main"; // Define the project name which you want to use.
+                options.Environment = "default"; // Define the environment name which you want to use for the project.
+            });
+
+
+            var asset = new UpdateAssetRequest()
+            {
+                Id = new Guid("F078FC7D-C3E6-459F-AD21-D34F71E6195B"), // Represents the unique identifier of the asset.
+                Description = "This is updated asset description..", // Represents the description of the asset.
+                Language = "en-US", // Represents the language of the asset.
+            };
+
+            await using (var file = new FileStream("NewPenzleLogo.png", FileMode.Open, FileAccess.Read)) // Load file stream from disk.
+            {
+                asset!.Payload = file; // Represents the file stream of the asset.
+            }
+
+            // Update the asset.
+            var httpStatusCode = await managementPenzleClient.Asset.UpdateAsset(asset, CancellationToken.None);
+
+            // Print the True if the asset was updated successfully.
+            Console.WriteLine(value: httpStatusCode == HttpStatusCode.NoContent);
         }
 
-        public static async Task ExampleHowToDeleteAsset(Uri uri, string apiKey)
+        public async static Task ExampleHowToDeleteAsset(Uri uri, string apiKey)
         {
-            throw new NotImplementedException();
+            // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+            var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+            {
+                options.Project = "main"; // Define the project name which you want to use.
+                options.Environment = "default"; // Define the environment name which you want to use for the project.
+            });
+
+
+            var assetId = new Guid("F078FC7D-C3E6-459F-AD21-D34F71E6195B"); // Represents the unique identifier of the asset.
+           
+            // Update the asset.
+            var httpStatusCode = await managementPenzleClient.Asset.DeleteAsset(assetId, CancellationToken.None);
+
+            // Print the True if the asset was updated successfully.
+            Console.WriteLine(value: httpStatusCode == HttpStatusCode.NoContent);
         }
 
-        public static async Task ExampleHowMoveAsset(Uri uri, string apiKey)
+        public async static Task ExampleHowMoveAsset(Uri uri, string apiKey)
         {
             throw new NotImplementedException();
         }
