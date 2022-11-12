@@ -1,8 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Http.Internal;
+﻿namespace Penzle.Core.Http.Internal;
 
 public class HttpClientAdapter : IHttpClient
 {
@@ -14,7 +10,10 @@ public class HttpClientAdapter : IHttpClient
     public HttpClientAdapter(Func<HttpMessageHandler> getHandler)
     {
         Guard.ArgumentNotNull(value: getHandler, name: nameof(getHandler));
-        HttpClient = new HttpClient(handler: new RedirectHandler { InnerHandler = getHandler() });
+        HttpClient = new HttpClient(handler: new RedirectHandler
+        {
+            InnerHandler = getHandler()
+        });
     }
 
     public HttpClientAdapter(HttpClient httpClient)
@@ -47,7 +46,8 @@ public class HttpClientAdapter : IHttpClient
         HttpClient.Timeout = timeout;
     }
 
-    internal virtual CancellationToken GetCancellationTokenForRequest(IRequest request,
+    internal virtual CancellationToken GetCancellationTokenForRequest(
+        IRequest request,
         CancellationToken cancellationToken)
     {
         var cancellationTokenForRequest = cancellationToken;
@@ -137,7 +137,8 @@ public class HttpClientAdapter : IHttpClient
         HttpClient?.Dispose();
     }
 
-    internal virtual async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+    internal virtual async Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
         var response = await HttpClient.SendAsync(request: request, cancellationToken: cancellationToken).ConfigureAwait(continueOnCapturedContext: false);

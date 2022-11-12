@@ -1,8 +1,4 @@
-﻿using System.Collections.ObjectModel;
-using System.Net;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Http.Internal;
+﻿namespace Penzle.Core.Http.Internal;
 
 /// <summary>
 ///     Represents a generic HTTP response

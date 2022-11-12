@@ -1,8 +1,4 @@
-﻿using System.Globalization;
-using Penzle.Core.Http;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Authentication;
+﻿namespace Penzle.Core.Authentication;
 
 internal sealed class BearerTokenAuthenticator : IAuthenticationHandler
 {

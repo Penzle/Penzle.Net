@@ -1,6 +1,4 @@
-﻿using System.Text.Json.Serialization;
-
-namespace Penzle.Core.Models;
+﻿namespace Penzle.Core.Models;
 
 public sealed class FormSystem : BaseSystem
 {

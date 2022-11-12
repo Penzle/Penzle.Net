@@ -1,11 +1,4 @@
-﻿using Penzle.Core.Clients;
-using Penzle.Core.Clients.Rest;
-using Penzle.Core.Http;
-using Penzle.Core.Http.Internal;
-using Penzle.Core.Models;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core;
+﻿namespace Penzle.Core;
 
 /// <inheritdoc>
 ///     <cref>IManagementPenzleClient</cref>

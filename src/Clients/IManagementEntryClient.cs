@@ -1,7 +1,4 @@
-﻿using System.Net;
-using Penzle.Core.Exceptions;
-
-namespace Penzle.Core.Clients;
+﻿namespace Penzle.Core.Clients;
 
 /// <summary>
 ///     It represents the set of clients for the Content Entry Management API.

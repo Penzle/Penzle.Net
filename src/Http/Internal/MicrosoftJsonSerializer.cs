@@ -1,11 +1,11 @@
-﻿using System.Text.Json;
-using System.Text.Json.Serialization;
-
-namespace Penzle.Core.Http.Internal;
+﻿namespace Penzle.Core.Http.Internal;
 
 public sealed class MicrosoftJsonSerializer : IJsonSerializer
 {
-    public JsonSerializerOptions Options { get; } = new() { PropertyNameCaseInsensitive = true, ReferenceHandler = ReferenceHandler.IgnoreCycles };
+    public JsonSerializerOptions Options { get; } = new()
+    {
+        PropertyNameCaseInsensitive = true, ReferenceHandler = ReferenceHandler.IgnoreCycles
+    };
 
     public string Serialize(object item)
     {

@@ -1,7 +1,4 @@
-﻿using Penzle.Core.Exceptions;
-using Penzle.Core.Models;
-
-namespace Penzle.Core.Clients;
+﻿namespace Penzle.Core.Clients;
 
 /// <summary>
 ///     It represents a set of clients for the Content Entry Delivery API.

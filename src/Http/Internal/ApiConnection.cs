@@ -1,7 +1,4 @@
-﻿using System.Net;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Http.Internal;
+﻿namespace Penzle.Core.Http.Internal;
 
 internal class ApiConnection : IApiConnection
 {

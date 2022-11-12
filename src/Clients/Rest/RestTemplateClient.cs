@@ -1,9 +1,4 @@
-﻿using Penzle.Core.Clients.Abstract;
-using Penzle.Core.Http;
-using Penzle.Core.Models;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Clients.Rest;
+﻿namespace Penzle.Core.Clients.Rest;
 
 internal sealed class RestTemplateClient : RestBaseClient, IDeliveryTemplateClient
 {

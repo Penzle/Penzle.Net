@@ -1,7 +1,4 @@
-﻿using System.ComponentModel;
-using Penzle.Core.Authentication;
-
-namespace Penzle.Core.Http;
+﻿namespace Penzle.Core.Http;
 
 /// <summary>
 ///     The base class for credentials for extending type of authentication.
