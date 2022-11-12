@@ -6,20 +6,19 @@ using Penzle.Core.Models;
 
 namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries;
 
-internal class AssetExamples
+internal record AssetExamples
 {
     public async static Task ExampleHowToGetAssetCollection(Uri uri, string apiKey)
     {
         // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
-        var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
+        var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
         {
             options.Project = "main"; // Define the project name which you want to use.
             options.Environment = "default"; // Define the environment name which you want to use for the project.
         });
 
-
         var query = QueryAssetBuilder.Instance;
-        var assetCollection = await managementPenzleClient.Asset.GetAssets(query: query, cancellationToken: CancellationToken.None);
+        var assetCollection = await deliveryPenzleClient.Asset.GetAssets(query: query, cancellationToken: CancellationToken.None);
 
         // Print the response of asset collection which is served in pagination list to the console.
         Console.WriteLine(value: assetCollection.HasNextPage); //Returns true if the superset is not empty and PageNumber is less than or equal to PageCount and this is not the last subset within the superset.
@@ -34,15 +33,14 @@ internal class AssetExamples
     public async static Task ExampleHowToGetAsset(Uri uri, string apiKey)
     {
         // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
-        var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
+        var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
         {
             options.Project = "main"; // Define the project name which you want to use.
             options.Environment = "default"; // Define the environment name which you want to use for the project.
         });
 
-
         var assetId = new Guid(g: "F078FC7D-C3E6-459F-AD21-D34F71E6195B");
-        var asset = await managementPenzleClient.Asset.GetAsset(id: assetId, cancellationToken: CancellationToken.None);
+        var asset = await deliveryPenzleClient.Asset.GetAsset(id: assetId, cancellationToken: CancellationToken.None);
 
         // Print the response of returned asset to the console.
         Console.WriteLine(value: asset.Id); // Returns the unique identifier of the asset.
@@ -65,7 +63,6 @@ internal class AssetExamples
             options.Project = "main"; // Define the project name which you want to use.
             options.Environment = "default"; // Define the environment name which you want to use for the project.
         });
-
 
         var asset = new AddAssetRequest
         {
@@ -95,7 +92,6 @@ internal class AssetExamples
             options.Environment = "default"; // Define the environment name which you want to use for the project.
         });
 
-
         var asset = new UpdateAssetRequest
         {
             Id = new Guid("F078FC7D-C3E6-459F-AD21-D34F71E6195B"), // Represents the unique identifier of the asset.
@@ -124,7 +120,6 @@ internal class AssetExamples
             options.Environment = "default"; // Define the environment name which you want to use for the project.
         });
 
-
         var assetId = new Guid("F078FC7D-C3E6-459F-AD21-D34F71E6195B"); // Represents the unique identifier of the asset.
 
         // Update the asset.
@@ -143,14 +138,12 @@ internal class AssetExamples
             options.Environment = "default"; // Define the environment name which you want to use for the project.
         });
 
-
         // Represents the unique identifiers of the assets.
         var assetIds = new[]
         {
             new("F078FC7D-C3E6-459F-AD21-D34F71E6195B"), // Represents the unique identifier of the asset.
             new Guid("B140B0E8-C1CB-4E98-95A1-74EE8D9437E5") // Represents the unique identifier of the asset.
         };
-
 
         // Update the asset.
         var httpStatusCode = await managementPenzleClient.Asset.DeleteAssets(ids: assetIds, cancellationToken: CancellationToken.None);

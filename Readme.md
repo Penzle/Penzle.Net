@@ -163,7 +163,7 @@ catch (PenzleException exception) // Handle exceptions.
 - [How to using SKD to manage entries.](./docs/entries/index.md)
 - [How to using SKD to manage forms.](./docs/forms/index.md)
 - [How to using SKD to manage assets.](./docs/assets/index.md)
-- [How to using SKD to manage templates.]()
+- [How to using SKD to manage templates.](./docs/templates/index.md)
 
 ## **Additional information**
 

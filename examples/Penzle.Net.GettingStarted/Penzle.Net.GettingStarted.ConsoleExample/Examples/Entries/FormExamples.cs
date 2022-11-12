@@ -7,7 +7,7 @@ using Penzle.Net.GettingStarted.ConsoleExample.Models;
 
 namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries;
 
-internal class FormExamples
+internal record FormExamples
 {
     public async static Task ExampleHowToCreateFormEntry(Uri uri, string apiKey)
     {
@@ -70,7 +70,7 @@ internal class FormExamples
     public async static Task ExampleHowToGetFormEntry(Uri uri, string apiKey)
     {
         // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
-        var managementPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
+        var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
         {
             options.Project = "main"; // Define the project name which you want to use.
             options.Environment = "default"; // Define the environment name which you want to use for the project.
@@ -79,11 +79,11 @@ internal class FormExamples
         var medicalReleaseId = new Guid(g: "8CE106F3-1F66-47EF-B9DD-D3EA2B8FD686");
 
         // Using created instance of the Penzle API client, you can call the API methods for creating the form entry.
-        var medicalRelease = await managementPenzleClient.Form.GetForm<MedicalRelease>(formId: medicalReleaseId, language: "en-US", cancellationToken: CancellationToken.None);
+        var medicalRelease = await deliveryPenzleClient.Form.GetForm<MedicalRelease>(formId: medicalReleaseId, language: "en-US", cancellationToken: CancellationToken.None);
 
         // Print the return object to the console.
         Console.WriteLine(value: medicalRelease.ParentName);
-        Console.WriteLine(value: medicalRelease.EmailAddress);
+        Console.WriteLine(value: medicalRelease.EmailAddress!);
         Console.WriteLine(value: medicalRelease.FirstName);
         Console.WriteLine(value: medicalRelease.LastName);
         Console.WriteLine(value: medicalRelease.DateOfBirth);

@@ -12,7 +12,9 @@ namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries;
 
 internal record EntryExamples
 {
+#pragma warning disable IDE0036 // Order modifiers
     public async static Task ExampleHowToGetEntryCollection(Uri uri, string apiKey)
+#pragma warning restore IDE0036 // Order modifiers
     {
         // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
         var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
@@ -95,9 +97,10 @@ internal record EntryExamples
         try
         {
             // Using created instance of the Penzle API client, you can call the API methods for fetching the entry data with pagination.
-            var entries = await deliveryPenzleClient.Entry.GetPaginationListEntries<Entry<Author>>("author", query: query);
+            var entries = await deliveryPenzleClient.Entry.GetPaginationListEntries<Entry<Author>>(template: "author", query: query);
 
             // Print the total number of entries.
+            Console.WriteLine(value: $"Total count of entries: {entries.TotalCount}");
         }
         catch (PenzleException exception)
         {
@@ -155,12 +158,11 @@ internal record EntryExamples
     public async static Task ExampleHowToCreateEntry(Uri uri, string apiKey)
     {
         // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
-        var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+        var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiManagementKey: apiKey, apiOptions: options =>
         {
             options.Project = "main"; // Define the project name which you want to use.
             options.Environment = "default"; // Define the environment name which you want to use for the project.
         });
-
 
         // Create a new instance of the form entry.
         var medicalRelease = new MedicalRelease
@@ -175,7 +177,7 @@ internal record EntryExamples
         };
 
         // Create a new instance of the entry.
-        var medicalReleaseId = await managementPenzleClient.Entry.CreateEntry(medicalRelease, CancellationToken.None);
+        var medicalReleaseId = await managementPenzleClient.Entry.CreateEntry(entry: medicalRelease, cancellationToken: CancellationToken.None);
 
         // Print the created entry id.
         Console.WriteLine(value: $"The entry id: {medicalReleaseId}");
@@ -184,7 +186,7 @@ internal record EntryExamples
     public async static Task ExampleHowToUpdateEntry(Uri uri, string apiKey)
     {
         // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
-        var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+        var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiManagementKey: apiKey, apiOptions: options =>
         {
             options.Project = "main"; // Define the project name which you want to use.
             options.Environment = "default"; // Define the environment name which you want to use for the project.
@@ -206,7 +208,7 @@ internal record EntryExamples
         };
 
         // Create a new instance of the entry.
-        var httpStatusCode = await managementPenzleClient.Entry.UpdateEntry(medicalReleaseId, medicalRelease, CancellationToken.None);
+        var httpStatusCode = await managementPenzleClient.Entry.UpdateEntry(entryId: medicalReleaseId, entry: medicalRelease, cancellationToken: CancellationToken.None);
 
         // Print True if the entry was updated successfully.
         Console.WriteLine(httpStatusCode == HttpStatusCode.NoContent);
@@ -215,7 +217,7 @@ internal record EntryExamples
     public async static Task ExampleHowToDeleteEntry(Uri uri, string apiKey)
     {
         // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
-        var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+        var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiManagementKey: apiKey, apiOptions: options =>
         {
             options.Project = "main"; // Define the project name which you want to use.
             options.Environment = "default"; // Define the environment name which you want to use for the project.
@@ -224,14 +226,9 @@ internal record EntryExamples
         var medicalReleaseId = new Guid(g: "2e2c2146-15b1-41ed-9bca-b77e346f8f0a"); // The entry id which you want to deleted.
 
         // Create a new instance of the entry.
-        var httpStatusCode = await managementPenzleClient.Entry.DeleteEntry(medicalReleaseId, CancellationToken.None);
+        var httpStatusCode = await managementPenzleClient.Entry.DeleteEntry(entryId: medicalReleaseId, cancellationToken: CancellationToken.None);
 
         // Print True if the entry was deleted successfully.
         Console.WriteLine(httpStatusCode == HttpStatusCode.NoContent);
-    }
-
-    public async static Task ExampleHowToGetEntry(Uri uri, string apiKey)
-    {
-        throw new NotImplementedException();
     }
 }

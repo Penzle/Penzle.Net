@@ -1,4 +1,6 @@
-﻿using Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries;
+﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
+
+using Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries;
 
 // For the real world usage, you'd want to use this url from configuration.
 const string DefaultUrl = "<your-api-url>";
@@ -17,7 +19,7 @@ await FormExamples.ExampleHowToGetFormEntry(uri: apiAddress, apiKey: ApiKey);
 
 // Entries examples.
 await EntryExamples.ExampleHowToGetEntryCollection(uri: apiAddress, apiKey: ApiKey);
-await EntryExamples.ExampleHowToGetEntry(uri: apiAddress, apiKey: ApiKey);
+await EntryExamples.ExampleHowToGetEntryById(uri: apiAddress, apiKey: ApiKey);
 await EntryExamples.ExampleHowToCreateEntry(uri: apiAddress, apiKey: ApiKey);
 await EntryExamples.ExampleHowToUpdateEntry(uri: apiAddress, apiKey: ApiKey);
 await EntryExamples.ExampleHowToDeleteEntry(uri: apiAddress, apiKey: ApiKey);

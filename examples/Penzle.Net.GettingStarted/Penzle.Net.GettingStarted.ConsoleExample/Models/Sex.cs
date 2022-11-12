@@ -13,7 +13,7 @@ internal record Sex
         Value = value;
     }
 
-    private string Value { get; init; }
+    private string Value { get; }
 
     public override string ToString()
     {
