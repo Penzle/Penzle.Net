@@ -7,6 +7,7 @@ global using System.Text.Json.Serialization;
 global using FluentAssertions;
 global using Moq;
 global using Penzle.Core.Authentication;
+global using Penzle.Core.Exceptions;
 global using Penzle.Core.Http;
 global using Penzle.Core.Http.Internal;
 global using Penzle.Core.Models;

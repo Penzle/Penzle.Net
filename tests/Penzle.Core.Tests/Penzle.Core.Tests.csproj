@@ -28,4 +28,10 @@
     <ProjectReference Include="..\..\src\Penzle.Core.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Update="Fixtures\Payloads\GetContentEntry.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
 </Project>
