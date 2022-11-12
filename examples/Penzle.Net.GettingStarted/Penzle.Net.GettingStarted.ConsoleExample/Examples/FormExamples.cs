@@ -5,7 +5,7 @@ using System.Net;
 using Penzle.Core;
 using Penzle.Net.GettingStarted.ConsoleExample.Models;
 
-namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries;
+namespace Penzle.Net.GettingStarted.ConsoleExample.Examples;
 
 internal record FormExamples
 {

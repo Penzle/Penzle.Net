@@ -4,7 +4,7 @@ using System.Net;
 using Penzle.Core;
 using Penzle.Core.Models;
 
-namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries;
+namespace Penzle.Net.GettingStarted.ConsoleExample.Examples;
 
 internal record AssetExamples
 {

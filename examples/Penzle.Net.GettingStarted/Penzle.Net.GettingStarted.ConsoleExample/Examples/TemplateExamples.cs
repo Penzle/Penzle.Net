@@ -2,7 +2,7 @@
 
 using Penzle.Core;
 
-namespace Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries;
+namespace Penzle.Net.GettingStarted.ConsoleExample.Examples;
 
 internal record TemplateExamples
 {
