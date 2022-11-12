@@ -76,6 +76,82 @@ internal record EntryExamples
         }
     }
 
+    public async static Task ExampleHowToGetEntryCollectionUsingTemplate(Uri uri, string apiKey)
+    {
+        // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+        var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
+        {
+            options.Project = "main"; // Define the project name which you want to use.
+            options.Environment = "default"; // Define the environment name which you want to use for the project.
+        });
+
+        // Using query builder to define request parameters.
+        var query = QueryEntryBuilder.Instance
+            .WithParentId(parentId: new Guid(g: "2e2c2146-15b1-41ed-9bca-b77e346f8f0a"))
+            .WithPagination(
+                pagination: QueryPaginationBuilder.Default
+                    .WithPage(page: 1)
+                    .WithPageSize(pageSize: 10));
+        try
+        {
+            // Using created instance of the Penzle API client, you can call the API methods for fetching the entry data with pagination.
+            var entries = await deliveryPenzleClient.Entry.GetPaginationListEntries<Entry<Author>>("author", query: query);
+
+            // Print the total number of entries.
+        }
+        catch (PenzleException exception)
+        {
+            Console.WriteLine(value: exception);
+            throw;
+        }
+    }
+
+    public async static Task ExampleHowToGetEntryById(Uri uri, string apiKey)
+    {
+        // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+        var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
+        {
+            options.Project = "main"; // Define the project name which you want to use.
+            options.Environment = "default"; // Define the environment name which you want to use for the project.
+        });
+
+        // Define the entry id which you want to get.
+        var entryId = new Guid("797D46CD-1283-4A4B-A335-EE46809D5F56");
+
+        // Using created instance of the Penzle API client, you can call the API methods for fetching the entry data.
+        var medicalRelease = await deliveryPenzleClient.Entry.GetEntry<MedicalRelease>(entryId: entryId, cancellationToken: CancellationToken.None);
+
+        // Print the entry.
+        Console.WriteLine(value: $"First Name: {medicalRelease.FirstName}");
+        Console.WriteLine(value: $"Last Name: {medicalRelease.LastName}");
+        Console.WriteLine(value: $"Date of Birth: {medicalRelease.DateOfBirth}");
+        Console.WriteLine(value: $"Email address: {medicalRelease.EmailAddress}");
+        Console.WriteLine(value: $"Sex: {medicalRelease.Sex}");
+    }
+
+    public async static Task ExampleHowToGetEntryBySlug(Uri uri, string apiKey)
+    {
+        // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+        var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDeliveryKey: apiKey, apiOptions: options =>
+        {
+            options.Project = "main"; // Define the project name which you want to use.
+            options.Environment = "default"; // Define the environment name which you want to use for the project.
+        });
+
+        // Define the entry slug which you want to get.
+        var slug = "/medial-release/medical-release-1";
+
+        // Using created instance of the Penzle API client, you can call the API methods for fetching the entry data.
+        var medicalRelease = await deliveryPenzleClient.Entry.GetEntry<MedicalRelease>(uri: slug, cancellationToken: CancellationToken.None);
+
+        // Print the entry.
+        Console.WriteLine(value: $"First Name: {medicalRelease.FirstName}");
+        Console.WriteLine(value: $"Last Name: {medicalRelease.LastName}");
+        Console.WriteLine(value: $"Date of Birth: {medicalRelease.DateOfBirth}");
+        Console.WriteLine(value: $"Email address: {medicalRelease.EmailAddress}");
+        Console.WriteLine(value: $"Sex: {medicalRelease.Sex}");
+    }
+
     public async static Task ExampleHowToCreateEntry(Uri uri, string apiKey)
     {
         // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.

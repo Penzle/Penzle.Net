@@ -21,6 +21,8 @@ await EntryExamples.ExampleHowToGetEntry(uri: apiAddress, apiKey: ApiKey);
 await EntryExamples.ExampleHowToCreateEntry(uri: apiAddress, apiKey: ApiKey);
 await EntryExamples.ExampleHowToUpdateEntry(uri: apiAddress, apiKey: ApiKey);
 await EntryExamples.ExampleHowToDeleteEntry(uri: apiAddress, apiKey: ApiKey);
+await EntryExamples.ExampleHowToGetEntryCollectionUsingTemplate(uri: apiAddress, apiKey: ApiKey);
+await EntryExamples.ExampleHowToGetEntryBySlug(uri: apiAddress, apiKey: ApiKey);
 
 // Assets examples.
 await AssetExamples.ExampleHowToGetAssetCollection(uri: apiAddress, apiKey: ApiKey);

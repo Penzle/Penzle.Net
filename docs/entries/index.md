@@ -183,7 +183,7 @@ var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: uri, apiDel
     options.Environment = "default"; // Define the environment name which you want to use for the project.
 });
 
-// Define the entry id which you want to get.
+// Define the entry slug which you want to get.
 var slug = "/medial-release/medical-release-1";
 
 // Using created instance of the Penzle API client, you can call the API methods for fetching the entry data.
