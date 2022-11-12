@@ -38,7 +38,10 @@ internal static class UriExtensions
         };
 
         var values = queryString.Replace(oldValue: "?", newValue: "")
-            .Split(separator: new[] { '&' }, options: StringSplitOptions.RemoveEmptyEntries);
+            .Split(separator: new[]
+            {
+                '&'
+            }, options: StringSplitOptions.RemoveEmptyEntries);
 
         var existingParameters = values.ToDictionary(
             keySelector: key => key[..key.IndexOf(value: '=')],
@@ -59,7 +62,10 @@ internal static class UriExtensions
         {
             case true:
                 {
-                    var uriBuilder = new UriBuilder(uri: uri) { Query = query };
+                    var uriBuilder = new UriBuilder(uri: uri)
+                    {
+                        Query = query
+                    };
                     return uriBuilder.Uri;
                 }
             default:

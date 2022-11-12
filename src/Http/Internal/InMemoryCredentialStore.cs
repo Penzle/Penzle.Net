@@ -1,6 +1,4 @@
-﻿using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Http.Internal;
+﻿namespace Penzle.Core.Http.Internal;
 
 public sealed class InMemoryCredentialStore : ICredentialStore<BearerCredentials>
 {

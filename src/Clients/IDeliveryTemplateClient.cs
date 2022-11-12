@@ -1,7 +1,4 @@
-﻿using Penzle.Core.Exceptions;
-using Penzle.Core.Models;
-
-namespace Penzle.Core.Clients;
+﻿namespace Penzle.Core.Clients;
 
 /// <summary>
 ///     Represents a collection of queries sent to the Template Delivery API.

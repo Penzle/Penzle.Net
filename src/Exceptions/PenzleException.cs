@@ -1,12 +1,4 @@
-﻿using System.Net;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Text.Json.Nodes;
-using Penzle.Core.Http;
-using Penzle.Core.Models;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Exceptions;
+﻿namespace Penzle.Core.Exceptions;
 
 /// <summary>
 ///     Errors that occur as a result of calling the Penzle APIs are represented by this class.

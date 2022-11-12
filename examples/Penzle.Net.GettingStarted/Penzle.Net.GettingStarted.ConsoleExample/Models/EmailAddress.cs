@@ -15,7 +15,7 @@ internal record EmailAddress
         Value = value;
     }
 
-    public static EmailAddress Null => new EmailAddress(value: "none@none.com");
+    public static EmailAddress Null => new(value: "none@none.com");
 
     public string Value { get; init; }
 

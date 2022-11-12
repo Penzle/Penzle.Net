@@ -154,6 +154,8 @@ catch (PenzleException exception) // Handle exceptions.
 }
 ```
 
+> You can find complete examples in the.NET 7 console project, which is written in a "How to" approach for developers. Visit [Penzle.Net.GettingStarted](/examples/Penzle.Net.GettingStarted) to view all examples of how to use various methods in console applications.
+
 ## **SDK integration recommendation for .NET applications**
 
 - [The recommendation procedure how to handle authentication and authorization.](./docs/authentication-and-authorization/index.md)
@@ -163,7 +165,7 @@ catch (PenzleException exception) // Handle exceptions.
 - [How to using SKD to manage entries.](./docs/entries/index.md)
 - [How to using SKD to manage forms.](./docs/forms/index.md)
 - [How to using SKD to manage assets.](./docs/assets/index.md)
-- [How to using SKD to manage templates.]()
+- [How to using SKD to manage templates.](./docs/templates/index.md)
 
 ## **Additional information**
 

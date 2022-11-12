@@ -1,6 +1,4 @@
-﻿using Penzle.Core.Clients;
-
-namespace Penzle.Core;
+﻿namespace Penzle.Core;
 
 /// <summary>
 ///     A management client for the initial release of the Penzle application programming interface. You may obtain further

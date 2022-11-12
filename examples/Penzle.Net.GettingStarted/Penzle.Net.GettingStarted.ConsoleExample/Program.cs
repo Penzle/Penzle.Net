@@ -1,4 +1,6 @@
-﻿using Penzle.Net.GettingStarted.ConsoleExample.Examples.Entries;
+﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
+
+using Penzle.Net.GettingStarted.ConsoleExample.Examples;
 
 // For the real world usage, you'd want to use this url from configuration.
 const string DefaultUrl = "<your-api-url>";
@@ -17,10 +19,12 @@ await FormExamples.ExampleHowToGetFormEntry(uri: apiAddress, apiKey: ApiKey);
 
 // Entries examples.
 await EntryExamples.ExampleHowToGetEntryCollection(uri: apiAddress, apiKey: ApiKey);
-await EntryExamples.ExampleHowToGetEntry(uri: apiAddress, apiKey: ApiKey);
+await EntryExamples.ExampleHowToGetEntryById(uri: apiAddress, apiKey: ApiKey);
 await EntryExamples.ExampleHowToCreateEntry(uri: apiAddress, apiKey: ApiKey);
 await EntryExamples.ExampleHowToUpdateEntry(uri: apiAddress, apiKey: ApiKey);
 await EntryExamples.ExampleHowToDeleteEntry(uri: apiAddress, apiKey: ApiKey);
+await EntryExamples.ExampleHowToGetEntryCollectionUsingTemplate(uri: apiAddress, apiKey: ApiKey);
+await EntryExamples.ExampleHowToGetEntryBySlug(uri: apiAddress, apiKey: ApiKey);
 
 // Assets examples.
 await AssetExamples.ExampleHowToGetAssetCollection(uri: apiAddress, apiKey: ApiKey);
@@ -28,4 +32,3 @@ await AssetExamples.ExampleHowToGetAsset(uri: apiAddress, apiKey: ApiKey);
 await AssetExamples.ExampleHowToCreateAsset(uri: apiAddress, apiKey: ApiKey);
 await AssetExamples.ExampleHowToUpdateAsset(uri: apiAddress, apiKey: ApiKey);
 await AssetExamples.ExampleHowToDeleteAsset(uri: apiAddress, apiKey: ApiKey);
-await AssetExamples.ExampleHowMoveAsset(uri: apiAddress, apiKey: ApiKey);

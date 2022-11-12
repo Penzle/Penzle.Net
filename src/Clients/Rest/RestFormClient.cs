@@ -1,9 +1,4 @@
-﻿using System.Net;
-using Penzle.Core.Clients.Abstract;
-using Penzle.Core.Http;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Clients.Rest;
+﻿namespace Penzle.Core.Clients.Rest;
 
 /// <summary>
 ///     Represent a REST form client that contains application programming interfaces (APIs) for management and delivery

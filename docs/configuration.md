@@ -73,7 +73,7 @@ offer complex configuration options.
 
 ```csharp
 
-IPenzleClient penzleClient = PenzleClient.Factory
+IPenzleDeliveryClient penzleClient = PenzleDeliveryClient.Factory
      (
         baseAddress: new Uri(uriString: "https://{yourname}.api.penzle.com"),
         apiDeliveryKey: "eyiOiJ0eXAiOi...",
@@ -88,7 +88,7 @@ IPenzleClient penzleClient = PenzleClient.Factory
         );
 
 // Register instance to IoC container.
-serviceCollection.AddScoped<IPenzleClient>(provider => penzleClient);
+serviceCollection.AddScoped<IPenzleDeliveryClient>(provider => penzleClient);
 ```
 
 An `HttpClient` is used internally by the default implementation of `IContentHttpClient`. The `HttpClientFactory` is the

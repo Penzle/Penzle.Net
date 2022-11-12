@@ -1,8 +1,4 @@
-﻿using Penzle.Core.Http;
-using Penzle.Core.Http.Internal;
-using Penzle.Core.Models;
-
-namespace Penzle.Core.Utilities;
+﻿namespace Penzle.Core.Utilities;
 
 public static class BaseExtensions
 {

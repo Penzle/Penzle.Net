@@ -1,8 +1,4 @@
-﻿using System.Net.Http.Headers;
-using System.Text;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Http.Internal;
+﻿namespace Penzle.Core.Http.Internal;
 
 public class HttpClientAdapter : IHttpClient
 {
@@ -14,7 +10,10 @@ public class HttpClientAdapter : IHttpClient
     public HttpClientAdapter(Func<HttpMessageHandler> getHandler)
     {
         Guard.ArgumentNotNull(value: getHandler, name: nameof(getHandler));
-        HttpClient = new HttpClient(handler: new RedirectHandler { InnerHandler = getHandler() });
+        HttpClient = new HttpClient(handler: new RedirectHandler
+        {
+            InnerHandler = getHandler()
+        });
     }
 
     public HttpClientAdapter(HttpClient httpClient)
@@ -25,7 +24,7 @@ public class HttpClientAdapter : IHttpClient
 
     public virtual HttpClient HttpClient { get; }
 
-    public virtual async Task<IResponse> Send(IRequest request, CancellationToken cancellationToken)
+    public async virtual Task<IResponse> Send(IRequest request, CancellationToken cancellationToken)
     {
         Guard.ArgumentNotNull(value: request, name: nameof(request));
 
@@ -47,12 +46,13 @@ public class HttpClientAdapter : IHttpClient
         HttpClient.Timeout = timeout;
     }
 
-    internal virtual CancellationToken GetCancellationTokenForRequest(IRequest request,
+    internal virtual CancellationToken GetCancellationTokenForRequest(
+        IRequest request,
         CancellationToken cancellationToken)
     {
         var cancellationTokenForRequest = cancellationToken;
 
-        if (request.Timeout == TimeSpan.Zero)
+        if (request.Timeout == Zero)
         {
             return cancellationTokenForRequest;
         }
@@ -65,7 +65,7 @@ public class HttpClientAdapter : IHttpClient
         return cancellationTokenForRequest;
     }
 
-    internal virtual async Task<IResponse> BuildResponse(HttpResponseMessage responseMessage)
+    async internal virtual Task<IResponse> BuildResponse(HttpResponseMessage responseMessage)
     {
         Guard.ArgumentNotNull(value: responseMessage, name: nameof(responseMessage));
 
@@ -137,7 +137,8 @@ public class HttpClientAdapter : IHttpClient
         HttpClient?.Dispose();
     }
 
-    internal virtual async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request,
+    async internal virtual Task<HttpResponseMessage> SendAsync(
+        HttpRequestMessage request,
         CancellationToken cancellationToken)
     {
         var response = await HttpClient.SendAsync(request: request, cancellationToken: cancellationToken).ConfigureAwait(continueOnCapturedContext: false);

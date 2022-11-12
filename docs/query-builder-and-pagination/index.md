@@ -9,6 +9,11 @@ Penzle.NET SKD supply multiple query builders, each with their own set of option
 For example, for entries types, there is a complex query that is configured with AND operator:
 
 ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
+...
+
 var query = QueryEntryBuilder.Instance
         .WithParentId(parentId: new Guid(g: "2e2c2146-15b1-41ed-9bca-b77e346f8f0a"))
         .WithLanguage("en-US")
@@ -63,6 +68,11 @@ Please note that once ids have been defined, the parent is ignored and the entir
 For the sake simplicity the form builder has the same behaviors and follows the same rules as the entry query builder, so we will keep DRY concept here.
 
 ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
+...
+
 var query = QueryFormBuilder.Instance
         .WithParentId(parentId: new Guid(g: "2e2c2146-15b1-41ed-9bca-b77e346f8f0a"))
         .WithLanguage("en-US")
@@ -78,6 +88,11 @@ var query = QueryFormBuilder.Instance
 For assets types, there is a complex query that is configured with AND operator:
 
 ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
+...
+
 var query = QueryAssetBuilder.Instance
     .WithParentId(new Guid("3069970B-AB6C-4C9D-9429-822FB18E971F"))
     .WithKeyword("my picture")
