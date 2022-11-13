@@ -13,5 +13,6 @@ global using Penzle.Core.Http.Internal;
 global using Penzle.Core.Models;
 global using Penzle.Core.Tests.Attribute;
 global using Penzle.Core.Tests.Models;
+global using Penzle.Core.Utilities;
 global using Xunit.Sdk;
 global using Xunit;

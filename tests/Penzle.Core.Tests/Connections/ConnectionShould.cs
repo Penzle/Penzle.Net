@@ -1,6 +1,5 @@
 ﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
 
-using System.Globalization;
 using Moq.Protected;
 
 namespace Penzle.Core.Tests.Connections;
@@ -190,7 +189,7 @@ public class ConnectionShould
         var mockHttp = new Mock<HttpMessageHandler>();
         mockHttp
             .Protected()
-            .Setup<Task<HttpResponseMessage>>("SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
                 StatusCode = HttpStatusCode.OK, Content = new StringContent(payload)
@@ -200,7 +199,7 @@ public class ConnectionShould
         var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
 
         // Act
-        var response = await connection.Get<Entry<Article>>(new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), new Dictionary<string, string>(), "text/json", "text/json", CancellationToken.None);
+        var response = await connection.Get<Entry<Article>>(uri: new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), parameters: new Dictionary<string, string>(), accepts: "text/json", contentType: "text/json", cancellationToken: CancellationToken.None);
 
         // Assert
         response.Should().NotBeNull();
@@ -224,5 +223,469 @@ public class ConnectionShould
         response.System.Slug.Should().Be("getting-started-with-penzle");
         response.System.ModifiedAt.Should().Be(new DateTime(year: 2022, month: 11, day: 08, hour: 07, minute: 53, second: 09, kind: DateTimeKind.Utc));
         response.System.CreatedAt.Should().Be(new DateTime(year: 2022, month: 10, day: 25, hour: 08, minute: 48, second: 10, kind: DateTimeKind.Utc));
+    }
+
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Ability_To_Send_Http_Request_Using_Post(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK, Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        // Act
+        var response = await connection.Post<Guid>(uri: new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), body: HttpMethod.Post, parameters: new Dictionary<string, string>(), accepts: "text/json", contentType: "text/json", cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().NotBeEmpty();
+        response.Should().Be("B9FCA947-1313-4AAF-8043-7F8323F280E4");
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Ability_To_Send_Http_Request_Using_Post_Non_Generic(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NoContent, Content = null
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        // Act
+        var response = await connection.Post(uri: new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), body: HttpMethod.Post, parameters: new Dictionary<string, string>(), accepts: "text/json", contentType: "text/json", cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Ability_To_Send_Http_Request_Using_Put_Non_Generic(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var payload = await File.ReadAllTextAsync("./Fixtures/Payloads/GetContentEntries.json").ConfigureAwait(false);
+
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NoContent, Content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        // Act
+        var response = await connection.Put(uri: new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), body: HttpMethod.Put, parameters: new Dictionary<string, string>(), accepts: "text/json", contentType: "text/json", cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Ability_To_Send_Http_Request_Using_Put(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK, Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        // Act
+        var response = await connection.Put<Guid>(uri: new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), body: HttpMethod.Put, parameters: new Dictionary<string, string>(), accepts: "text/json", contentType: "text/json", cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().NotBeEmpty();
+        response.Should().Be("B9FCA947-1313-4AAF-8043-7F8323F280E4");
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Ability_To_Send_Http_Request_Using_Patch(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK, Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        // Act
+        var response = await connection.Patch<Guid>(uri: new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), body: HttpMethod.Patch, parameters: new Dictionary<string, string>(), accepts: "text/json", contentType: "text/json", cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().NotBeEmpty();
+        response.Should().Be("B9FCA947-1313-4AAF-8043-7F8323F280E4");
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Ability_To_Send_Http_Request_Using_Patch_Non_Generic(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var payload = await File.ReadAllTextAsync("./Fixtures/Payloads/GetContentEntries.json").ConfigureAwait(false);
+
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NoContent, Content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        // Act
+        var response = await connection.Patch(uri: new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), body: HttpMethod.Patch, parameters: new Dictionary<string, string>(), accepts: "text/json", contentType: "text/json", cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Ability_To_Send_Http_Request_Using_Delete(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK, Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        // Act
+        var response = await connection.Delete<Guid>(uri: new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), body: HttpMethod.Delete, parameters: new Dictionary<string, string>(), accepts: "text/json", contentType: "text/json", cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().NotBeEmpty();
+        response.Should().Be("B9FCA947-1313-4AAF-8043-7F8323F280E4");
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Ability_To_Send_Http_Request_Using_Delete_Non_Generic(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var payload = await File.ReadAllTextAsync("./Fixtures/Payloads/GetContentEntries.json").ConfigureAwait(false);
+
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.NoContent, Content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        // Act
+        var response = await connection.Delete(uri: new Uri(uriString: "/api/project/main/environment/development/entries/4d40413f-587c-442b-949e-c44771096ee3", uriKind: UriKind.Relative), body: HttpMethod.Delete, parameters: new Dictionary<string, string>(), accepts: "text/json", contentType: "text/json", cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().Be(HttpStatusCode.NoContent);
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Processing_Request_Internally_Have_To_Break_On_MultipartFormDataContent(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var payload = await File.ReadAllTextAsync("./Fixtures/Payloads/GetContentEntry.json").ConfigureAwait(false);
+
+        var content = new MultipartFormDataContent
+        {
+            new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
+        };
+
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK, Content = content
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+        var request = new Request
+        {
+            Body = content,
+            Method = HttpMethod.Post,
+            BaseAddress = new Uri(uriString: "https://api.penzle.com", uriKind: UriKind.Absolute),
+            Endpoint = new Uri(uriString: "/api/project/main/environment/development/entries", uriKind: UriKind.Relative),
+            ContentType = "multipart/form-data"
+        };
+
+        // Act
+        var handler = () => connection.SendEntryInternal<Article>(body: content, cancellationToken: CancellationToken.None, request: request);
+
+        // Assert 
+        await handler.Should().ThrowAsync<Exception>();
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Processing_Run_Request_Have_To_Populate_Strong_Type_Object(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var payload = await File.ReadAllTextAsync("./Fixtures/Payloads/GetContentEntry.json").ConfigureAwait(false);
+        var content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json");
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK, Content = content
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        var request = new Request
+        {
+            Body = content,
+            Method = HttpMethod.Post,
+            BaseAddress = new Uri(uriString: "https://api.penzle.com", uriKind: UriKind.Absolute),
+            Endpoint = new Uri(uriString: "/api/project/main/environment/development/entries", uriKind: UriKind.Relative),
+            ContentType = "text/json"
+        };
+
+        // Act
+        var response = await connection.Run<Article>(request: request, cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().NotBeNull();
+        response.Should().BeOfType<Article>();
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Processing_Run_Request_Have_To_Populate_Strong_Type_Object_With_System_Properties(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var payload = await File.ReadAllTextAsync("./Fixtures/Payloads/GetContentEntry.json").ConfigureAwait(false);
+        var content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json");
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK, Content = content
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        var request = new Request
+        {
+            Body = content,
+            Method = HttpMethod.Post,
+            BaseAddress = new Uri(uriString: "https://api.penzle.com", uriKind: UriKind.Absolute),
+            Endpoint = new Uri(uriString: "/api/project/main/environment/development/entries", uriKind: UriKind.Relative),
+            ContentType = "text/json"
+        };
+
+        // Act
+        var response = await connection.Run<ArticleWithSystem>(request: request, cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().NotBeNull();
+        response.Should().BeOfType<ArticleWithSystem>();
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Processing_Run_Request_Have_To_Populate_Entry_Strong_Type_Object(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var payload = await File.ReadAllTextAsync("./Fixtures/Payloads/GetContentEntry.json").ConfigureAwait(false);
+        var content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json");
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK, Content = content
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        var request = new Request
+        {
+            Body = content,
+            Method = HttpMethod.Post,
+            BaseAddress = new Uri(uriString: "https://api.penzle.com", uriKind: UriKind.Absolute),
+            Endpoint = new Uri(uriString: "/api/project/main/environment/development/entries", uriKind: UriKind.Relative),
+            ContentType = "text/json"
+        };
+
+        // Act
+        var response = await connection.Run<Entry<Article>>(request: request, cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().NotBeNull();
+        response.Should().BeOfType<Entry<Article>>();
+    }
+
+    [Theory]
+    [ConnectionDependenciesData]
+    public async Task Processing_Run_Request_Have_To_Populate_Well_Know_Type_Object(
+        Uri baseAddress,
+        ApiOptions apiOptions,
+        ICredentialStore<BearerCredentials> credentialStore,
+        IHttpClient httpClientAdapter,
+        IJsonSerializer jsonSerializer,
+        IPlatformInformation platformInformation)
+    {
+        // Arrange
+        var payload = await File.ReadAllTextAsync("./Fixtures/Payloads/GetContentEntry.json").ConfigureAwait(false);
+        var content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json");
+        var mockHttp = new Mock<HttpMessageHandler>();
+        mockHttp
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = HttpStatusCode.OK, Content = content
+            });
+
+        httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
+        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
+
+        var request = new Request
+        {
+            Body = content,
+            Method = HttpMethod.Post,
+            BaseAddress = new Uri(uriString: "https://api.penzle.com", uriKind: UriKind.Absolute),
+            Endpoint = new Uri(uriString: "/api/project/main/environment/development/entries", uriKind: UriKind.Relative),
+            ContentType = "text/json"
+        };
+
+        // Act
+        var response = await connection.Run<Template>(request: request, cancellationToken: CancellationToken.None);
+
+        // Assert
+        response.Should().NotBeNull();
+        response.Should().BeOfType<Template>();
     }
 }

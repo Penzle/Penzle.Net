@@ -95,4 +95,56 @@ public class RequestShould
         request.Should().NotBeNull();
         request.ContentType.Should().Be(expected: ContentType);
     }
+
+    [Fact]
+    public void Ability_To_Set_Request_Headers()
+    {
+        // Arrange
+        var request = new Request
+        {
+            Headers = new Dictionary<string, string>
+            {
+                {
+                    "key", "value"
+                }
+            }
+        };
+
+        // Assert
+        request.Should().NotBeNull();
+        request.Headers.Should().NotBeEmpty();
+    }
+    
+    [Fact]
+    public void Ability_To_Set_Request_Parameters()
+    {
+        // Arrange
+        var request = new Request
+        {
+           Parameters = new Dictionary<string, string>()
+           {
+                {
+                     "key", "value"
+                }
+           }
+        };
+
+        // Assert
+        request.Should().NotBeNull();
+        request.Parameters.Should().NotBeEmpty();
+    }
+    
+    [Fact]
+    public void Ability_To_Set_Request_Timeout()
+    {
+        // Arrange
+        var request = new Request
+        {
+           Timeout = TimeSpan.FromSeconds(60)
+        };
+
+        // Assert
+        request.Should().NotBeNull();
+        request.Timeout.Should().BeGreaterOrEqualTo(TimeSpan.FromMinutes(1));
+    }
 }
