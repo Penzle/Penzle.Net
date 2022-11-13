@@ -18,5 +18,5 @@ public abstract class Credentials
     /// <summary>
     ///     The various authentication methods that are provided by the Penzle API.
     /// </summary>
-    public AuthenticationType AuthenticationType { get; }
+    public virtual AuthenticationType AuthenticationType { get; set; }
 }
