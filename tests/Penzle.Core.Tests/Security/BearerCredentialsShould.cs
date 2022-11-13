@@ -4,20 +4,6 @@
 public sealed class BearerCredentialsShould
 {
     [Fact]
-    public void Construct_BearerCredentials_Without_Proper_AuthenticationType()
-    {
-        // Arrange
-        var mock = new Mock<Credentials>();
-
-        // Act
-        Action handler = () => mock.SetupAllProperties()
-            .SetupProperty(property: credentials => credentials.AuthenticationType, initialValue: Enum.Parse<AuthenticationType>("-1"));
-
-        // Assert
-        handler.Should().Throw<NotSupportedException>();
-    }
-
-    [Fact]
     public void Construct_BearerCredentials_With_Proper_AuthenticationType_Bearer()
     {
         // Arrange

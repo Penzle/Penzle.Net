@@ -5,6 +5,8 @@
 /// </summary>
 public abstract class Credentials
 {
+    protected Credentials() { }
+
     protected Credentials(AuthenticationType authenticationType)
     {
         if (!Enum.IsDefined(enumType: typeof(AuthenticationType), value: authenticationType))

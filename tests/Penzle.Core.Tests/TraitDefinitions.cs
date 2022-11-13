@@ -8,4 +8,5 @@ public static class TraitDefinitions
     public static readonly string Connections = "Connections";
     public static readonly string Platform = "Platform";
     public static readonly string Serializers = "Serializers";
+    public static readonly string Exceptions = "Exceptions";
 }
