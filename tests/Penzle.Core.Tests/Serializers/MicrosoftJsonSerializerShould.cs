@@ -1,5 +1,6 @@
 ﻿namespace Penzle.Core.Tests.Serializers;
 
+[Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Serializers))]
 public class MicrosoftJsonSerializerShould
 {
     [Fact]
