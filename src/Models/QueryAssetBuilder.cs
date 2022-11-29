@@ -47,9 +47,9 @@ public sealed class QueryAssetBuilder
         return this;
     }
 
-    public QueryAssetBuilder FromRoot()
+    public QueryAssetBuilder FromRoot(Guid rootId)
     {
-        ParentId = Constants.AssetRootId;
+        ParentId = rootId;
         return this;
     }
 

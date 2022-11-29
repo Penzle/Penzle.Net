@@ -11,7 +11,7 @@ public sealed class QueryEntryBuilder
 
     internal string Ids { get; set; }
     internal QueryPaginationBuilder Pagination { get; set; }
-    internal Guid? ParentId { get; set; } = Constants.EntryRootId;
+    internal Guid? ParentId { get; set; }
     internal string Language { get; set; }
 
     public QueryEntryBuilder WithParentId(Guid parentId)
