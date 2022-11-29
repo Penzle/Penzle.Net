@@ -1,11 +1,4 @@
-﻿using System.Net;
-using FluentAssertions;
-using Moq;
-using Penzle.Core.Authentication;
-using Penzle.Core.Http;
-using Penzle.Core.Http.Internal;
-
-namespace Penzle.Core.Tests.Connections;
+﻿namespace Penzle.Core.Tests.Connections;
 
 [Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Connections))]
 public class ApiConnectionShould

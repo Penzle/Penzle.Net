@@ -8,26 +8,6 @@
 ![W3C](https://img.shields.io/badge/w3c-validated-brightgreen)
 ![Paradigm](https://img.shields.io/badge/accessibility-yes-brightgreen)
 
-> ⚠️ The SDK for .NET and the underlying documentation are still in the developing phase, and we are working very hard to finish them as quickly as we possibly can.
-
-## **Penzle Headless CMS**
-
-### Our technologies can help you build next generation of your apps
-
-At Penzle, we aimed to develop the best headless CMS system that enables seamless, safe, and efficient API-driven
-content management for an exceptional online and mobile experience. Our cloud-based headless CMS permits advanced,
-code-free content editing across all devices. The outcome? You are able to save time and generate versatile,
-customizable content.
-
-| Asset Management                                                                                   | Form Builder                                                                                                                                | Experience Manager                                                                                                                                | Digital Marketing                                                                                       |
-| -------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
-| Locate digital asset filed quickly with our organized and centralized solution to file management. | Use forms across your website to perform surveys, gather leads, or take registrations. Penzle’s form builder makes building forms a breeze. | See what web visitors see, as you build it. Experience Manager is a user-friendly way for content managers to contribute to the building process. | Leverage insights and personalization capability to execute successful omnichannel marketing campaigns. |
-
-Penzle represent client library that makes it simple to communicate with the Penzle RESTFull API. It was developed with
-the intention of targeting versions of the .NET Framework that are greater than or equal to 4.6, as well as versions of
-DotNet Core and .NET Standard. Simply going to the [website](https://www.penzle.com) for Penzle Tech Stack will allow
-you to acquire further knowledge regarding the product.
-
 ## **Getting started**
 
 Installation of the core penzle package without support for dependency injection using the Visual Studio Package Manager
@@ -154,6 +134,8 @@ catch (PenzleException exception) // Handle exceptions.
 }
 ```
 
+> You can find complete examples in the.NET 7 console project, which is written in a "How to" approach for developers. Visit [Penzle.Net.GettingStarted](/examples/Penzle.Net.GettingStarted) to view all examples of how to use various methods in console applications.
+
 ## **SDK integration recommendation for .NET applications**
 
 - [The recommendation procedure how to handle authentication and authorization.](./docs/authentication-and-authorization/index.md)
@@ -163,7 +145,7 @@ catch (PenzleException exception) // Handle exceptions.
 - [How to using SKD to manage entries.](./docs/entries/index.md)
 - [How to using SKD to manage forms.](./docs/forms/index.md)
 - [How to using SKD to manage assets.](./docs/assets/index.md)
-- [How to using SKD to manage templates.]()
+- [How to using SKD to manage templates.](./docs/templates/index.md)
 
 ## **Additional information**
 

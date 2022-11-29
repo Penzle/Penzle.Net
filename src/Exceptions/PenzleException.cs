@@ -1,12 +1,4 @@
-﻿using System.Net;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Text.Json.Nodes;
-using Penzle.Core.Http;
-using Penzle.Core.Models;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Exceptions;
+﻿namespace Penzle.Core.Exceptions;
 
 /// <summary>
 ///     Errors that occur as a result of calling the Penzle APIs are represented by this class.
@@ -31,13 +23,14 @@ public class PenzleException : Exception
     {
     }
 
-    protected PenzleException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(info: serializationInfo, context: streamingContext)
+    internal PenzleException(SerializationInfo serializationInfo, StreamingContext streamingContext) : base(info: serializationInfo, context: streamingContext)
     {
         Guard.ArgumentNotNull(value: serializationInfo, name: nameof(serializationInfo));
         StatusCode = (HttpStatusCode)serializationInfo.GetValue(name: nameof(StatusCode), type: typeof(HttpStatusCode));
         ApiError = (ApiError)serializationInfo.GetValue(name: nameof(ApiError), type: typeof(ApiError));
         HttpResponse = (IResponse)serializationInfo.GetValue(name: nameof(HttpResponse), type: typeof(IResponse));
     }
+
 
     internal PenzleException(string message) : base(message: message)
     {
@@ -74,8 +67,7 @@ public class PenzleException : Exception
         base.GetObjectData(info: info, context: context);
         info.AddValue(name: nameof(ApiError), value: ApiError);
         info.AddValue(name: nameof(HttpResponse), value: HttpResponse);
-        info.AddValue(name: nameof(ApiError), value: ApiError);
-        info.AddValue(name: nameof(HttpResponse), value: HttpResponse);
+        info.AddValue(name: nameof(StatusCode), value: (int)StatusCode);
     }
 
     private static ApiError GetApiErrorFromExceptionMessage(IResponse response)
@@ -84,7 +76,7 @@ public class PenzleException : Exception
         return GetApiErrorFromExceptionMessage(responseContent: responseBody);
     }
 
-    private static ApiError GetApiErrorFromExceptionMessage(string responseContent)
+    internal static ApiError GetApiErrorFromExceptionMessage(string responseContent)
     {
         var error = new ApiError(title: responseContent);
         try

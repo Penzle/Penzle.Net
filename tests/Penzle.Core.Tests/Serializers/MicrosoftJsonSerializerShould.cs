@@ -1,11 +1,6 @@
-﻿using System.Text.Json.Serialization;
-using FluentAssertions;
-using Penzle.Core.Http;
-using Penzle.Core.Http.Internal;
-using Penzle.Core.Tests.Models;
+﻿namespace Penzle.Core.Tests.Serializers;
 
-namespace Penzle.Core.Tests.Serializers;
-
+[Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Serializers))]
 public class MicrosoftJsonSerializerShould
 {
     [Fact]
@@ -65,7 +60,16 @@ public class MicrosoftJsonSerializerShould
     {
         // Arrange
         var serializer = new MicrosoftJsonSerializer();
-        var person = new { FirstName = "John", LastName = "Doe", Age = 30, Address = new { Street = "123 Main St", City = "Seattle", State = "WA", PostalCode = "98052" } };
+        var person = new
+        {
+            FirstName = "John",
+            LastName = "Doe",
+            Age = 30,
+            Address = new
+            {
+                Street = "123 Main St", City = "Seattle", State = "WA", PostalCode = "98052"
+            }
+        };
 
         // Act
         var json = serializer.Serialize(item: person);

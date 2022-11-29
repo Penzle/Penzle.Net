@@ -1,6 +1,4 @@
-﻿using Penzle.Core.Http;
-
-namespace Penzle.Core.Authentication;
+﻿namespace Penzle.Core.Authentication;
 
 internal interface IAuthenticationHandler
 {

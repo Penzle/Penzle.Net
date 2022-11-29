@@ -9,37 +9,80 @@ appropriate response.
 
 Object Penzle Exception enables developers to read error as routines at every level of the codebase, providing vital
 feedback on what errors are occurring and why they are occurring so that they can be addressed quickly and efficiently.
+
 Overall, error handling via Penzle Exception can help ensure the highest levels of quality and stability when building
 software programs.
 
+
 ```csharp
-    try
+try 
+{
+       IDeliveryPenzleClient client = DeliveryPenzleClient.Factory(...);
+
+        var query = QueryEntryBuilder.Instance
+            .WithPagination(
+                QueryPaginationBuilder
+                    .Default
+                        .WithPage(1)
+                        .WithPageSize(10));
+        
+        var response = await client.Entry.GetEntries<Entry<Product>>(query);
+
+}
+catch (PenzleException exception) when (exception.StatusCode == HttpStatusCode.NotFound)
+{
+    // Handle 404 Not Found
+}
+catch (PenzleException exception) when (exception.StatusCode == HttpStatusCode.Forbidden)
+{
+    // Handle 403 Forbidden
+}
+catch (PenzleException exception) when (exception.StatusCode == HttpStatusCode.Unauthorized)
+{
+    // Handle 401 Unauthorized
+}
+catch (PenzleException exception) when (exception.StatusCode == HttpStatusCode.BadRequest)
+{
+    // Handle 400 Bad Request
+}
+catch (PenzleException exception) when (exception.StatusCode == HttpStatusCode.InternalServerError)
+{
+    // Handle 500 Internal Server Error
+}
+catch (PenzleException exception) when (exception.StatusCode == HttpStatusCode.ServiceUnavailable)
+{
+    // Handle 503 Service Unavailable
+}
+catch (PenzleException exception)
+{
+    // Examine the overarching message that comes back from the API.
+    Console.WriteLine(value: e.Message);
+
+    // Examine the HTTP status code that is returned by the API.
+    Console.WriteLine(value: e.StatusCode);
+
+    // Check the more details regarding the mistake, such as if it was a validation error or whether it was caused by faulty requests, etc.
+    Console.WriteLine(value: e.ApiError.Detail);
+
+    // To gain a better understanding of what information is missing from the request, it is necessary to enumerate the errors field by field.
+    foreach (var apiErrorDetail in e.ApiError.Errors)
     {
-        await GetEntries(penzleClient: deliveryPenzleClient);
-        Console.ReadLine();
+        Console.WriteLine(value: apiErrorDetail.Field);
+        Console.WriteLine(value: apiErrorDetail.Message);
     }
-    catch (PenzleException e)
-    {
-        // Examine the overarching message that comes back from the API.
-        Console.WriteLine(value: e.Message);
-    
-        // Examine the HTTP status code that is returned by the API.
-        Console.WriteLine(value: e.StatusCode);
-    
-        // Check the more details regarding the mistake, such as if it was a validation error or whether it was caused by faulty requests, etc.
-        Console.WriteLine(value: e.ApiError.Detail);
-    
-        // To gain a better understanding of what information is missing from the request, it is necessary to enumerate the errors field by field.
-        foreach(var apiErrorDetail in e.ApiError.Errors)
-        {
-            Console.WriteLine(value: apiErrorDetail.Field);
-            Console.WriteLine(value: apiErrorDetail.Message);
-        }
-    
-        // Calling ToString() allows you to obtain a formatted error message in a single string.
-        Console.WriteLine(value: e.ToString());
-    }
+
+    // Calling ToString() allows you to obtain a formatted error message in a single string.
+    Console.WriteLine(value: e.ToString());
+}
 ```
+
+When determining whether or not an API request was successful, the Penzle platform uses the standard HTTP response codes.
+
+Any code in the `2xx` range denotes a successful transaction. The `4xx` field contains codes that indicate an error that could not be fixed with the provided information (e.g., Bad Request, Not Found, Unauthorized, Forbbiden).
+
+If an error has occurred with the Penzle backend system if the code is in the range `5xx`.
+
+Some of the `4xx` faults that can be handled programmatically include an error code that provides a condensed explanation of the error that was reported (for example, "bad request" or "not found").
 
 #### 200 Status Code (Success)
 

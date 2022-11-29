@@ -1,6 +1,4 @@
-﻿using Penzle.Core.Authentication;
-
-namespace Penzle.Core.Http;
+﻿namespace Penzle.Core.Http;
 
 /// <summary>
 ///     Bearer authentication (also known as token authentication) is an HTTP authentication system that uses bearer tokens

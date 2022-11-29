@@ -78,7 +78,20 @@ Console.WriteLine(value: assetCollection.PageSize); //Returns the number of item
 Console.WriteLine(value: assetCollection.TotalCount); //Returns the total number of items in the superset.
 Console.WriteLine(value: assetCollection.TotalPages); //Returns the total number of pages in the superset.
 Console.WriteLine(assetCollection.Items); // Returns the collection of Penzle.Core.Model.Asset in the current page.
+
 ```
+
+##### **Response status code**
+
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 200  | Returns a collection of assets.                                 |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 500  | There was a communication error with the Penzle API.            |
+
 
 > ⚠️ An increased page size while pulling the asset will reduce the number of calls to the API endpoint but double the quantity of data provided for each API call. Please keep this in mind when defining pageSize, since it could affect performance and the end-user experience.
 
@@ -117,3 +130,183 @@ Console.WriteLine(value: asset.Size); // Returns the content length size of the 
 Console.WriteLine(value: asset.Url); // Returns the url from CDN of the asset.
 Console.WriteLine(value: asset.Type); // Returns the type of the asset it can be folder or file.
 ```
+
+##### **Response status code**
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 200  | Returns a single asset.                                         |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 404  | The requested asset was not found.                              |
+| 500  | There was a communication error with the Penzle API.            |
+
+
+ ### **Creates asset**
+
+Using the Penzle.NET SDK, it is possible to create file assets that include both binary and meta data, simply the request should include the file and its arguments, as seen in the C# sample below. To acquire access to a resource, a minimum API write key is required.
+
+ ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
+// Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+{
+    options.Project = "main"; // Define the project name which you want to use.
+    options.Environment = "default"; // Define the environment name which you want to use for the project.
+});
+
+
+var asset = new AddAssetRequest()
+{
+    FolderId = new Guid("B140B0E8-C1CB-4E98-95A1-74EE8D9437E5"), // Represents the unique identifier of the parent folder. In case if this value is null then the asset will be created against to root folder.
+    Description = "This is a description of the asset.", // Represents the description of the asset.
+    Language = "en-US", // Represents the language of the asset.
+};
+
+await using (var file = new FileStream("Penzle.png", FileMode.Open, FileAccess.Read)) // Load file stream from disk.
+{
+    asset!.Payload = file; // Represents the file stream of the asset.
+}
+
+// Create a new asset.
+var assetId = await managementPenzleClient.Asset.AddAsset(asset, CancellationToken.None);
+
+// Print the response of returned asset to the console.
+Console.WriteLine(value: assetId); // Returns the unique identifier of the asset.
+```
+
+##### **Response status code**
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 200  | Returns newly created asset id.                                 |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 500  | There was a communication error with the Penzle API.            |
+
+
+ ### **Update asset file**
+
+ The Penzle.NET SDK enables each asset file to be updated, such as by changing its content. The primary requirement is to supply the asset file id. This is C# example.
+
+ ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
+ // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+{
+    options.Project = "main"; // Define the project name which you want to use.
+    options.Environment = "default"; // Define the environment name which you want to use for the project.
+});
+
+
+var asset = new UpdateAssetRequest()
+{
+    Id = new Guid("F078FC7D-C3E6-459F-AD21-D34F71E6195B"), // Represents the unique identifier of the asset.
+    Description = "This is updated asset description..", // Represents the description of the asset.
+    Language = "en-US", // Represents the language of the asset.
+};
+
+await using (var file = new FileStream("NewPenzleLogo.png", FileMode.Open, FileAccess.Read)) // Load file stream from disk.
+{
+    asset!.Payload = file; // Represents the file stream of the asset.
+}
+
+// Update the asset.
+var httpStatusCode = await managementPenzleClient.Asset.UpdateAsset(asset, CancellationToken.None);
+
+// Print the True if the asset was updated successfully.
+Console.WriteLine(value: httpStatusCode == HttpStatusCode.NoContent);
+```
+
+##### **Response status code**
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 204  | Returns no content as indicated by the HTTP status code.        |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 500  | There was a communication error with the Penzle API.            |
+
+ ### **Delete asset**
+ Penzle.NET gives you the ability in case you need to delete  to one of the folders or files in the asset library. You'll need to know the id of the folder, or file and you'll also need to provide a minimum write key.
+
+ > ⚠️ When deleting a folder, you must remember that all its children, including files and folders, will also be deleted.
+
+ ```csharp
+ // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+{
+    options.Project = "main"; // Define the project name which you want to use.
+    options.Environment = "default"; // Define the environment name which you want to use for the project.
+});
+
+
+var assetId = new Guid("F078FC7D-C3E6-459F-AD21-D34F71E6195B"); // Represents the unique identifier of the asset.
+
+// Update the asset.
+var httpStatusCode = await managementPenzleClient.Asset.DeleteAsset(assetId, CancellationToken.None);
+
+// Print the True if the asset was updated successfully.
+Console.WriteLine(value: httpStatusCode == HttpStatusCode.NoContent);
+```
+
+ ##### **Response status code**
+
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 204  | Returns no content as indicated by the HTTP status code.        |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 500  | There was a communication error with the Penzle API.            |
+
+ ### **Delete collection of asset**
+
+ If you need to delete a collection of assets in bulk, you can pass the collection's unique identifier to Penzle.NET. Here is C# example.
+
+ ```csharp
+using Penzle.Core;
+using Penzle.Core.Models;
+
+ // Create a new instance of the Penzle API client using Factory method ans passing API address and API key.
+var managementPenzleClient = ManagementPenzleClient.Factory(baseAddress: uri, apiKey, apiOptions: options =>
+{
+    options.Project = "main"; // Define the project name which you want to use.
+    options.Environment = "default"; // Define the environment name which you want to use for the project.
+});
+
+
+// Represents the unique identifiers of the assets.
+var assetIds = new Guid[]
+{
+    new Guid("F078FC7D-C3E6-459F-AD21-D34F71E6195B"), // Represents the unique identifier of the asset.
+    new Guid("B140B0E8-C1CB-4E98-95A1-74EE8D9437E5"), // Represents the unique identifier of the asset.
+};
+
+
+// Update the asset.
+var httpStatusCode = await managementPenzleClient.Asset.DeleteAssets(assetIds, CancellationToken.None);
+
+// Print the True if the asset was updated successfully.
+Console.WriteLine(value: httpStatusCode == HttpStatusCode.NoContent);
+ ```
+
+ ##### **Response status code**
+
+
+| Code | Description                                                     |
+| ---- | --------------------------------------------------------------- |
+| 204  | Returns no content as indicated by the HTTP status code.        |
+| 400  | The request is invalid.                                         |
+| 401  | The user is not authenticated to access the requested resource. |
+| 403  | The user is not authorized to access the requested resource.    |
+| 500  | There was a communication error with the Penzle API.            |
+

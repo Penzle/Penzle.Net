@@ -1,11 +1,4 @@
-﻿using System.Net;
-using System.Text;
-using FluentAssertions;
-using Moq;
-using Penzle.Core.Http;
-using Penzle.Core.Http.Internal;
-
-namespace Penzle.Core.Tests.Http;
+﻿namespace Penzle.Core.Tests.Http;
 
 [Trait(name: nameof(TraitDefinitions.Category), value: nameof(TraitDefinitions.Http))]
 public class HttpClientAdapterShould
@@ -170,7 +163,12 @@ public class HttpClientAdapterShould
         // Arrange
         var requestMock = new Mock<IRequest>();
         requestMock.SetupAllProperties();
-        requestMock.SetupProperty(property: request => request.Body, initialValue: new MultipartFormDataContent { { new StreamContent(content: Stream.Null), "document", "document.pdf" } });
+        requestMock.SetupProperty(property: request => request.Body, initialValue: new MultipartFormDataContent
+        {
+            {
+                new StreamContent(content: Stream.Null), "document", "document.pdf"
+            }
+        });
         requestMock.SetupProperty(property: request => request.Method, initialValue: HttpMethod.Post);
         requestMock.SetupProperty(property: request => request.ContentType, initialValue: "application/json");
         requestMock.SetupProperty(property: request => request.BaseAddress, initialValue: new Uri(uriString: "https://api.penzle.com"));
@@ -215,12 +213,22 @@ public class HttpClientAdapterShould
 
         var requestMock = new Mock<IRequest>();
         requestMock.SetupAllProperties();
-        requestMock.SetupProperty(property: request => request.Body, initialValue: new MultipartFormDataContent { { new StreamContent(content: Stream.Null), "document", "document.pdf" } });
+        requestMock.SetupProperty(property: request => request.Body, initialValue: new MultipartFormDataContent
+        {
+            {
+                new StreamContent(content: Stream.Null), "document", "document.pdf"
+            }
+        });
         requestMock.SetupProperty(property: request => request.Method, initialValue: HttpMethod.Post);
         requestMock.SetupProperty(property: request => request.ContentType, initialValue: "application/json");
         requestMock.SetupProperty(property: request => request.BaseAddress, initialValue: new Uri(uriString: "https://api.penzle.com"));
         requestMock.SetupProperty(property: request => request.Endpoint, initialValue: new Uri(uriString: "api/v1/endpoint", uriKind: UriKind.Relative));
-        requestMock.SetupProperty(property: request => request.Headers, initialValue: new Dictionary<string, string> { { Key, Value } });
+        requestMock.SetupProperty(property: request => request.Headers, initialValue: new Dictionary<string, string>
+        {
+            {
+                Key, Value
+            }
+        });
 
         var httpClientAdapter = new HttpClientAdapter();
 
@@ -239,7 +247,12 @@ public class HttpClientAdapterShould
         // Arrange
         var requestMock = new Mock<IRequest>();
         requestMock.SetupAllProperties();
-        requestMock.SetupProperty(property: request => request.Body, initialValue: new MultipartFormDataContent { { new StreamContent(content: Stream.Null), "document", "document.pdf" } });
+        requestMock.SetupProperty(property: request => request.Body, initialValue: new MultipartFormDataContent
+        {
+            {
+                new StreamContent(content: Stream.Null), "document", "document.pdf"
+            }
+        });
         requestMock.SetupProperty(property: request => request.Method, initialValue: HttpMethod.Post);
         requestMock.SetupProperty(property: request => request.ContentType, initialValue: "application/json");
         requestMock.SetupProperty(property: request => request.BaseAddress, initialValue: new Uri(uriString: "https://api.penzle.com"));

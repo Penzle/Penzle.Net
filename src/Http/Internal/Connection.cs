@@ -1,14 +1,4 @@
-﻿using System.Globalization;
-using System.Net;
-using System.Net.Http.Headers;
-using System.Reflection;
-using System.Text.Json.Nodes;
-using Penzle.Core.Authentication;
-using Penzle.Core.Exceptions;
-using Penzle.Core.Models;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Http.Internal;
+﻿namespace Penzle.Core.Http.Internal;
 
 public class Connection : IConnection
 {

@@ -1,7 +1,4 @@
-﻿using Penzle.Core.Exceptions;
-using Penzle.Core.Models;
-
-namespace Penzle.Core.Clients;
+﻿namespace Penzle.Core.Clients;
 
 /// <summary>
 ///     Represents collection of Content Asset Management API queries.

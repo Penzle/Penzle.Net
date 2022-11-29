@@ -1,6 +1,4 @@
-﻿using System.Net;
-
-namespace Penzle.Core.Http;
+﻿namespace Penzle.Core.Http;
 
 public interface IConnection
 {

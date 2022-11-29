@@ -1,11 +1,4 @@
-﻿using System.Net;
-using System.Net.Http.Headers;
-using Penzle.Core.Clients.Abstract;
-using Penzle.Core.Http;
-using Penzle.Core.Models;
-using Penzle.Core.Utilities;
-
-namespace Penzle.Core.Clients.Rest;
+﻿namespace Penzle.Core.Clients.Rest;
 
 /// <summary>
 ///     Represent a REST asset client that includes APIs for management and delivery methods.
@@ -48,7 +41,10 @@ internal sealed class RestAssetClient : RestBaseClient, IManagementAssetClient, 
     /// <inheritdoc cref="IManagementAssetClient.DeleteAsset" />
     public ValueTask<HttpStatusCode> DeleteAsset(Guid id, CancellationToken cancellationToken = default)
     {
-        return DeleteAssets(ids: new[] { id }, cancellationToken: cancellationToken);
+        return DeleteAssets(ids: new[]
+        {
+            id
+        }, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc cref="IManagementAssetClient.DeleteAssets" />

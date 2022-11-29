@@ -1,9 +1,4 @@
-using System.Runtime.Serialization;
-using System.Text.Json.Nodes;
-using Penzle.Core.Http;
-using Penzle.Core.Http.Internal;
-
-namespace Penzle.Core.Models;
+﻿namespace Penzle.Core.Models;
 
 [Serializable]
 public class ApiError : ISerializable
@@ -56,7 +51,10 @@ public class ApiError : ISerializable
 
                 foreach (var error in errors)
                 {
-                    Errors.Add(item: new ApiErrorDetail { Field = error.Key, Message = error.Value.ToList() });
+                    Errors.Add(item: new ApiErrorDetail
+                    {
+                        Field = error.Key, Message = error.Value.ToList()
+                    });
                 }
             }
             catch (Exception)

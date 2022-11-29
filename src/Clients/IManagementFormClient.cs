@@ -1,7 +1,4 @@
-﻿using System.Net;
-using Penzle.Core.Exceptions;
-
-namespace Penzle.Core.Clients;
+﻿namespace Penzle.Core.Clients;
 
 /// <summary>
 ///     Represents a collection of queries sent to the Content Form Management API.
