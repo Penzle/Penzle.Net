@@ -5,13 +5,13 @@ The Penzle .NET SDK provides a comprehensive set of documentation and resources 
 ## SDK integration recommendation for .NET applications
 
 - [The recommendation procedure how to handle authentication and authorization.](./authentication-and-authorization/index.md)
-- [The recommendation procedure how to use query builder and pagination.](./docs/query-builder-and-pagination/index.md)
-- [The recommended procedure for carrying out unit tests.](./docs/unit-tests.md)
-- [The recommendation how to handle errors using SDK.](./docs/status-code-and-errors.md)
-- [How to using SKD to manage entries.](./docs/entries/index.md)
-- [How to using SKD to manage forms.](./docs/forms/index.md)
-- [How to using SKD to manage assets.](./docs/assets/index.md)
-- [How to using SKD to manage templates.](./docs/templates/index.md)
+- [The recommendation procedure how to use query builder and pagination.](./query-builder-and-pagination/index.md)
+- [The recommended procedure for carrying out unit tests.](./unit-tests.md)
+- [The recommendation how to handle errors using SDK.](./status-code-and-errors.md)
+- [How to using SKD to manage entries.](./entries/index.md)
+- [How to using SKD to manage forms.](./forms/index.md)
+- [How to using SKD to manage assets.](./assets/index.md)
+- [How to using SKD to manage templates.](./templates/index.md)
 
 ## Additional information
 
