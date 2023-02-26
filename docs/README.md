@@ -4,7 +4,7 @@ The Penzle .NET SDK provides a comprehensive set of documentation and resources 
 
 ## SDK integration recommendation for .NET applications
 
-- [The recommendation procedure how to handle authentication and authorization.](./docs/authentication-and-authorization/index.md)
+- [The recommendation procedure how to handle authentication and authorization.](./authentication-and-authorization/index.md)
 - [The recommendation procedure how to use query builder and pagination.](./docs/query-builder-and-pagination/index.md)
 - [The recommended procedure for carrying out unit tests.](./docs/unit-tests.md)
 - [The recommendation how to handle errors using SDK.](./docs/status-code-and-errors.md)
