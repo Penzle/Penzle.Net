@@ -31,10 +31,10 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
     /// <summary>
     ///     Create instance of Penzle Client Management API.
     /// </summary>
-    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <param name="apiDeliveryKey">The key for delivery.</param>
+    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <returns>The default instance which is matched <see cref="IDeliveryPenzleClient" />IPenzleClient</returns>
-    public static IDeliveryPenzleClient Factory(Uri baseAddress, string apiDeliveryKey)
+    public static IDeliveryPenzleClient Factory(string apiDeliveryKey, Uri baseAddress = null)
     {
         return Factory
         (
@@ -54,11 +54,11 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
     /// <summary>
     ///     Create instance of Penzle Client Management API.
     /// </summary>
-    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <param name="apiDeliveryKey">The key for delivery.</param>
     /// <param name="apiOptions">Pass additional options as project id and environments id.</param>
+    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <returns>The default instance which is matched <see cref="IDeliveryPenzleClient" />IPenzleClient</returns>
-    public static IDeliveryPenzleClient Factory(Uri baseAddress, string apiDeliveryKey, Action<ApiOptions> apiOptions)
+    public static IDeliveryPenzleClient Factory(string apiDeliveryKey, Action<ApiOptions> apiOptions, Uri baseAddress = null)
     {
         return Factory
         (
@@ -74,12 +74,12 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
     /// <summary>
     ///     Create instance of Penzle Client Management API.
     /// </summary>
-    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <param name="apiDeliveryKey">The key for delivery.</param>
     /// <param name="apiOptions">Pass additional options as project id and environments id.</param>
     /// <param name="httpClient">Pass your own implementation of http client.</param>
+    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <returns>The default instance which is matched <see cref="IDeliveryPenzleClient" />IPenzleClient</returns>
-    public static IDeliveryPenzleClient Factory(Uri baseAddress, string apiDeliveryKey, Action<ApiOptions> apiOptions, IHttpClient httpClient)
+    public static IDeliveryPenzleClient Factory(string apiDeliveryKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, Uri baseAddress = null)
     {
         return Factory
         (
@@ -96,7 +96,6 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
     /// <summary>
     ///     Create instance of Penzle Client Management API.
     /// </summary>
-    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <param name="apiDeliveryKey">The key for delivery.</param>
     /// <param name="apiOptions">Pass additional options as project id and environments id.</param>
     /// <param name="httpClient">Pass your own implementation of http client.</param>
@@ -104,8 +103,9 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
     ///     Pass your own implementation of json serializer. The current implementation coming from
     ///     System.Text.Json
     /// </param>
+    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <returns>The default instance which is matched <see cref="IDeliveryPenzleClient" />IPenzleClient</returns>
-    public static IDeliveryPenzleClient Factory(Uri baseAddress, string apiDeliveryKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer)
+    public static IDeliveryPenzleClient Factory(string apiDeliveryKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer, Uri baseAddress = null)
     {
         return Factory
         (
@@ -121,7 +121,6 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
     /// <summary>
     ///     Create instance of Penzle Client Management API.
     /// </summary>
-    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <param name="apiDeliveryKey">The key for delivery.</param>
     /// <param name="apiOptions">Pass additional options as project id and environments id.</param>
     /// <param name="httpClient">Pass your own implementation of http client.</param>
@@ -130,8 +129,9 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
     ///     System.Text.Json
     /// </param>
     /// <param name="timeOut">Pass custom time for cancel request on global level.</param>
+    /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <returns>The default instance which is matched <see cref="IDeliveryPenzleClient" />IPenzleClient</returns>
-    public static IDeliveryPenzleClient Factory(Uri baseAddress, string apiDeliveryKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer, TimeSpan timeOut)
+    public static IDeliveryPenzleClient Factory(string apiDeliveryKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer, TimeSpan timeOut, Uri baseAddress)
     {
         ICredentialStore<BearerCredentials> credentialStore = new InMemoryCredentialStore(credentials: new BearerCredentials(apiDeliveryKey: apiDeliveryKey, apiManagementKey: null));
 

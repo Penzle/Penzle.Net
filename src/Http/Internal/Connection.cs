@@ -2,6 +2,7 @@
 
 public class Connection : IConnection
 {
+    private readonly Uri _penzleCloudApi = new Uri(uriString: "https://api.penzle.com");
     private readonly Authenticator _authenticator;
     private readonly IJsonSerializer _jsonSerializer;
     private readonly IPlatformInformation _platformInformation;
@@ -13,20 +14,42 @@ public class Connection : IConnection
     }
 
     public Connection(
-        Uri baseAddress,
         ApiOptions apiOptions,
         ICredentialStore<BearerCredentials> credentialStore,
         IHttpClient httpClient,
         IJsonSerializer serializer,
-        IPlatformInformation platformInformation)
+        IPlatformInformation platformInformation,
+        Uri baseAddress = null)
     {
-        Guard.ArgumentNotNull(value: baseAddress, name: nameof(baseAddress));
         Guard.ArgumentNotNull(value: apiOptions, name: nameof(apiOptions));
         Guard.ArgumentNotNull(value: credentialStore, name: nameof(credentialStore));
         Guard.ArgumentNotNull(value: httpClient, name: nameof(httpClient));
         Guard.ArgumentNotNull(value: serializer, name: nameof(serializer));
         Guard.ArgumentNotNull(value: platformInformation, name: nameof(platformInformation));
 
+        _authenticator = new Authenticator(credentialStore: credentialStore);
+        _jsonSerializer = serializer;
+        _platformInformation = platformInformation;
+        HttpClient = httpClient;
+        UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
+        Credentials = credentialStore.GetCredentials().GetAwaiter().GetResult();
+        CredentialStore = credentialStore;
+        SetBaseAdress(baseAddress, apiOptions);
+    }
+
+    
+    public virtual IHttpClient HttpClient { get; set; }
+    public virtual string UserAgent { get; set; }
+    public virtual ICredentialStore<BearerCredentials> CredentialStore { get; set; }
+
+    private void SetBaseAdress(Uri? baseAddress, ApiOptions apiOptions)
+    {
+        if (baseAddress == null)
+        {
+            BaseAddress = Constants.AddressTemplate.FormatUri(_penzleCloudApi, apiOptions.Project, apiOptions.Environment);
+            return;
+        }
+        
         if (!baseAddress.IsAbsoluteUri)
         {
             throw new ArgumentException(
@@ -39,19 +62,8 @@ public class Connection : IConnection
             baseAddress = new Uri(uriString: baseAddress.ToString().Remove(startIndex: baseAddress.ToString().Length - 1));
         }
 
-        _authenticator = new Authenticator(credentialStore: credentialStore);
-        _jsonSerializer = serializer;
-        _platformInformation = platformInformation;
-        HttpClient = httpClient;
         BaseAddress = Constants.AddressTemplate.FormatUri(baseAddress, apiOptions.Project, apiOptions.Environment);
-        UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
-        Credentials = credentialStore.GetCredentials().GetAwaiter().GetResult();
-        CredentialStore = credentialStore;
     }
-
-    public virtual IHttpClient HttpClient { get; set; }
-    public virtual string UserAgent { get; set; }
-    public virtual ICredentialStore<BearerCredentials> CredentialStore { get; set; }
 
     public async virtual Task<T> Get<T>(
         Uri uri,

@@ -9,9 +9,9 @@ public class ApiOptions
     }
 
     /// <summary>
-    ///     Default API Options include the Main project with Master environment
+    ///     Default API Options include the Main project with Main environment
     /// </summary>
-    public static ApiOptions Default => new(project: "main", environment: "master");
+    public static ApiOptions Default => new(project: "main", environment: "main");
 
     /// <summary>
     ///     Specify the project.

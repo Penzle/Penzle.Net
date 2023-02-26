@@ -1,4 +1,13 @@
 ﻿{
+  "base": [
+    {
+      "template": "metadata",
+      "fields": {
+        "metaTitle": "Getting started with Penzle",
+        "metaDescription": "With the help of Penzle's headless content platform, developers can use the toolkits and languages most appropriate for the project."
+      }
+    }
+  ],
   "fields": {
     "title": "Getting started with Penzle",
     "slug": "getting-started-with-penzle",
@@ -20,14 +29,5 @@
     "slug": "getting-started-with-penzle",
     "modifiedAt": "2022-11-08T07:53:09",
     "createdAt": "2022-10-25T08:48:10"
-  },
-  "base": [
-    {
-      "template": "metadata",
-      "fields": {
-        "metaTitle": "Getting started with Penzle",
-        "metaDescription": "With the help of Penzle's headless content platform, developers can use the toolkits and languages most appropriate for the project."
-      }
-    }
-  ]
+  }
 }

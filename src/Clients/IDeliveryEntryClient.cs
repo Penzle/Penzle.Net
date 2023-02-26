@@ -16,7 +16,7 @@ public interface IDeliveryEntryClient
     /// <param name="template">The template code representing the object's shape from which has been created.</param>
     /// <returns>A <see cref="TEntry" /> of items.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    Task<PagedList<TEntry>> GetPaginationListEntries<TEntry>(string template, QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new();
+    Task<PagedList<TEntry>> GetPaginationListEntries<TEntry>(string template, QueryEntryBuilder<TEntry> query = null, CancellationToken cancellationToken = default) where TEntry : new();
 
     /// <summary>
     ///     Retrieves all the entries of a template, optionally filtered by a querystring. Utilizing the class is more
@@ -28,7 +28,7 @@ public interface IDeliveryEntryClient
     /// <param name="cancellationToken">The optional token used to cancel an operation.</param>
     /// <returns>A <see cref="TEntry" /> of items.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    Task<PagedList<TEntry>> GetPaginationListEntries<TEntry>(QueryEntryBuilder query = null, CancellationToken cancellationToken = default) where TEntry : new();
+    Task<PagedList<TEntry>> GetPaginationListEntries<TEntry>(QueryEntryBuilder<TEntry> query = null, CancellationToken cancellationToken = default) where TEntry : new();
 
 
     /// <summary>
@@ -42,7 +42,7 @@ public interface IDeliveryEntryClient
     /// <param name="cancellationToken">The optional token used to cancel an operation.</param>
     /// <returns>A read only collection of <see cref="TEntry" /> of items.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(QueryEntryBuilder query = null, int fetch = 50, CancellationToken cancellationToken = default) where TEntry : new();
+    Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(QueryEntryBuilder<TEntry> query = null, int fetch = 50, CancellationToken cancellationToken = default) where TEntry : new();
 
     /// <summary>
     ///     Retrieves all the entries of a template, optionally filtered by a querystring. Utilizing the class is more
@@ -56,7 +56,7 @@ public interface IDeliveryEntryClient
     /// <param name="cancellationToken">The optional token used to cancel an operation.</param>
     /// <returns>A read only collection of <see cref="TEntry" /> of items.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(string template, QueryEntryBuilder query = null, int fetch = 50, CancellationToken cancellationToken = default) where TEntry : new();
+    Task<IReadOnlyList<TEntry>> GetEntries<TEntry>(string template, QueryEntryBuilder<TEntry> query = null, int fetch = 50, CancellationToken cancellationToken = default) where TEntry : new();
 
 
     /// <summary>

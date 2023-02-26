@@ -1,1 +1,37 @@
-{"fields":{"summary":"","promoTextImage":null,"highlightedFeatures":"90c821e9-2086-4f95-9e1b-0f499391506a","featureText":""},"system":{"template":"solution","id":"744b75f5-1432-4816-8eac-7b149b71f254","parentId":"dc4f77ae-b62a-4781-90e0-86872e615336","name":"Education","version":"5.0","language":"en-US","aliasPath":"/content/Solutions/Education","slug":"education","modifiedAt":"2022-11-06T21:02:59","createdAt":"2022-10-22T22:27:36"},"base":[{"template":"metadata","fields":{"metaTitle":"Education","metaDescription":"Penzle technology helps educators launch interactive courses, mobile applications and student portals to provide a next-generation learning experience."}},{"template":"banner","fields":{"title":"Innovate How You Teach With Penzle","description":"<p>Create the ultimate learning experience with Penzle Solutions. Digital transformation is taking the education industry by storm, and students are demanding more modern learning experiences. You can deliver that and more with Penzle CMS.</p>","image":"a42cb647-e801-4f84-ba25-f0e098f86ea0"}}]}
+{
+  "base": [
+    {
+      "template": "metadata",
+      "fields": {
+        "metaTitle": "Education",
+        "metaDescription": "Penzle technology helps educators launch interactive courses, mobile applications and student portals to provide a next-generation learning experience."
+      }
+    },
+    {
+      "template": "banner",
+      "fields": {
+        "title": "Innovate How You Teach With Penzle",
+        "description": "<p>Create the ultimate learning experience with Penzle Solutions. Digital transformation is taking the education industry by storm, and students are demanding more modern learning experiences. You can deliver that and more with Penzle CMS.</p>",
+        "image": "a42cb647-e801-4f84-ba25-f0e098f86ea0"
+      }
+    }
+  ],
+  "fields": {
+    "featureText": "",
+    "highlightedFeatures": "90c821e9-2086-4f95-9e1b-0f499391506a",
+    "promoTextImage": null,
+    "summary": ""
+  },
+  "system": {
+    "template": "solution",
+    "id": "744b75f5-1432-4816-8eac-7b149b71f254",
+    "parentId": "dc4f77ae-b62a-4781-90e0-86872e615336",
+    "name": "Education",
+    "version": "5.0",
+    "language": "en-US",
+    "aliasPath": "/content/Solutions/Education",
+    "slug": "education",
+    "modifiedAt": "2022-11-06T21:02:59",
+    "createdAt": "2022-10-22T22:27:36"
+  }
+}
