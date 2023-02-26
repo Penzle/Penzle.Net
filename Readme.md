@@ -1,201 +1,177 @@
-# **Penzle Delivery and Management .NET SDK**
+# **Penzle .NET SDK**
+
+The Penzle .NET SDK is a library that allows developers to easily integrate with the Penzle Content Delivery and Content Management APIs. This SDK is designed for .NET developers who want to create, update and retrieve content from the Penzle platform.
 
 ![Run Build and Test](https://github.com/Penzle/Penzle.Net/actions/workflows/run-build-and-test.ci.yml/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/edbdt6fl1omedpfi/branch/main?svg=true)](https://ci.appveyor.com/project/admir-live/penzle-net/branch/main)
 
-![NuGet Downloads](<https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads&style=plastic](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads)>)
+![NuGet Downloads](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads&style=plastic](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads))
 ![Licence](https://camo.githubusercontent.com/238290f8deb751619ca04ad3d316f1246a498b13d2ab49c0348e2b4311bd08f4/68747470733a2f2f696d672e736869656c64732e696f2f6769746875622f6c6963656e73652f6a6f6e6772616365636f782f616e7962616467652e737667)
 ![W3C](https://img.shields.io/badge/w3c-validated-brightgreen)
 ![Paradigm](https://img.shields.io/badge/accessibility-yes-brightgreen)
 
 ## **Getting started**
 
-Installation of the core penzle package without support for dependency injection using the Visual Studio Package Manager
-Console:
+To install the Penzle .NET SDK, you can use the following options:
+
+- Run the following command in the Package Manager Console:
 
 ```
 Install-Package Penzle.Net
 ```
 
-Installation using .NET CLI:
+- Run the following .NET CLI command in the command-line:
 
 ```
 dotnet add <your project> package Penzle.Net
 ```
 
-Installation of the penzle package with support for dependency injection using the Visual Studio Package Manager
-Console:
+## Usage
 
-```
-Install-Package Penzle.Net.Microsoft.DependencyInjection
+To retrieve content from the Penzle APIs, you will use the `DeliveryPenzleClient` class. This class provides methods for retrieving content from the Penzle Delivery API.
+You will use `ManagementPenzleClient `class to create, update, and delete content.
+
+You can use a client with DI/IoC or without DI/IoC.
+
+### Without DI/IoC
+
+```csharp
+   var client = DeliveryPenzleClient
+          .Factory
+          (
+              apiDeliveryKey: "<delivery_api_key>",
+              (api) =>
+              {
+                  api.Environment = "<environment_name>";
+                  api.Project = "<project_name>";
+              }
+          );
 ```
 
-Installation using .NET CLI:
+### With DI/IoC
 
-```
-dotnet add <your project> package Penzle.Net.Microsoft.DependencyInjection
+```csharp
+    public void ConfigureServices(IServiceCollection services)
+    {
+	    services.AddPenzleClient(Configuration);
+    }
 ```
 
-## **Recommended & minimum configuration example**
+```csharp
+    public class HomeController
+    {
+	    private IDeliveryPenzleClient client;
+
+	    public HomeController(IDeliveryPenzleClient deliveryPenzleClient)
+	    {
+		    client = deliveryPenzleClient;
+	    }
+    }
+```
+
+## Retrieving data
+
+After creating a Penzle client, you can retrieve data from Penzle APIs:
+
+```csharp
+    // Retrieving a single entry by ID
+    var entry = await client.Entry.GetEntry<Author>(<author_id>);
+  
+    Console.WriteLine(entry.Summary); // => Penzle author.
+    Console.WriteLine(entry.Age); // => 27.
+  
+```
 
 Create a strong type model that is compatible with your data template first before you do anything else.
 
 ```csharp
 public sealed class Author
 {
-    public string? Summary { get; set; }
+    public string Summary { get; set; }
+    public int Age { get; set; }
 }
 ```
 
+If you need system data of the entry, add an EntrySystem property to the class.
+
 ```csharp
-public sealed class Address
+public sealed class Author
 {
-    public string? Street { get; set; }
-    public string? City { get; set; }
-    public string? State { get; set; }
-    public string? Zip { get; set; }
+    public EntrySystem System { get; init; }
+    public string Summary { get; set; }
+    public int Age { get; set; }
 }
 ```
 
-Our secure architecture served as the foundation for the creation of clients for delivery and management. The key must be different for delivery and managament client. Otherwise, the system will return a forbidden response. Please click the following [link](https://docs.penzle.com/api/authentication-and-authorization/index.html) to learn more about it.
-
-To retrieve data from the Penzle API, you must make a call using the `IDeliveryPenzleClient`.
-
-If you're using our package for IoC, you need to set it up the way recommended in the documentation. If not, you can use the static method `Factory`, which can be accessed through `DeliveryPenzleClient` and has multiple overloads. There is an example of how to set up the minimum configuration.
+The `GetEntries `return collections of strongly-typed objects, based on the content types you have defined in your Penzle project.
+You can use LINQ to filter, sort and transform the content before it is returned.
 
 ```csharp
-// You should use this url from configuration for actual world usage, such as production, or even just for best practices.
-const string DefaultUrl = "https://api-{your-tenant-name}.penzle.com";
-var apiAddress = new Uri(uriString: DefaultUrl, uriKind: UriKind.Absolute);
 
-// You should use this key from a secure configuration, such as Azure Key Vault, following the best security practice.
-const string ApiKey = "<your-key" > ;
+    // Use query builder to define request parameters.
+    var query = QueryEntryBuilder.New
+                .Where(x => x.Summary.Contains("J") && x.Age >= 30)
+                .OrderBy(x => x.Id)
+                .Select(x => new { x.Id, x.FirstName });
+        
+    var entries = await client.Entry.GetEntries<Author>(query: query);
 
-// Use the Factory method to create a new instance of the Penzle API client, giving the API address and API key.
-var deliveryPenzleClient = DeliveryPenzleClient.Factory(baseAddress: apiAddress, apiDeliveryKey: ApiKey, apiOptions: options =>
-{
-    options.Project = "default"; // Define the project name which you want to use.
-    options.Environment = "main"; // Define the environment name which you want to use for the project.
-});
-
-// Using query builder to define request parameters.
-var query = QueryEntryBuilder.Instance
-            .WithParentId(parentId: new Guid(g: "2e2c2146-15b1-41ed-9bca-b77e346f8f0a"))
-            .WithPagination(pagination: QueryPaginationBuilder.Default
-                            .WithPage(page: 1)
-                            .WithPageSize(pageSize: 10));
-
-try
-{
-
-    // You can call the API methods for fetching the entry data with pagination using an instance of the Penzle API client that you have created.
-    var entries = await deliveryPenzleClient.Entry.GetPaginationListEntries<Entry<Author>>(query: query);
-
-    // Print the total number of entries.
-    Console.WriteLine(value: $"Total count of entries: {entries.TotalCount}");
-
-    // Print the entries to the console.
-    foreach (var entry in entries.Items)
+  // Print the entries to the console.
+    foreach (var entry in entries)
     {
         // Print the entry system fields.
-        Console.WriteLine(value: $"Entry {entry.System.Name} system fields:");
-        Console.WriteLine(value: $"System Id: {entry.System.Id}");
-        Console.WriteLine(value: $"System Template: {entry.System.Template}");
-        Console.WriteLine(value: $"System Language: {entry.System.Language}");
-        Console.WriteLine(value: $"System Version: {entry.System.Version}");
-        Console.WriteLine(value: $"System CreatedAt: {entry.System.CreatedAt}");
-        Console.WriteLine(value: $"System ModifiedAt: {entry.System.ModifiedAt}");
-
-        // Print the entry fields.
-        Console.WriteLine(value: $"Entry {entry.System.Name} fields:");
-        Console.WriteLine(value: $"Summary: {entry.Fields.Summary}");
-
-        // Print the entry base collection fields.
-        foreach (var @base in entry.Base)
-        {
-            Console.WriteLine(value: "Entry base fields:");
-            Console.WriteLine(value: $"Fields dictionary: {@base.Fields}");
-        }
-
-        // Get strong type base object.
-        var address = entries.Items.First().Base.BaseEntityTo<Address>();
-
-        // Print base address object
-        Console.WriteLine(value: address.City);
-        Console.WriteLine(value: address.State);
-        Console.WriteLine(value: address.Zip);
-        Console.WriteLine(value: address.Street);
+        Console.WriteLine(value: $"Summary {entry.Summary}");
+        Console.WriteLine(value: $"Age: {entry.Age}");
     }
-}
-catch (PenzleException exception) // Handle exceptions.
-{
-    Console.WriteLine(value: exception);
-    throw;
-}
 ```
 
 > You can find complete examples in the.NET 7 console project, which is written in a "How to" approach for developers. Visit [Penzle.Net.GettingStarted](/examples/Penzle.Net.GettingStarted) to view all examples of how to use various methods in console applications.
 
-## **SDK integration recommendation for .NET applications**
+## Management API
 
-- [The recommendation procedure how to handle authentication and authorization.](./docs/authentication-and-authorization/index.md)
-- [The recommendation procedure how to use query builder and pagination.](./docs/query-builder-and-pagination/index.md)
-- [The recommended procedure for carrying out unit tests.](./docs/unit-tests.md)
-- [The recommendation how to handle errors using SDK.](./docs/status-code-and-errors.md)
-- [How to using SKD to manage entries.](./docs/entries/index.md)
-- [How to using SKD to manage forms.](./docs/forms/index.md)
-- [How to using SKD to manage assets.](./docs/assets/index.md)
-- [How to using SKD to manage templates.](./docs/templates/index.md)
+To create, update or delete data in your Penzle project, you will need to use the Penzle Management API. The Penzle .NET SDK provides a `ManagementPenzleClient` class that you can use to interact with the management API:
 
-## **Additional information**
+```csharp
+   var client = ManagementPenzleClient
+          .Factory
+          (
+              apiManagementKey: "<management_api_key>"
+          );
+```
 
-In order to find more developers material please visit next sections:
+```csharp
 
-- [OAuth Flow for Authentication and Authorization.](https://github.com/Penzle/Penzle.Net/blob/main/docs/authenticated-access.md)
-- [Increasing modularity through the use of dependency injection.](https://github.com/Penzle/Penzle.Net/blob/main/docs/configuration.md)
-- [Utilize HttpClientFactory to improve the overall performance of your application as well as its stability.](https://github.com/Penzle/Penzle.Net/blob/main/docs/http-client-and-penzle-client.md)
-- [Utilize models with strong typing to ensure that you get the most out of all of the benefits from string typeping models.](https://github.com/Penzle/Penzle.Net/blob/main/docs/models-with-strong-typing.md)
-- [Make sure your keys are safe.](https://github.com/Penzle/Penzle.Net/blob/main/docs/azure-key-vault.md)
+    // Create a new instance of the form entry.
+    var author = new Author
+    {
+        Summary = "David Smith",
+        Age = 20,
+    };
 
-## **Contributing to Penzle.Net**
+    // Create a new instance of the entry.
+    var medicalReleaseId = await client.Entry.CreateEntry(author, CancellationToken.None);
+```
 
-Your thoughts and ideas are much appreciated. If you're interested in helping out with this project in any way, we'd
-like to make it as clear and straightforward as possible for you to do so, whether that's by:
+## SDK Documentation
 
-- Bug reporting
-- Addressing the present codebase
-- Offering a patch
-- Advancing ideas for brand new capabilities
-- Taking on the role of a maintainer
+The official SDK documentation provides detailed information about the various classes and methods available in the SDK. Please follow the documentation for more details. 
 
-Github is where we host our code, manage bug reports and feature requests, and incorporate changes suggested by our
-users.
-Report bugs using Github's issues. We host our code on Github, which is also where we manage user bug reports and
-feature requests and incorporate modifications made by users. In general, high-quality bug reports consist of the
-following components: background information; reproducible steps; an example of the code, if the reporter possesses such
-an example.
+## License
 
-## **License**
+This SDK is released under the [MIT License](./LICENSE).
 
-MIT License
+## Reach out to us
 
-Copyright (c) 2022 Penzle LLC
+We welcome feedback, bug reports, and feature requests.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+If you need help with this library, please contact the vendor support.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+You can also open an issue on the GitHub repository or submit a pull request with improvements to the code.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+If you have any questions or suggestions, please feel free to reach out to us by sending an email to support@penzle.com.
 
+We are looking forward to hearing from you!
+
+## Contribution
+
+We welcome contributions to this library. If you are interested in contributing, please read the [CONTRIBUTING] (./CONTRIBUTING.md) file for more information on how to get started.

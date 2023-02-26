@@ -7,8 +7,6 @@ public sealed class QueryFormBuilder
         Pagination = QueryPaginationBuilder.Default;
     }
 
-    public static QueryEntryBuilder Instance => new();
-
     private QueryPaginationBuilder Pagination { get; set; }
     private string Language { get; set; }
 

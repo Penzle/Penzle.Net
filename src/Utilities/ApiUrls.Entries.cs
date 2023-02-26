@@ -2,9 +2,14 @@
 
 internal static partial class ApiUrls
 {
-    internal static Uri GetEntries(string template, Guid? parentId, string language, string ids, int page, int pageSize)
+    internal static Uri GetEntries<TEntry>(string template, QueryEntryBuilder<TEntry> queryEntryBuilder)
     {
-        return "entries/{0}?parentId={1}&language={2}&page={3}&pageSize={4}&ids={5}".FormatUri(template, parentId, language, page, pageSize, ids);
+        if (queryEntryBuilder.QueryParameters.Any())
+        {
+            return "entries/{0}/v2?{1}".FormatUri(template, queryEntryBuilder.Build());
+        }
+
+        return "entries/{0}/v2".FormatUri(template);
     }
 
     internal static Uri GetEntry(Guid entryId, string language)
