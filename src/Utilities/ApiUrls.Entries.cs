@@ -6,10 +6,10 @@ internal static partial class ApiUrls
     {
         if (queryEntryBuilder.QueryParameters.Any())
         {
-            return "entries/{0}/v2?{1}".FormatUri(template, queryEntryBuilder.Build());
+            return "entries/{0}?{1}".FormatUri(template, queryEntryBuilder.Build());
         }
 
-        return "entries/{0}/v2".FormatUri(template);
+        return "entries/{0}".FormatUri(template);
     }
 
     internal static Uri GetEntry(Guid entryId, string language)
