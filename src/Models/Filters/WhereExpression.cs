@@ -9,6 +9,7 @@ namespace Penzle.Core.Models.Filters
     {
         private readonly string RqlFromat = "filter[where][and][{0}]";
 
+        private static readonly string Like = "[like]=";
         private static readonly Dictionary<ExpressionType, string> OperatorMap = new()
         {
             [ExpressionType.Equal] = "=",
@@ -63,6 +64,8 @@ namespace Penzle.Core.Models.Filters
 
                 ExpressionType.Call => VisitMethod((MethodCallExpression)expression, isUnary, prefix, postfix),
 
+                ExpressionType.Convert => VisitConvertMember(expression, isUnary, prefix, postfix),
+                
                 _ => UnhandledExpressionType(expression)
             };
 
@@ -76,13 +79,13 @@ namespace Penzle.Core.Models.Filters
                => methodCall.Method.Name switch
                {
                    "Contains" when methodCall.Method.DeclaringType == typeof(string) =>
-                       WhereExpressionValue.Concat(Visit(methodCall.Object), OperatorMap.GetValueOrDefault(ExpressionType.Equal), Visit(methodCall.Arguments[0], prefix: "*", postfix: "*")),
+                       WhereExpressionValue.Concat(Visit(methodCall.Object), Like, Visit(methodCall.Arguments[0], prefix: "*", postfix: "*")),
 
                    "StartsWith" when methodCall.Method.DeclaringType == typeof(string) =>
-                       WhereExpressionValue.Concat(Visit(methodCall.Object), OperatorMap.GetValueOrDefault(ExpressionType.Equal), Visit(methodCall.Arguments[0], prefix: "^")),
+                       WhereExpressionValue.Concat(Visit(methodCall.Object), Like, Visit(methodCall.Arguments[0], prefix: "^")),
 
                    "EndsWith" when methodCall.Method.DeclaringType == typeof(string) =>
-                       WhereExpressionValue.Concat(Visit(methodCall.Object), OperatorMap.GetValueOrDefault(ExpressionType.Equal), Visit(methodCall.Arguments[0], prefix: "*", postfix: "$")),
+                       WhereExpressionValue.Concat(Visit(methodCall.Object), Like, Visit(methodCall.Arguments[0], prefix: "*", postfix: "$")),
 
                    "Contains" when methodCall.Arguments.Count == 2 && typeof(IEnumerable).IsAssignableFrom(methodCall.Arguments[1].Type) =>
                    WhereExpressionValue.Concat(
@@ -140,6 +143,25 @@ namespace Penzle.Core.Models.Filters
             }
 
             return WhereExpressionValue.Create(value.ToString());
+        }
+
+        private WhereExpressionValue VisitConvertMember(Expression memberExpression, bool isUnary, string prefix, string postfix)
+        {
+            if (memberExpression is UnaryExpression unaryExpr)
+            {
+                if (unaryExpr.Operand is MemberExpression memberExpr)
+                {
+                    // Traverse the expression tree if the expression is a nested MemberExpression
+                    while (memberExpr.Expression is MemberExpression nestedExpr)
+                    {
+                        memberExpr = nestedExpr;
+                    }
+                    
+                    return VisitMember(memberExpr, isUnary, prefix, postfix);
+                }
+            }
+         
+            throw new Exception($"Expression does not refer to a property or field '{memberExpression}'.");
         }
 
         private WhereExpressionValue VisitMember(MemberExpression memberExpression, bool isUnary, string prefix, string postfix)
