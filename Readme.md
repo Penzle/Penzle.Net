@@ -174,4 +174,4 @@ We are looking forward to hearing from you!
 
 ## Contribution
 
-We welcome contributions to this library. If you are interested in contributing, please read the [CONTRIBUTING] (./CONTRIBUTING.md) file for more information on how to get started.
+We welcome contributions to this library. If you are interested in contributing, please read the [CONTRIBUTING](./CONTRIBUTING.md) file for more information on how to get started.
