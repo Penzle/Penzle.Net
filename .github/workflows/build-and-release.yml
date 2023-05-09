@@ -25,7 +25,7 @@ jobs:
         id: release
         uses: cycjimmy/semantic-release-action@v3
         with:
-          working_directory: ../src
+          working_directory: src
           extra_plugins: |
             @semantic-release/commit-analyzer
             @semantic-release/release-notes-generator
