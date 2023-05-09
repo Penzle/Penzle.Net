@@ -27,10 +27,8 @@ jobs:
     - name: Test
       run: dotnet test --no-build --verbosity normal
      # Add the following steps for semantic versioning and NuGet publishing
-    - name: Set up Semantic Release
-      uses: semantic-release/action@v1
-      with:
-        debug: true
+    - name: Action For Semantic Release
+      uses: cycjimmy/semantic-release-action@v3.4.2
     - name: Install NuGet CLI
       run: |
         dotnet tool install -g NuGet.CommandLine
