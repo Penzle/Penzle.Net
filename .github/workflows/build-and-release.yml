@@ -43,7 +43,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Push to NuGet
-      uses: Rebel028/publish-nuget@v2.8.0
+      uses: brandedoutcast/publish-nuget@v2.5.2
       with:
         PROJECT_FILE_PATH: ${{ env.PROJECT_PATH }}
         NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
