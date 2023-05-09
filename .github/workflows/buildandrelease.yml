@@ -31,6 +31,9 @@ jobs:
       uses: cycjimmy/semantic-release-action@v3.4.2
       with:
        branches: main
+      env:
+        GH_TOKEN: ${{ secrets.GH_TOKEN }}
+        
     - name: Install NuGet CLI
       run: |
         dotnet tool install -g NuGet.CommandLine
