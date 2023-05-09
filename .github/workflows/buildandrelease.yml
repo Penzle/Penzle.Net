@@ -26,7 +26,8 @@ jobs:
       run: dotnet build --no-restore
     - name: Test
       run: dotnet test --no-build --verbosity normal
-
+    - name: Create package.json file
+      run: echo "{}" > package.json
     - name: Action For Semantic Release
       uses: cycjimmy/semantic-release-action@v3.4.2
       with:
