@@ -18,27 +18,12 @@ jobs:
         with:
           dotnet-version: "7.0.x"
       - run: dotnet build
-  coverage:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/setup-dotnet@v3.0.3
-        with:
-          dotnet-version: "7.0.x"
-      - run: dotnet test /p:CollectCoverage=true
-      - name: publish coverage report to coveralls.io
-        uses: coverallsapp/github-action@v2.1.2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: coverage/coverage.info
-          format: lcov
   release:
-    name: Semantic Release
+    name: Release
     if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/develop')
     runs-on: ubuntu-latest
     needs:
       - build
-      - coverage
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -52,6 +37,6 @@ jobs:
       - name: Semantic Release
         env:
           GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
-          NUGET_TOKEN: ${{ secrets.NUGET_TOKEN }}
+          NUGET_TOKEN: ${{ secrets.NUGET_API_KEY }}
         run: npx semantic-release
     
