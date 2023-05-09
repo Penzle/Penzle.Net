@@ -31,6 +31,14 @@ jobs:
 
     - name: Test
       run: dotnet test --no-build --verbosity normal
+      
+    - name: Setup Node.js
+      uses: actions/setup-node@v2.5.2
+      with:
+        node-version: '14'
+
+    - name: Install dependencies
+      run: npm install
 
     - name: Install semantic-release
       run: npm ci
