@@ -5,7 +5,7 @@ on:
     branches:
       - main
 env:
-  PROJECT_PATH: 'src/Penzle.Core.csproj'
+  PROJECT_PATH: './src/Penzle.Core.csproj/bin/Release'
   PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}/output
   NUGET_PUSH_URL: ${{ secrets.NUGET_PUSH_URL }}
   NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
@@ -39,6 +39,6 @@ jobs:
         uses: nuget/publish@1.0.0
         with:
           nuget-api-key: ${{ secrets.NUGET_API_KEY }}
-          nuget-packages-directory: ./${{ PROJECT_PATH }}/bin/Release
+          nuget-packages-directory: ${{ env.PROJECT_PATH }}
           nuget-package-version: ${{ steps.semantic_release.outputs.next_version }}
           nuget-package-id: Penzle.Net
