@@ -1,0 +1,44 @@
+name: Release
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_PATH: 'src/Penzle.Core.csproj'
+  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}\output
+  NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
+
+jobs:
+  release:
+    name: Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '7.0.x'
+      - name: 'Restore packages'
+        run: dotnet restore ${{ env.PROJECT_PATH }}
+      - name: Build
+        run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
+      - name: Test
+        run: dotnet test --configuration Release --no-build
+      - name: Install Node.js and Semantic Release
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+      - name: Authenticate with NuGet
+        uses: nuget/setup-nuget@v1
+        with:
+          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+          nuget-source: ${{ env.NUGET_SOURCE_URL }}
+      - name: Install dependencies
+        run: npm install
+      - name: Semantic Release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NU_GET_API_KEY: ${{ secrets.NUGET_API_KEY }}
+        run: npx semantic-release@^18.2.4 --debug -s ${{ env.NUGET_SOURCE_URL }} --skip-duplicate
