@@ -15,45 +15,30 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3.0.3
-      with:
-        dotnet-version: 7.0.x
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: '6.0.x'
 
-    - name: Restore dependencies
-      run: dotnet restore
+      - name: Restore dependencies
+        run: dotnet restore
 
-    - name: Build
-      run: dotnet build --no-restore
+      - name: Build and Test
+        run: dotnet build --configuration Release --no-restore && dotnet test --no-restore --verbosity normal
 
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
-      
-    - name: Setup Node.js
-      uses: actions/setup-node@v2.5.2
-      with:
-        node-version: '14'
+      - name: Semantic Release
+        uses: actions/semantic-release@v1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          debug: true
 
-    - name: Install dependencies
-      run: npm install
-
-    - name: Install semantic-release
-      run: npm ci
-      working-directory: ./
-
-    - name: Semantic Release
-      id: semantic
-      run: npx semantic-release
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-    - name: Push to NuGet
-      uses: brandedoutcast/publish-nuget@v2.5.2
-      with:
-        PROJECT_FILE_PATH: ${{ env.PROJECT_PATH }}
-        NUGET_KEY: ${{ secrets.NUGET_API_KEY }}
-        PACKAGE_NAME: 'Penzle.Net'
-        VERSION: ${{ steps.semantic.outputs.new_release_version }}
+      - name: Publish to NuGet
+        uses: nuget/publish@1.0.0
+        with:
+          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
+          nuget-packages-directory: ./${{ PROJECT_PATH }}/bin/Release
+          nuget-package-version: ${{ steps.semantic_release.outputs.next_version }}
+          nuget-package-id: Penzle.Net
