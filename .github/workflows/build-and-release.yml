@@ -1,12 +1,13 @@
 name: Release
 on:
+  workflow_dispatch:
   push:
     branches:
       - main
-
 env:
   PROJECT_PATH: 'src/Penzle.Core.csproj'
-  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}\output
+  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}/output
+  NUGET_PUSH_URL: ${{ secrets.NUGET_PUSH_URL }}
   NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
 
 jobs:
@@ -15,30 +16,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
-      - name: Setup .NET Core
-        uses: actions/setup-dotnet@v1
+        uses: actions/checkout@v3
+      - name: Setup .NET Core SDK ${{ matrix.dotnet-version }}
+        uses: actions/setup-dotnet@v2
         with:
-          dotnet-version: '7.0.x'
-      - name: 'Restore packages'
-        run: dotnet restore ${{ env.PROJECT_PATH }}
-      - name: Build
-        run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
-      - name: Test
-        run: dotnet test --configuration Release --no-build
-      - name: Install Node.js and Semantic Release
-        uses: actions/setup-node@v2
-        with:
-          node-version: '16'
-      - name: Authenticate with NuGet
-        uses: nuget/setup-nuget@v1
-        with:
-          nuget-api-key: ${{ secrets.NUGET_API_KEY }}
-          nuget-source: ${{ env.NUGET_SOURCE_URL }}
-      - name: Install dependencies
-        run: npm install
+          dotnet-version: 6.0.x
       - name: Semantic Release
+        id: release
+        uses: cycjimmy/semantic-release-action@v3
+        with:
+          working_directory: ../src
+          extra_plugins: |
+            @semantic-release/commit-analyzer
+            @semantic-release/release-notes-generator
+            @semantic-release/github
+            @semantic-release/git
+            @semantic-release/exec
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          NU_GET_API_KEY: ${{ secrets.NUGET_API_KEY }}
-        run: npx semantic-release@^18.2.4 --debug -s ${{ env.NUGET_SOURCE_URL }} --skip-duplicate
+          
+      - name: 'Pack & Publish project'
+        if: ${{ steps.release.outputs.new_release_version }}
+        run: |
+          dotnet clean
+          dotnet pack ${{ env.PROJECT_PATH }} --configuration Release --include-symbols --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+          dotnet nuget push ${{ env.PACKAGE_OUTPUT_DIRECTORY }}/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_PUSH_URL }}
