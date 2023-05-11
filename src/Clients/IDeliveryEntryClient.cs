@@ -66,11 +66,11 @@ public interface IDeliveryEntryClient
     ///     The type into which to serialize this entry.If you wish to include metadata in the serialized response.
     /// </typeparam>
     /// <param name="entryId">The ID of the entry.</param>
-    /// <param name="language">The optional querystring to add additional filtering to the language.</param>
+    /// <param name="queryEntryBuilder">The optional QueryEntryBuilder to add additional filtering.</param>
     /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
     /// <returns>A <see cref="TEntry" /> of item.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    Task<TEntry> GetEntry<TEntry>(Guid entryId, string language = null, CancellationToken cancellationToken = default) where TEntry : new();
+    Task<TEntry> GetEntry<TEntry>(Guid entryId, QueryEntryBuilder queryEntryBuilder = null, CancellationToken cancellationToken = default) where TEntry : new();
 
     /// <summary>
     ///     Retrieve a single entry by its alias url.
@@ -79,9 +79,9 @@ public interface IDeliveryEntryClient
     ///     The type into which to serialize this entry.If you wish to include metadata in the serialized response.
     /// </typeparam>
     /// <param name="uri">The alias url of the entry.</param>
-    /// <param name="language">The optional querystring to add additional filtering to the language.</param>
+    /// <param name="queryEntryBuilder">The optional QueryEntryBuilder to add additional filtering.</param>
     /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
     /// <returns>A <see cref="TEntry" /> of item.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle AP.</exception>
-    Task<TEntry> GetEntry<TEntry>(string uri, string language = null, CancellationToken cancellationToken = default) where TEntry : new();
+    Task<TEntry> GetEntry<TEntry>(string uri, QueryEntryBuilder queryEntryBuilder = null, CancellationToken cancellationToken = default) where TEntry : new();
 }

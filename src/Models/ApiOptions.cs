@@ -22,4 +22,14 @@ public class ApiOptions
     ///     Specify the Environment.
     /// </summary>
     public string Environment { get; set; }
+
+    /// <summary>
+    /// A boolean flag indicating if the preview mode should be enabled, which allows fetching draft content (optional).
+    /// </summary>
+    public bool UsePreviewMode { get; set; }
+
+    /// <summary>
+    /// The default language for content entries, used when a specific language is not provided (optional).
+    /// </summary>
+    public string DefaultLanguage { get; set; }
 }

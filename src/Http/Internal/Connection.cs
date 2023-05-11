@@ -6,7 +6,7 @@ public class Connection : IConnection
     private readonly Authenticator _authenticator;
     private readonly IJsonSerializer _jsonSerializer;
     private readonly IPlatformInformation _platformInformation;
-
+    public ApiOptions ApiOptions { get; }
     public Connection()
     {
         _jsonSerializer = new MicrosoftJsonSerializer();
@@ -34,6 +34,7 @@ public class Connection : IConnection
         UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
         Credentials = credentialStore.GetCredentials().GetAwaiter().GetResult();
         CredentialStore = credentialStore;
+        ApiOptions = apiOptions;
         SetBaseAdress(baseAddress, apiOptions);
     }
 

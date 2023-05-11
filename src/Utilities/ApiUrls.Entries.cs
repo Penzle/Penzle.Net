@@ -12,14 +12,24 @@ internal static partial class ApiUrls
         return "entries/{0}".FormatUri(template);
     }
 
-    internal static Uri GetEntry(Guid entryId, string language)
+    internal static Uri GetEntry(Guid entryId, QueryEntryBuilder queryEntryBuilder)
     {
-        return !string.IsNullOrWhiteSpace(value: language) ? "entries/{0}?language={1}".FormatUri(entryId, language) : "entries/{0}".FormatUri(entryId);
+        if (queryEntryBuilder.QueryParameters.Any())
+        {
+            return "entries/{0}?{1}".FormatUri(entryId, queryEntryBuilder.Build());
+        }
+
+        return "entries/{0}".FormatUri(entryId);
     }
 
-    internal static Uri GetEntryByAliasUrl(string uri, string language)
+    internal static Uri GetEntryByAliasUrl(string uri, QueryEntryBuilder queryEntryBuilder)
     {
-        return !string.IsNullOrWhiteSpace(value: language) ? "entries/url?language={0}&aliasUrl={1}".FormatUri(language, uri) : "entries?aliasUrl={0}".FormatUri(uri);
+        if (queryEntryBuilder.QueryParameters.Any())
+        {
+            return "entries/?slug={0}&{1}".FormatUri(uri, queryEntryBuilder.Build());
+        }
+
+        return "entries/?slug={0}".FormatUri(uri);
     }
 
     public static Uri CreateEntry()
