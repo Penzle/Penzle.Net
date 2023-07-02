@@ -1,42 +1,33 @@
-name: "Deploy to NuGet"
+name: Publish to NuGet
 
 on:
   push:
     tags:
-    - 'v*'
+      - 'v*'
   workflow_dispatch:
-
-env:
-  PROJECT_PATH: 'src/Penzle.Core.csproj'
-  PACKAGE_OUTPUT_DIRECTORY: ${{ github.workspace }}/output
-  NUGET_SOURCE_URL: 'https://api.nuget.org/v3/index.json'
 
 jobs:
   deploy:
-    name: 'Deploy'
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
-    - name: 'Checkout'
+    - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: 'Install dotnet'
+    - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: '6.0.x'
+        dotnet-version: 7.0.x
 
-    - name: 'Restore packages'
-      run: dotnet restore ${{ env.PROJECT_PATH }}
+    - name: Build with dotnet
+      run: dotnet build --configuration Release QueryVortex.Core/QueryVortex.Core.csproj
 
-    - name: 'Build project'
-      run: dotnet build ${{ env.PROJECT_PATH }} --no-restore --configuration Release
-
-    - name: 'Get Version'
+    - name: Get Version
       id: version
       uses: battila7/get-version-action@v2
 
-    - name: 'Pack project'
-      run: dotnet pack ${{ env.PROJECT_PATH }} --no-restore --no-build --configuration Release --include-symbols -p:PackageVersion=${{ steps.version.outputs.version-without-v }} --output ${{ env.PACKAGE_OUTPUT_DIRECTORY }}
+    - name: Pack project
+      run: dotnet pack QueryVortex.Core/QueryVortex.Core.csproj --no-restore --no-build --configuration Release --include-symbols -p:PackageVersion=${{ steps.version.outputs.version-without-v }} --output ./
 
-    - name: 'Push package'
+    - name: Push package
       run: |
-        bash -c "dotnet nuget push '${{ env.PACKAGE_OUTPUT_DIRECTORY }}'/*.nupkg -k ${{ secrets.NUGET_API_KEY }} -s ${{ env.NUGET_SOURCE_URL }} --skip-duplicate"
+        dotnet nuget push "*.nupkg" -k ${{ secrets.NUGET_API_KEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
