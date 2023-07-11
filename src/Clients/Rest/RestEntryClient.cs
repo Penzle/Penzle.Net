@@ -101,7 +101,7 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
     /// <inheritdoc>
     ///     <cref>IManagementEntryClient.UpdateEntry</cref>
     /// </inheritdoc>
-    public ValueTask<HttpStatusCode> UpdateEntry(Guid entryId, object entry, CancellationToken cancellationToken = default)
+    public ValueTask<HttpStatusCode> UpdateEntry<TEntity>(Guid entryId, UpdateEntryRequest<TEntity> entry, CancellationToken cancellationToken = default) where TEntity : new()
     {
         return Connection.Put(uri: ApiUrls.UpdateEntry(entryId: entryId), body: entry, parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
     }
