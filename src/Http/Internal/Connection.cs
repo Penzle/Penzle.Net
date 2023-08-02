@@ -2,9 +2,9 @@
 
 public class Connection : IConnection
 {
-    private readonly Uri _penzleCloudApi = new Uri(uriString: "https://api.penzle.com");
     private readonly Authenticator _authenticator;
     private readonly IJsonSerializer _jsonSerializer;
+    private readonly Uri _penzleCloudApi = new("https://api.penzle.com");
     private readonly IPlatformInformation _platformInformation;
 
     public Connection()
@@ -21,63 +21,40 @@ public class Connection : IConnection
         IPlatformInformation platformInformation,
         Uri baseAddress = null)
     {
-        Guard.ArgumentNotNull(value: apiOptions, name: nameof(apiOptions));
-        Guard.ArgumentNotNull(value: credentialStore, name: nameof(credentialStore));
-        Guard.ArgumentNotNull(value: httpClient, name: nameof(httpClient));
-        Guard.ArgumentNotNull(value: serializer, name: nameof(serializer));
-        Guard.ArgumentNotNull(value: platformInformation, name: nameof(platformInformation));
+        Guard.ArgumentNotNull(apiOptions, nameof(apiOptions));
+        Guard.ArgumentNotNull(credentialStore, nameof(credentialStore));
+        Guard.ArgumentNotNull(httpClient, nameof(httpClient));
+        Guard.ArgumentNotNull(serializer, nameof(serializer));
+        Guard.ArgumentNotNull(platformInformation, nameof(platformInformation));
 
-        _authenticator = new Authenticator(credentialStore: credentialStore);
+        _authenticator = new Authenticator(credentialStore);
         _jsonSerializer = serializer;
         _platformInformation = platformInformation;
         HttpClient = httpClient;
-        UserAgent = FormatUserAgent(productInformation: new ProductHeaderValue(name: "Penzle.Core.Net"));
+        UserAgent = FormatUserAgent(new ProductHeaderValue("Penzle.Core.Net"));
         Credentials = credentialStore.GetCredentials().GetAwaiter().GetResult();
         CredentialStore = credentialStore;
-        SetBaseAdress(baseAddress, apiOptions);
+        SetBaseAddress(baseAddress, apiOptions);
     }
 
-    
+
     public virtual IHttpClient HttpClient { get; set; }
     public virtual string UserAgent { get; set; }
     public virtual ICredentialStore<BearerCredentials> CredentialStore { get; set; }
 
-    private void SetBaseAdress(Uri? baseAddress, ApiOptions apiOptions)
-    {
-        if (baseAddress == null)
-        {
-            BaseAddress = Constants.AddressTemplate.FormatUri(_penzleCloudApi, apiOptions.Project, apiOptions.Environment);
-            return;
-        }
-        
-        if (!baseAddress.IsAbsoluteUri)
-        {
-            throw new ArgumentException(
-                message: string.Format(provider: CultureInfo.InvariantCulture, format: "The base address '{0}' must be an absolute URI",
-                    arg0: baseAddress), paramName: nameof(baseAddress));
-        }
-
-        if (baseAddress.ToString().EndsWith(value: "/"))
-        {
-            baseAddress = new Uri(uriString: baseAddress.ToString().Remove(startIndex: baseAddress.ToString().Length - 1));
-        }
-
-        BaseAddress = Constants.AddressTemplate.FormatUri(baseAddress, apiOptions.Project, apiOptions.Environment);
-    }
-
-    public async virtual Task<T> Get<T>(
+    public virtual async Task<T> Get<T>(
         Uri uri,
         IDictionary<string, string> parameters,
         string accepts,
         string contentType,
         CancellationToken cancellationToken = default)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        return await SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Get, body: null, accepts: accepts, contentType: contentType,
-            cancellationToken: cancellationToken);
+        Guard.ArgumentNotNull(uri, nameof(uri));
+        return await SendEntry<T>(uri.ApplyParameters(parameters), HttpMethod.Get, null, accepts, contentType,
+            cancellationToken);
     }
 
-    public async virtual ValueTask<HttpStatusCode> Patch(
+    public virtual async ValueTask<HttpStatusCode> Patch(
         Uri uri,
         object body,
         IDictionary<string, string> parameters,
@@ -85,11 +62,11 @@ public class Connection : IConnection
         string contentType,
         CancellationToken cancellationToken = default)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        Guard.ArgumentNotNull(value: uri, name: nameof(body));
+        Guard.ArgumentNotNull(uri, nameof(uri));
+        Guard.ArgumentNotNull(uri, nameof(body));
 
-        await SendEntry<object>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Patch, body: body, accepts: accepts, contentType: contentType,
-            cancellationToken: cancellationToken);
+        await SendEntry<object>(uri.ApplyParameters(parameters), HttpMethod.Patch, body, accepts, contentType,
+            cancellationToken);
         return HttpStatusCode.NoContent;
     }
 
@@ -101,14 +78,14 @@ public class Connection : IConnection
         string contentType,
         CancellationToken cancellationToken = default)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        Guard.ArgumentNotNull(value: uri, name: nameof(body));
+        Guard.ArgumentNotNull(uri, nameof(uri));
+        Guard.ArgumentNotNull(uri, nameof(body));
 
-        return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Patch, body: body, accepts: accepts, contentType: contentType,
-            cancellationToken: cancellationToken);
+        return SendEntry<T>(uri.ApplyParameters(parameters), HttpMethod.Patch, body, accepts, contentType,
+            cancellationToken);
     }
 
-    public async virtual ValueTask<HttpStatusCode> Post(
+    public virtual async ValueTask<HttpStatusCode> Post(
         Uri uri,
         object body,
         IDictionary<string, string> parameters,
@@ -116,11 +93,11 @@ public class Connection : IConnection
         string contentType,
         CancellationToken cancellationToken = default)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        Guard.ArgumentNotNull(value: uri, name: nameof(body));
+        Guard.ArgumentNotNull(uri, nameof(uri));
+        Guard.ArgumentNotNull(uri, nameof(body));
 
-        await SendEntry<object>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Post, body: body, accepts: accepts, contentType: contentType,
-            cancellationToken: cancellationToken);
+        await SendEntry<object>(uri.ApplyParameters(parameters), HttpMethod.Post, body, accepts, contentType,
+            cancellationToken);
         return HttpStatusCode.NoContent;
     }
 
@@ -132,14 +109,14 @@ public class Connection : IConnection
         string contentType,
         CancellationToken cancellationToken = default)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        Guard.ArgumentNotNull(value: uri, name: nameof(body));
+        Guard.ArgumentNotNull(uri, nameof(uri));
+        Guard.ArgumentNotNull(uri, nameof(body));
 
-        return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Post, body: body, accepts: accepts, contentType: contentType,
-            cancellationToken: cancellationToken);
+        return SendEntry<T>(uri.ApplyParameters(parameters), HttpMethod.Post, body, accepts, contentType,
+            cancellationToken);
     }
 
-    public async virtual ValueTask<HttpStatusCode> Put(
+    public virtual async ValueTask<HttpStatusCode> Put(
         Uri uri,
         object body,
         IDictionary<string, string> parameters,
@@ -147,11 +124,11 @@ public class Connection : IConnection
         string contentType,
         CancellationToken cancellationToken = default)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        Guard.ArgumentNotNull(value: uri, name: nameof(body));
+        Guard.ArgumentNotNull(uri, nameof(uri));
+        Guard.ArgumentNotNull(uri, nameof(body));
 
-        await SendEntry<object>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Put, body: body, accepts: accepts, contentType: contentType,
-            cancellationToken: cancellationToken);
+        await SendEntry<object>(uri.ApplyParameters(parameters), HttpMethod.Put, body, accepts, contentType,
+            cancellationToken);
         return HttpStatusCode.NoContent;
     }
 
@@ -163,14 +140,14 @@ public class Connection : IConnection
         string contentType,
         CancellationToken cancellationToken = default)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        Guard.ArgumentNotNull(value: uri, name: nameof(body));
+        Guard.ArgumentNotNull(uri, nameof(uri));
+        Guard.ArgumentNotNull(uri, nameof(body));
 
-        return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Put, body: body, accepts: accepts, contentType: contentType,
-            cancellationToken: cancellationToken);
+        return SendEntry<T>(uri.ApplyParameters(parameters), HttpMethod.Put, body, accepts, contentType,
+            cancellationToken);
     }
 
-    public async virtual ValueTask<HttpStatusCode> Delete(
+    public virtual async ValueTask<HttpStatusCode> Delete(
         Uri uri,
         object body,
         IDictionary<string, string> parameters,
@@ -178,10 +155,10 @@ public class Connection : IConnection
         string contentType,
         CancellationToken cancellationToken = default)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
+        Guard.ArgumentNotNull(uri, nameof(uri));
 
-        await SendEntry<object>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Delete, body: body, accepts: accepts, contentType: contentType,
-            cancellationToken: cancellationToken);
+        await SendEntry<object>(uri.ApplyParameters(parameters), HttpMethod.Delete, body, accepts, contentType,
+            cancellationToken);
         return HttpStatusCode.NoContent;
     }
 
@@ -193,9 +170,9 @@ public class Connection : IConnection
         string contentType,
         CancellationToken cancellationToken = default)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        return SendEntry<T>(uri: uri.ApplyParameters(parameters: parameters), method: HttpMethod.Delete, body: body, accepts: accepts, contentType: contentType,
-            cancellationToken: cancellationToken);
+        Guard.ArgumentNotNull(uri, nameof(uri));
+        return SendEntry<T>(uri.ApplyParameters(parameters), HttpMethod.Delete, body, accepts, contentType,
+            cancellationToken);
     }
 
     public virtual Uri BaseAddress { get; set; }
@@ -203,7 +180,30 @@ public class Connection : IConnection
 
     public virtual void SetRequestTimeout(TimeSpan timeout)
     {
-        HttpClient.SetRequestTimeout(timeout: timeout);
+        HttpClient.SetRequestTimeout(timeout);
+    }
+
+    private void SetBaseAddress(Uri baseAddress, ApiOptions apiOptions)
+    {
+        if (baseAddress == null)
+        {
+            BaseAddress = Constants.AddressTemplate.FormatUri(_penzleCloudApi, apiOptions.Project, apiOptions.Environment);
+            return;
+        }
+
+        if (!baseAddress.IsAbsoluteUri)
+        {
+            throw new ArgumentException(
+                string.Format(CultureInfo.InvariantCulture, "The base address '{0}' must be an absolute URI",
+                    baseAddress), nameof(baseAddress));
+        }
+
+        if (baseAddress.ToString().EndsWith("/"))
+        {
+            baseAddress = new Uri(baseAddress.ToString().Remove(baseAddress.ToString().Length - 1));
+        }
+
+        BaseAddress = Constants.AddressTemplate.FormatUri(baseAddress, apiOptions.Project, apiOptions.Environment);
     }
 
     internal virtual Task<T> SendEntry<T>(
@@ -215,23 +215,30 @@ public class Connection : IConnection
         CancellationToken cancellationToken,
         Uri baseAddress = null)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-        var request = new Request
+        Guard.ArgumentNotNull(uri, nameof(uri));
+        BaseAddress = baseAddress ?? BaseAddress;
+        var ignoreProject = false;
+        if (uri.ToString().StartsWith(Constants.IgnoreProjectKeyword))
         {
-            Method = method, BaseAddress = baseAddress ?? BaseAddress, Endpoint = uri
-        };
+            ignoreProject = true;
+            uri = uri.ToString().Replace(Constants.IgnoreProjectKeyword, string.Empty).FormatUri();
+            BaseAddress = BaseAddress.ReplaceRelativeUri(new Uri(Constants.AddressWithoutProjectTemplate, UriKind.RelativeOrAbsolute));
+        }
 
-        return SendEntryInternal<T>(body: body, cancellationToken: cancellationToken, request: request, accepts: accepts, contentType: contentType);
+        var request = new Request { Method = method, BaseAddress = baseAddress ?? BaseAddress, Endpoint = uri };
+
+        return SendEntryInternal<T>(body, cancellationToken, request, ignoreProject, accepts, contentType);
     }
 
     internal virtual Task<T> SendEntryInternal<T>(
         object body,
         CancellationToken cancellationToken,
         Request request,
+        bool ignoreProject = false,
         string accepts = "*/*",
         string contentType = "application/json")
     {
-        request.Headers[key: "Accept"] = accepts ?? "*/*";
+        request.Headers["Accept"] = accepts ?? "*/*";
 
         switch (body)
         {
@@ -243,7 +250,7 @@ public class Connection : IConnection
                 {
                     if (body != null)
                     {
-                        request.Body = _jsonSerializer.Serialize(item: body);
+                        request.Body = _jsonSerializer.Serialize(body);
                         request.ContentType = contentType ?? "application/json";
                     }
 
@@ -251,18 +258,15 @@ public class Connection : IConnection
                 }
         }
 
-        return Run<T>(request: request, cancellationToken: cancellationToken);
+        return Run<T>(request, ignoreProject, cancellationToken);
     }
 
-    async internal virtual Task<T> Run<T>(IRequest request, CancellationToken cancellationToken)
+    internal virtual async Task<T> Run<T>(IRequest request, bool ignoreProject = false, CancellationToken cancellationToken = default)
     {
-        var types = new[]
-        {
-            typeof(Template), typeof(Asset), typeof(Guid)
-        };
+        var types = new[] { typeof(Template), typeof(Asset), typeof(Guid) };
         T @object = default;
 
-        var response = await RunRequest(request: request, cancellationToken: cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
+        var response = await RunRequest(request, cancellationToken).ConfigureAwait(false);
         switch (response.StatusCode)
         {
             case HttpStatusCode.NoContent:
@@ -271,20 +275,20 @@ public class Connection : IConnection
                 return default;
         }
 
-        if (typeof(T).IsGenericType || types.Contains(value: typeof(T)))
+        if (ignoreProject || typeof(T).IsGenericType || types.Contains(typeof(T)))
         {
-            return _jsonSerializer.Deserialize<T>(json: response.Body.ToString());
+            return _jsonSerializer.Deserialize<T>(response.Body.ToString());
         }
 
-        var jsonNode = JsonNode.Parse(json: response.Body.ToString())?.AsObject() ?? new JsonObject();
+        var jsonNode = JsonNode.Parse(response.Body.ToString())?.AsObject() ?? new JsonObject();
 
-        if (jsonNode.ContainsKey(propertyName: "fields"))
+        if (jsonNode.ContainsKey("fields"))
         {
-            @object = _jsonSerializer.Deserialize<T>(json: jsonNode[propertyName: "fields"]?.ToJsonString());
+            @object = _jsonSerializer.Deserialize<T>(jsonNode["fields"]?.ToJsonString());
         }
 
-        @object = SetProperty(jsonNode: jsonNode, @object: @object, propertyType: "system", predicate: info => info.PropertyType.BaseType == typeof(BaseSystem));
-        @object = SetProperty(jsonNode: jsonNode, @object: @object, propertyType: "base", predicate: info => info.PropertyType == typeof(List<BaseTemplates>));
+        @object = SetProperty(jsonNode, @object, "system", info => info.PropertyType.BaseType == typeof(BaseSystem));
+        @object = SetProperty(jsonNode, @object, "base", info => info.PropertyType == typeof(List<BaseTemplates>));
 
         return @object;
     }
@@ -295,25 +299,25 @@ public class Connection : IConnection
         string propertyType,
         Func<PropertyInfo, bool> predicate)
     {
-        var systemPropertyInfo = @object != null ? @object.GetProperties().FirstOrDefault(predicate: predicate) : null;
-        if (systemPropertyInfo == null || !jsonNode.ContainsKey(propertyName: propertyType))
+        var systemPropertyInfo = @object != null ? @object.GetProperties().FirstOrDefault(predicate) : null;
+        if (systemPropertyInfo == null || !jsonNode.ContainsKey(propertyType))
         {
             return @object;
         }
 
         var system =
-            _jsonSerializer.Deserialize(json: jsonNode[propertyName: propertyType].ToJsonString(), returnType: systemPropertyInfo.PropertyType);
-        @object.SetPropertyValue(propertyName: systemPropertyInfo.Name, value: system);
+            _jsonSerializer.Deserialize(jsonNode[propertyType].ToJsonString(), systemPropertyInfo.PropertyType);
+        @object.SetPropertyValue(systemPropertyInfo.Name, system);
 
         return @object;
     }
 
-    async internal virtual Task<IResponse> RunRequest(IRequest request, CancellationToken cancellationToken)
+    internal virtual async Task<IResponse> RunRequest(IRequest request, CancellationToken cancellationToken)
     {
-        request.Headers.Add(key: "User-Agent", value: UserAgent);
-        await _authenticator.Apply(request: request).ConfigureAwait(continueOnCapturedContext: false);
-        var response = await HttpClient.Send(request: request, cancellationToken: cancellationToken).ConfigureAwait(continueOnCapturedContext: false);
-        HandleErrors(response: response);
+        request.Headers.Add("User-Agent", UserAgent);
+        await _authenticator.Apply(request).ConfigureAwait(false);
+        var response = await HttpClient.Send(request, cancellationToken).ConfigureAwait(false);
+        HandleErrors(response);
         return response;
     }
 
@@ -326,13 +330,13 @@ public class Connection : IConnection
 
         if ((int)response.StatusCode >= 400)
         {
-            throw new PenzleException(response: response);
+            throw new PenzleException(response);
         }
     }
 
     internal virtual string FormatUserAgent(ProductHeaderValue productInformation)
     {
-        return string.Format(provider: CultureInfo.InvariantCulture, format: "{0} ({1}; {2}; penzle.net {3})",
+        return string.Format(CultureInfo.InvariantCulture, "{0} ({1}; {2}; penzle.net {3})",
             productInformation,
             _platformInformation.GetPlatformInformation(),
             GetCultureInformation(),
