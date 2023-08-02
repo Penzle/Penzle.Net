@@ -7,14 +7,13 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
 {
     public DeliveryPenzleClient(IConnection connection)
     {
-        Guard.ArgumentNotNull(value: connection, name: nameof(connection));
+        Guard.ArgumentNotNull(connection, nameof(connection));
 
-        var apiConnection = new ApiConnection(connection: connection);
-        Form = new RestFormClient(apiConnection: apiConnection);
-        Entry = new RestEntryClient(apiConnection: apiConnection);
-        Template = new RestTemplateClient(apiConnection: apiConnection);
-        Asset = new RestAssetClient(apiConnection: apiConnection);
-        User = new RestUserClient(apiConnection: apiConnection);
+        var apiConnection = new ApiConnection(connection);
+        Form = new RestFormClient(apiConnection);
+        Entry = new RestEntryClient(apiConnection);
+        Template = new RestTemplateClient(apiConnection);
+        Asset = new RestAssetClient(apiConnection);
     }
 
     /// <inheritdoc cref="Entry{TEntity}" />
@@ -28,9 +27,6 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
 
     /// <inheritdoc cref="Models.Asset" />
     public IDeliveryAssetClient Asset { get; }
-    
-    /// <inheritdoc cref="IDeliveryUserClient" />
-    public IDeliveryUserClient User { get; }
 
     /// <summary>
     ///     Create instance of Penzle Client Management API.
@@ -49,9 +45,9 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
                 options.Environment = ApiOptions.Default.Environment;
                 options.Project = ApiOptions.Default.Project;
             },
-            httpClient: new HttpClientAdapter(getHandler: () => new HttpClientHandler()),
+            httpClient: new HttpClientAdapter(() => new HttpClientHandler()),
             jsonSerializer: new MicrosoftJsonSerializer(),
-            timeOut: FromSeconds(value: 30)
+            timeOut: FromSeconds(30)
         );
     }
 
@@ -69,9 +65,9 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
             baseAddress: baseAddress,
             apiDeliveryKey: apiDeliveryKey,
             apiOptions: apiOptions,
-            httpClient: new HttpClientAdapter(getHandler: () => new HttpClientHandler()),
+            httpClient: new HttpClientAdapter(() => new HttpClientHandler()),
             jsonSerializer: new MicrosoftJsonSerializer(),
-            timeOut: FromSeconds(value: 30)
+            timeOut: FromSeconds(30)
         );
     }
 
@@ -92,7 +88,7 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
             apiOptions: apiOptions,
             httpClient: httpClient,
             jsonSerializer: new MicrosoftJsonSerializer(),
-            timeOut: FromSeconds(value: 30)
+            timeOut: FromSeconds(30)
         );
     }
 
@@ -118,7 +114,7 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
             apiOptions: apiOptions,
             httpClient: httpClient,
             jsonSerializer: jsonSerializer,
-            timeOut: FromSeconds(value: 30)
+            timeOut: FromSeconds(30)
         );
     }
 
@@ -135,16 +131,18 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
     /// <param name="timeOut">Pass custom time for cancel request on global level.</param>
     /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <returns>The default instance which is matched <see cref="IDeliveryPenzleClient" />IPenzleClient</returns>
-    public static IDeliveryPenzleClient Factory(string apiDeliveryKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer, TimeSpan timeOut, Uri baseAddress)
+    public static IDeliveryPenzleClient Factory(string apiDeliveryKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer, TimeSpan timeOut,
+        Uri baseAddress)
     {
-        ICredentialStore<BearerCredentials> credentialStore = new InMemoryCredentialStore(credentials: new BearerCredentials(apiDeliveryKey: apiDeliveryKey, apiManagementKey: null));
+        ICredentialStore<BearerCredentials> credentialStore = new InMemoryCredentialStore(new BearerCredentials(apiDeliveryKey, null));
 
         var options = ApiOptions.Default;
-        apiOptions?.Invoke(obj: options);
+        apiOptions?.Invoke(options);
 
-        IConnection connection = new Connection(baseAddress: baseAddress, apiOptions: options, credentialStore: credentialStore, httpClient: httpClient, serializer: jsonSerializer, platformInformation: new SdkPlatformInformation());
-        connection.SetRequestTimeout(timeout: timeOut);
+        IConnection connection = new Connection(baseAddress: baseAddress, apiOptions: options, credentialStore: credentialStore, httpClient: httpClient, serializer: jsonSerializer,
+            platformInformation: new SdkPlatformInformation());
+        connection.SetRequestTimeout(timeOut);
 
-        return new DeliveryPenzleClient(connection: connection);
+        return new DeliveryPenzleClient(connection);
     }
 }

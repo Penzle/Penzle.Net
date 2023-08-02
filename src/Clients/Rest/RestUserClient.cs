@@ -3,7 +3,7 @@
 /// <summary>
 ///     Provides REST-based implementation for user operations.
 /// </summary>
-internal sealed class RestUserClient : RestBaseClient, IDeliveryUserClient
+internal sealed class RestUserClient : RestBaseClient, IManagementUserClient
 {
     /// <summary>
     ///     Creates a new instance of the RestUserClient class.

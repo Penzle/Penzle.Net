@@ -25,9 +25,4 @@ public interface IDeliveryPenzleClient
     ///     A client for the Penzle Asset API that is responsible for handling delivery.
     /// </summary>
     IDeliveryAssetClient Asset { get; }
-
-    /// <summary>
-    ///     A client for the Penzle User API that is responsible for handling user-related operations.
-    /// </summary>
-    IDeliveryUserClient User { get; }
 }

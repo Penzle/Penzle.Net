@@ -1,10 +1,9 @@
 ﻿namespace Penzle.Core.Clients;
 
 /// <summary>
-///     Retrieves a paginated list of users, optionally filtered by a querystring. Utilizing the class is more
-///     efficient than manually constructing a query. See <see cref="QueryUserBuilder" />.
+///     A client for the Penzle User API that is responsible for handling user-related operations.
 /// </summary>
-public interface IDeliveryUserClient
+public interface IManagementUserClient
 {
     /// <summary>
     ///     Retrieves a paginated list of users.
