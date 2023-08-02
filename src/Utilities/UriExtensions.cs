@@ -4,26 +4,25 @@ internal static class UriExtensions
 {
     public static Uri StripRelativeUri(this Uri uri)
     {
-        return new Uri(baseUri: uri, relativeUri: "/");
+        return new Uri(uri, "/");
     }
 
     public static Uri ReplaceRelativeUri(this Uri uri, Uri relativeUri)
     {
-        return new Uri(baseUri: StripRelativeUri(uri: uri), relativeUri: relativeUri);
+        return new Uri(StripRelativeUri(uri), relativeUri);
     }
 
     public static Uri ApplyParameters(this Uri uri, IDictionary<string, string> parameters)
     {
-        Guard.ArgumentNotNull(value: uri, name: nameof(uri));
-
+        Guard.ArgumentNotNull(uri, nameof(uri));
         if (parameters == null || !parameters.Any())
         {
             return uri;
         }
 
-        var p = new Dictionary<string, string>(dictionary: parameters);
+        var p = new Dictionary<string, string>(parameters);
 
-        var hasQueryString = uri.OriginalString.IndexOf(value: "?", comparisonType: StringComparison.Ordinal);
+        var hasQueryString = uri.OriginalString.IndexOf("?", StringComparison.Ordinal);
 
         var uriWithoutQuery = hasQueryString == -1 ? uri.ToString() : uri.OriginalString[..hasQueryString];
 
@@ -37,39 +36,33 @@ internal static class UriExtensions
             }
         };
 
-        var values = queryString.Replace(oldValue: "?", newValue: "")
-            .Split(separator: new[]
-            {
-                '&'
-            }, options: StringSplitOptions.RemoveEmptyEntries);
+        var values = queryString.Replace("?", "")
+            .Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries);
 
         var existingParameters = values.ToDictionary(
-            keySelector: key => key[..key.IndexOf(value: '=')],
-            elementSelector: value => value[(value.IndexOf(value: '=') + 1)..]);
+            key => key[..key.IndexOf('=')],
+            value => value[(value.IndexOf('=') + 1)..]);
 
-        foreach (var existing in existingParameters.Where(predicate: existing => !p.ContainsKey(key: existing.Key)))
+        foreach (var existing in existingParameters.Where(existing => !p.ContainsKey(existing.Key)))
         {
-            p.Add(key: existing.Key, value: existing.Value);
+            p.Add(existing.Key, existing.Value);
         }
 
         string MapValueFunction(string key, string value)
         {
-            return key == "q" ? value : Uri.EscapeDataString(stringToEscape: value);
+            return key == "q" ? value : Uri.EscapeDataString(value);
         }
 
-        var query = string.Join(separator: "&", values: p.Select(selector: kvp => kvp.Key + "=" + MapValueFunction(key: kvp.Key, value: kvp.Value)));
+        var query = string.Join("&", p.Select(kvp => kvp.Key + "=" + MapValueFunction(kvp.Key, kvp.Value)));
         switch (uri.IsAbsoluteUri)
         {
             case true:
                 {
-                    var uriBuilder = new UriBuilder(uri: uri)
-                    {
-                        Query = query
-                    };
+                    var uriBuilder = new UriBuilder(uri) { Query = query };
                     return uriBuilder.Uri;
                 }
             default:
-                return new Uri(uriString: $"{uriWithoutQuery}?{query}", uriKind: UriKind.Relative);
+                return new Uri($"{uriWithoutQuery}?{query}", UriKind.Relative);
         }
     }
 }
