@@ -14,6 +14,7 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
         Entry = new RestEntryClient(apiConnection: apiConnection);
         Template = new RestTemplateClient(apiConnection: apiConnection);
         Asset = new RestAssetClient(apiConnection: apiConnection);
+        User = new RestUserClient(apiConnection: apiConnection);
     }
 
     /// <inheritdoc cref="Entry{TEntity}" />
@@ -27,6 +28,9 @@ public sealed class DeliveryPenzleClient : IDeliveryPenzleClient
 
     /// <inheritdoc cref="Models.Asset" />
     public IDeliveryAssetClient Asset { get; }
+    
+    /// <inheritdoc cref="IDeliveryUserClient" />
+    public IDeliveryUserClient User { get; }
 
     /// <summary>
     ///     Create instance of Penzle Client Management API.

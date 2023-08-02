@@ -147,4 +147,18 @@ public class RequestShould
         request.Should().NotBeNull();
         request.Timeout.Should().BeGreaterOrEqualTo(TimeSpan.FromMinutes(1));
     }
+    
+    [Fact]
+    public void Test()
+    {
+        // Arrange
+        var request = new Request
+        {
+            Timeout = TimeSpan.FromSeconds(60)
+        };
+
+        // Assert
+        request.Should().NotBeNull();
+        request.Timeout.Should().BeGreaterOrEqualTo(TimeSpan.FromMinutes(1));
+    }
 }
