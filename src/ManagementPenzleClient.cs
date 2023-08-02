@@ -7,12 +7,13 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
 {
     public ManagementPenzleClient(IConnection connection)
     {
-        Guard.ArgumentNotNull(value: connection, name: nameof(connection));
+        Guard.ArgumentNotNull(connection, nameof(connection));
 
-        var apiConnection = new ApiConnection(connection: connection);
-        Form = new RestFormClient(apiConnection: apiConnection);
-        Entry = new RestEntryClient(apiConnection: apiConnection);
-        Asset = new RestAssetClient(apiConnection: apiConnection);
+        var apiConnection = new ApiConnection(connection);
+        Form = new RestFormClient(apiConnection);
+        Entry = new RestEntryClient(apiConnection);
+        Asset = new RestAssetClient(apiConnection);
+        User = new RestUserClient(apiConnection);
     }
 
     /// <inheritdoc cref="Entry{TEntity}" />
@@ -23,6 +24,9 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
 
     /// <inheritdoc cref="Models.Asset" />
     public IManagementAssetClient Asset { get; }
+
+    /// <inheritdoc />
+    public IManagementUserClient User { get; }
 
     /// <summary>
     ///     Create instance of Penzle Client Management API.
@@ -41,9 +45,9 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
                 options.Environment = ApiOptions.Default.Environment;
                 options.Project = ApiOptions.Default.Project;
             },
-            httpClient: new HttpClientAdapter(getHandler: () => new HttpClientHandler()),
+            httpClient: new HttpClientAdapter(() => new HttpClientHandler()),
             jsonSerializer: new MicrosoftJsonSerializer(),
-            timeOut: FromSeconds(value: 30)
+            timeOut: FromSeconds(30)
         );
     }
 
@@ -61,9 +65,9 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
             baseAddress: baseAddress,
             apiManagementKey: apiManagementKey,
             apiOptions: apiOptions,
-            httpClient: new HttpClientAdapter(getHandler: () => new HttpClientHandler()),
+            httpClient: new HttpClientAdapter(() => new HttpClientHandler()),
             jsonSerializer: new MicrosoftJsonSerializer(),
-            timeOut: FromSeconds(value: 30)
+            timeOut: FromSeconds(30)
         );
     }
 
@@ -84,7 +88,7 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
             apiOptions: apiOptions,
             httpClient: httpClient,
             jsonSerializer: new MicrosoftJsonSerializer(),
-            timeOut: FromSeconds(value: 30)
+            timeOut: FromSeconds(30)
         );
     }
 
@@ -101,7 +105,8 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
     /// </param>
     /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <returns>The default instance which is matched <see cref="IManagementPenzleClient" />IPenzleClient</returns>
-    public static IManagementPenzleClient Factory(string apiManagementKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer, Uri baseAddress = null)
+    public static IManagementPenzleClient Factory(string apiManagementKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer,
+        Uri baseAddress = null)
     {
         return Factory
         (
@@ -110,7 +115,7 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
             apiOptions: apiOptions,
             httpClient: httpClient,
             jsonSerializer: jsonSerializer,
-            timeOut: FromSeconds(value: 30)
+            timeOut: FromSeconds(30)
         );
     }
 
@@ -127,16 +132,18 @@ public sealed class ManagementPenzleClient : IManagementPenzleClient
     /// <param name="timeOut">Pass custom time for cancel request on global level.</param>
     /// <param name="baseAddress">The base address of api endpoint.</param>
     /// <returns>The default instance which is matched <see cref="IManagementPenzleClient" />IPenzleClient</returns>
-    public static IManagementPenzleClient Factory(string apiManagementKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer, TimeSpan timeOut, Uri baseAddress)
+    public static IManagementPenzleClient Factory(string apiManagementKey, Action<ApiOptions> apiOptions, IHttpClient httpClient, IJsonSerializer jsonSerializer, TimeSpan timeOut,
+        Uri baseAddress)
     {
-        ICredentialStore<BearerCredentials> credentialStore = new InMemoryCredentialStore(credentials: new BearerCredentials(apiDeliveryKey: null, apiManagementKey: apiManagementKey));
+        ICredentialStore<BearerCredentials> credentialStore = new InMemoryCredentialStore(new BearerCredentials(null, apiManagementKey));
 
         var options = ApiOptions.Default;
-        apiOptions?.Invoke(obj: options);
+        apiOptions?.Invoke(options);
 
-        IConnection connection = new Connection(baseAddress: baseAddress, apiOptions: options, credentialStore: credentialStore, httpClient: httpClient, serializer: jsonSerializer, platformInformation: new SdkPlatformInformation());
-        connection.SetRequestTimeout(timeout: timeOut);
+        IConnection connection = new Connection(baseAddress: baseAddress, apiOptions: options, credentialStore: credentialStore, httpClient: httpClient, serializer: jsonSerializer,
+            platformInformation: new SdkPlatformInformation());
+        connection.SetRequestTimeout(timeOut);
 
-        return new ManagementPenzleClient(connection: connection);
+        return new ManagementPenzleClient(connection);
     }
 }

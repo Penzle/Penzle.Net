@@ -20,4 +20,9 @@ public interface IManagementPenzleClient
     ///     A client for the Penzle Asset Content API that is responsible for handling management.
     /// </summary>
     IManagementAssetClient Asset { get; }
+
+    /// <summary>
+    ///     A client for the Penzle User API that is responsible for handling user-related operations.
+    /// </summary>
+    IManagementUserClient User { get; }
 }
