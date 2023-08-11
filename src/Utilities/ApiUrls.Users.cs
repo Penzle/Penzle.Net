@@ -12,4 +12,9 @@ internal static partial class ApiUrls
     {
         return "{0}users/{1}".FormatUri(Constants.IgnoreProjectKeyword, id);
     }
+
+    internal static Uri EnrollUser()
+    {
+        return "{0}users".FormatUri(Constants.IgnoreProjectKeyword);
+    }
 }
