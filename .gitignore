@@ -427,3 +427,9 @@ _UpgradeReport_Files/
 Thumbs.db
 Desktop.ini
 .DS_Store
+
+.idea/
+*.sln.iml
+*.ipr
+*.iws
+.idea/
