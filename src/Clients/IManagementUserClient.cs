@@ -25,4 +25,23 @@ public interface IManagementUserClient
     /// <returns>A <see cref="TUserResponse" /> object representing the user.</returns>
     /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
     Task<TUserResponse> GetUser<TUserResponse>(Guid targetUserId, CancellationToken cancellationToken = default) where TUserResponse : new();
+
+    /// <summary>
+    ///     Adds a user with the specified user object.
+    /// </summary>
+    /// <param name="user">The user object containing user details.</param>
+    /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
+    /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
+    Task<Guid> EnrollUser(User user, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Adds a user with the specified user name, email, first name, and last name.
+    /// </summary>
+    /// <param name="userName">The user's user name.</param>
+    /// <param name="email">The user's email address.</param>
+    /// <param name="firstName">The user's first name.</param>
+    /// <param name="lastName">The user's last name.</param>
+    /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
+    /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
+    Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default);
 }
