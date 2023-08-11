@@ -42,4 +42,33 @@ internal sealed class RestUserClient : RestBaseClient, IManagementUserClient
     {
         return Connection.Get<TUserResponse>(ApiUrls.GetUser(targetUserId), null, null, null, cancellationToken);
     }
+
+    /// <summary>
+    ///     Enrolls a new user with the specified user object.
+    /// </summary>
+    /// <param name="user">The user object containing user details.</param>
+    /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation. The task result contains the Guid of the enrolled user.
+    /// </returns>
+    public async Task<Guid> EnrollUser(User user, CancellationToken cancellationToken = default)
+    {
+        return await Connection.Post<Guid>(ApiUrls.EnrollUser(), user, null, null, null, cancellationToken);
+    }
+
+    /// <summary>
+    ///     Enrolls a new user with the specified user name, email, first name, and last name.
+    /// </summary>
+    /// <param name="userName">The user's user name.</param>
+    /// <param name="email">The user's email address.</param>
+    /// <param name="firstName">The user's first name.</param>
+    /// <param name="lastName">The user's last name.</param>
+    /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
+    /// <returns>
+    ///     A task that represents the asynchronous operation. The task result contains the Guid of the enrolled user.
+    /// </returns>
+    public async Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default)
+    {
+        return await EnrollUser(new User(userName, email, firstName, lastName), cancellationToken);
+    }
 }
