@@ -1,4 +1,8 @@
-﻿namespace Penzle.Core.Clients.Rest;
+﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
+
+using CSharpFunctionalExtensions;
+
+namespace Penzle.Core.Clients.Rest;
 
 /// <summary>
 ///     Provides REST-based implementation for user operations.
@@ -51,9 +55,9 @@ internal sealed class RestUserClient : RestBaseClient, IManagementUserClient
     /// <returns>
     ///     A task that represents the asynchronous operation. The task result contains the Guid of the enrolled user.
     /// </returns>
-    public async Task<Guid> EnrollUser(User user, CancellationToken cancellationToken = default)
+    public async Task<Result<Guid>> EnrollUser(User user, CancellationToken cancellationToken = default)
     {
-        return await Connection.Post<Guid>(ApiUrls.EnrollUser(), user, null, null, null, cancellationToken);
+        return await Connection.Post<Result<Guid>>(ApiUrls.EnrollUser(), user, null, null, null, cancellationToken);
     }
 
     /// <summary>
@@ -67,8 +71,8 @@ internal sealed class RestUserClient : RestBaseClient, IManagementUserClient
     /// <returns>
     ///     A task that represents the asynchronous operation. The task result contains the Guid of the enrolled user.
     /// </returns>
-    public async Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default)
+    public async Task<Result<Guid>> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default)
     {
-        return await EnrollUser(new User(userName,email,firstName,lastName), cancellationToken);
+        return await EnrollUser(new User(userName, email, firstName, lastName), cancellationToken);
     }
 }
