@@ -1,4 +1,6 @@
-﻿namespace Penzle.Core.Http.Internal;
+﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
+
+namespace Penzle.Core.Http.Internal;
 
 public class Connection : IConnection
 {
@@ -328,7 +330,7 @@ public class Connection : IConnection
             return;
         }
 
-        if ((int)response.StatusCode >= 400)
+        if ((int)response.StatusCode >= 500)
         {
             throw new PenzleException(response);
         }
