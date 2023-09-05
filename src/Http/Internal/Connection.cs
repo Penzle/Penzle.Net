@@ -330,6 +330,11 @@ public class Connection : IConnection
             return;
         }
 
+        if (response.StatusCode == HttpStatusCode.BadRequest)
+        {
+            throw new BadRequestException(response);
+        }
+
         if ((int)response.StatusCode >= 500)
         {
             throw new PenzleException(response);
