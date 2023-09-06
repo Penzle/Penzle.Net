@@ -1,5 +1,4 @@
 ﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
-using CSharpFunctionalExtensions;
 namespace Penzle.Core.Clients;
 
 /// <summary>
@@ -34,7 +33,7 @@ public interface IManagementUserClient
     /// <param name="user">The user object containing user details.</param>
     /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
     /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
-    Task<Result<Guid>> EnrollUser(User user, CancellationToken cancellationToken = default);
+    Task<Guid> EnrollUser(User user, CancellationToken cancellationToken = default);
 
     /// <summary>
     ///     Adds a user with the specified user name, email, first name, and last name.
@@ -45,5 +44,5 @@ public interface IManagementUserClient
     /// <param name="lastName">The user's last name.</param>
     /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
     /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
-    Task<Result<Guid>> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default);
+    Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default);
 }
