@@ -1,4 +1,6 @@
-﻿namespace Penzle.Core.Models;
+﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
+
+namespace Penzle.Core.Models;
 
 /// <summary>
 ///     Represents a User with properties related to personal information, contact details, and preferences.
@@ -105,4 +107,8 @@ public class User
     ///     Gets or sets the office phone number.
     /// </summary>
     public string OfficePhone { get; set; }
+    /// <summary>
+    ///     Gets or sets user roles
+    /// </summary>
+    public string[] Roles { get; set; }
 }
