@@ -218,16 +218,20 @@ public class Connection : IConnection
         Uri baseAddress = null)
     {
         Guard.ArgumentNotNull(uri, nameof(uri));
-        BaseAddress = baseAddress ?? BaseAddress;
+        BaseAddress = baseAddress ?? BaseAddress; 
         var ignoreProject = false;
+        Request request;
+
         if (uri.ToString().StartsWith(Constants.IgnoreProjectKeyword))
         {
             ignoreProject = true;
             uri = uri.ToString().Replace(Constants.IgnoreProjectKeyword, string.Empty).FormatUri();
-            BaseAddress = BaseAddress.ReplaceRelativeUri(new Uri(Constants.AddressWithoutProjectTemplate, UriKind.RelativeOrAbsolute));
+            request = new Request { Method = method, BaseAddress = baseAddress ?? BaseAddress.ReplaceRelativeUri(new Uri(Constants.AddressWithoutProjectTemplate, UriKind.RelativeOrAbsolute)), Endpoint = uri };
         }
-
-        var request = new Request { Method = method, BaseAddress = baseAddress ?? BaseAddress, Endpoint = uri };
+        else
+        {
+            request = new Request { Method = method, BaseAddress = baseAddress ?? BaseAddress, Endpoint = uri };
+        }
 
         return SendEntryInternal<T>(body, cancellationToken, request, ignoreProject, accepts, contentType);
     }
