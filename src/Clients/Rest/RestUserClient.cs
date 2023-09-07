@@ -73,4 +73,14 @@ internal sealed class RestUserClient : RestBaseClient, IManagementUserClient
     {
         return await EnrollUser(new User(userName, email, firstName, lastName), cancellationToken);
     }
+
+    public async ValueTask<HttpStatusCode> UpdateUserCustomData<T>(Guid id, CustomUserData<T> data, CancellationToken cancellationToken = default)
+    {
+        return await Connection.Put(ApiUrls.UpdateUserCustomData(id), data, null, null, null, cancellationToken);
+    }
+
+    public Task<TUserResponse> GetUserCustomData<TUserResponse>(Guid targetUserId, CancellationToken cancellationToken = default) where TUserResponse : new()
+    {
+        return Connection.Get<TUserResponse>(ApiUrls.GetUserCustomData(targetUserId), null, null, null, cancellationToken);
+    }
 }
