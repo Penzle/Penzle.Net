@@ -45,4 +45,20 @@ public interface IManagementUserClient
     /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
     /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
     Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Updates user custom data
+    /// </summary>
+    /// <param name="id">The user's id.</param>
+    /// <param name="data">The user's custom data.</param>
+    /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
+    ValueTask<HttpStatusCode> UpdateUserCustomData<T>(Guid id, CustomUserData<T> data, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     gets user custom data
+    /// </summary>
+    /// <param name="id">The user's id.</param>
+    /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
+
+    Task<TUserResponse> GetUserCustomData<TUserResponse>(Guid targetUserId, CancellationToken cancellationToken = default) where TUserResponse : new();
 }
