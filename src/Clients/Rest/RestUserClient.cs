@@ -1,6 +1,4 @@
-﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
-
-namespace Penzle.Core.Clients.Rest;
+﻿namespace Penzle.Core.Clients.Rest;
 
 /// <summary>
 ///     Provides REST-based implementation for user operations.
@@ -65,22 +63,13 @@ internal sealed class RestUserClient : RestBaseClient, IManagementUserClient
     /// <param name="email">The user's email address.</param>
     /// <param name="firstName">The user's first name.</param>
     /// <param name="lastName">The user's last name.</param>
+    /// <param name="password">The user's password</param>
     /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
     /// <returns>
     ///     A task that represents the asynchronous operation. The task result contains the Guid of the enrolled user.
     /// </returns>
-    public async Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default)
+    public async Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, string password = null, CancellationToken cancellationToken = default)
     {
-        return await EnrollUser(new User(userName, email, firstName, lastName), cancellationToken);
-    }
-
-    public async ValueTask<HttpStatusCode> UpdateUserCustomData<T>(Guid id, CustomUserData<T> data, CancellationToken cancellationToken = default)
-    {
-        return await Connection.Put(ApiUrls.UpdateUserCustomData(id), data, null, null, null, cancellationToken);
-    }
-
-    public Task<TUserResponse> GetUserCustomData<TUserResponse>(Guid targetUserId, CancellationToken cancellationToken = default) where TUserResponse : new()
-    {
-        return Connection.Get<TUserResponse>(ApiUrls.GetUserCustomData(targetUserId), null, null, null, cancellationToken);
+        return await EnrollUser(new User(userName, email, firstName, lastName, password), cancellationToken);
     }
 }

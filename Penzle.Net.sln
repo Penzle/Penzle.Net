@@ -4,8 +4,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Penzle.Core", "src\Penzle.C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Penzle.Core.Tests", "tests\Penzle.Core.Tests\Penzle.Core.Tests.csproj", "{E1F3D00F-D0C5-4526-A1A7-8985D700AB8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Penzle.Core.Terminal", "terminal\Penzle.Core.Terminal\Penzle.Core.Terminal.csproj", "{2A9BB635-1D95-4D60-AF93-FFC91386A0CA}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -20,9 +18,5 @@ Global
 		{E1F3D00F-D0C5-4526-A1A7-8985D700AB8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E1F3D00F-D0C5-4526-A1A7-8985D700AB8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E1F3D00F-D0C5-4526-A1A7-8985D700AB8B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2A9BB635-1D95-4D60-AF93-FFC91386A0CA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2A9BB635-1D95-4D60-AF93-FFC91386A0CA}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2A9BB635-1D95-4D60-AF93-FFC91386A0CA}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2A9BB635-1D95-4D60-AF93-FFC91386A0CA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
