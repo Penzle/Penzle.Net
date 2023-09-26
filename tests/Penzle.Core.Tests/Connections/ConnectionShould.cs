@@ -119,7 +119,7 @@ public class ConnectionShould
         var action = () => connection.HandleErrors(mockResponse.Object);
 
         // Assert
-        action.Should().Throw<PenzleException>();
+        action.Should().Throw<BadRequestException>();
     }
 
     [Theory]
