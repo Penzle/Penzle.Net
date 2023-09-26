@@ -63,12 +63,13 @@ internal sealed class RestUserClient : RestBaseClient, IManagementUserClient
     /// <param name="email">The user's email address.</param>
     /// <param name="firstName">The user's first name.</param>
     /// <param name="lastName">The user's last name.</param>
+    /// <param name="password">The user's password</param>
     /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
     /// <returns>
     ///     A task that represents the asynchronous operation. The task result contains the Guid of the enrolled user.
     /// </returns>
-    public async Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default)
+    public async Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, string password = null, CancellationToken cancellationToken = default)
     {
-        return await EnrollUser(new User(userName,email,firstName,lastName), cancellationToken);
+        return await EnrollUser(new User(userName, email, firstName, lastName, password), cancellationToken);
     }
 }

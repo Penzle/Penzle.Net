@@ -41,7 +41,8 @@ public interface IManagementUserClient
     /// <param name="email">The user's email address.</param>
     /// <param name="firstName">The user's first name.</param>
     /// <param name="lastName">The user's last name.</param>
+    /// <param name="password">The user's password</param>
     /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
     /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
-    Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default);
+    Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, string password = null, CancellationToken cancellationToken = default);
 }
