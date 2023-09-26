@@ -19,14 +19,12 @@ public class User
     /// <param name="email">User's email address.</param>
     /// <param name="firstName">User's first name.</param>
     /// <param name="lastName">User's last name.</param>
-    /// <param name="password"></param>
-    public User(string userName, string email, string firstName, string lastName, string password = null)
+    public User(string userName, string email, string firstName, string lastName)
     {
         UserName = userName;
         Email = email;
         FirstName = firstName;
         LastName = lastName;
-        Password = password;
     }
 
     /// <summary>
@@ -53,11 +51,6 @@ public class User
     ///     Gets or sets the last name.
     /// </summary>
     public string LastName { get; set; }
-
-    /// <summary>
-    ///     Gets or sets the password.
-    /// </summary>
-    public string Password { get; set; }
 
     /// <summary>
     ///     Gets or sets a value indicating whether the user is active or not. Default is true, meaning the user is active.

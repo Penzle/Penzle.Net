@@ -1,4 +1,5 @@
-﻿namespace Penzle.Core.Clients;
+﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
+namespace Penzle.Core.Clients;
 
 /// <summary>
 ///     A client for the Penzle User API that is responsible for handling user-related operations.
@@ -41,8 +42,23 @@ public interface IManagementUserClient
     /// <param name="email">The user's email address.</param>
     /// <param name="firstName">The user's first name.</param>
     /// <param name="lastName">The user's last name.</param>
-    /// <param name="password">The user's password</param>
     /// <param name="cancellationToken">The optional cancellation token to cancel the operation.</param>
     /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
-    Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, string password = null, CancellationToken cancellationToken = default);
+    Task<Guid> EnrollUser(string userName, string email, string firstName, string lastName, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     Updates user custom data
+    /// </summary>
+    /// <param name="id">The user's id.</param>
+    /// <param name="data">The user's custom data.</param>
+    /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
+    ValueTask<HttpStatusCode> UpdateUserCustomData<T>(Guid id, CustomUserData<T> data, CancellationToken cancellationToken = default);
+
+    /// <summary>
+    ///     gets user custom data
+    /// </summary>
+    /// <param name="id">The user's id.</param>
+    /// <exception cref="PenzleException">There was a communication error with the Penzle API.</exception>
+
+    Task<TUserResponse> GetUserCustomData<TUserResponse>(Guid targetUserId, CancellationToken cancellationToken = default) where TUserResponse : new();
 }
