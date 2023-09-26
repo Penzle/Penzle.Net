@@ -92,7 +92,7 @@ namespace Penzle.Core.Tests.Filters
             var result = builder.Build();
 
             // Assert
-            Assert.Equal("filter[where][and][Id][ne]=1", result);
+            Assert.Equal("filter[where][and][Id][neq]=1", result);
         }
 
         [Fact]
@@ -106,7 +106,7 @@ namespace Penzle.Core.Tests.Filters
             var result = builder.Build();
 
             // Assert
-            Assert.Equal("filter[where][and][Id][gt]=1", result);
+            Assert.Equal("filter[where][and][Id][gte]=1", result);
         }
 
         [Fact]
@@ -120,7 +120,7 @@ namespace Penzle.Core.Tests.Filters
             var result = builder.Build();
 
             // Assert
-            Assert.Equal("filter[where][and][Id][ge]=1", result);
+            Assert.Equal("filter[where][and][Id][gt]=1", result);
         }
 
         [Fact]
@@ -148,7 +148,7 @@ namespace Penzle.Core.Tests.Filters
             var result = builder.Build();
 
             // Assert
-            Assert.Equal("filter[where][and][Id][le]=1", result);
+            Assert.Equal("filter[where][and][Id][lte]=1", result);
         }
 
         [Fact]
@@ -204,7 +204,7 @@ namespace Penzle.Core.Tests.Filters
             var result = builder.Build();
 
             // Assert
-            Assert.Equal("filter[where][and][FirstName][inq]=John,Jane", result);
+            Assert.Equal("filter[where][and][FirstName][in]=John,Jane", result);
         }
 
         [Fact]
@@ -246,7 +246,7 @@ namespace Penzle.Core.Tests.Filters
             var result = builder.Build();
 
             // Assert
-            Assert.Equal("filter[where][and][FirstName][like]=^J&filter[where][and][Age][ge]=30", result);
+            Assert.Equal("filter[where][and][FirstName][like]=^J&filter[where][and][Age][gt]=30", result);
         }
 
         [Fact]
