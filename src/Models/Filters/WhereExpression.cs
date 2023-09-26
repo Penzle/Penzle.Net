@@ -13,15 +13,15 @@ namespace Penzle.Core.Models.Filters
         private static readonly Dictionary<ExpressionType, string> OperatorMap = new()
         {
             [ExpressionType.Equal] = "=",
-            [ExpressionType.NotEqual] = "[ne]=",
-            [ExpressionType.GreaterThan] = "[gt]=",
-            [ExpressionType.GreaterThanOrEqual] = "[ge]=",
+            [ExpressionType.NotEqual] = "[neq]=",
+            [ExpressionType.GreaterThan] = "[gte]=",
+            [ExpressionType.GreaterThanOrEqual] = "[gt]=",
             [ExpressionType.LessThan] = "[lt]=",
-            [ExpressionType.LessThanOrEqual] = "[le]=",
+            [ExpressionType.LessThanOrEqual] = "[lte]=",
             [ExpressionType.AndAlso] = "&",
             [ExpressionType.OrElse] = "&",
             [ExpressionType.Not] = "NOT",
-            [ExpressionType.Call] = "[inq]="
+            [ExpressionType.Call] = "[in]="
         };
 
         private readonly Expression _expression;
@@ -29,7 +29,7 @@ namespace Penzle.Core.Models.Filters
         public WhereExpression(Expression expression)
         {
             Guard.ArgumentNotNull(value: expression, name: nameof(expression));
-            
+
             _expression = expression;
         }
 
@@ -65,7 +65,7 @@ namespace Penzle.Core.Models.Filters
                 ExpressionType.Call => VisitMethod((MethodCallExpression)expression, isUnary, prefix, postfix),
 
                 ExpressionType.Convert => VisitConvertMember(expression, isUnary, prefix, postfix),
-                
+
                 _ => UnhandledExpressionType(expression)
             };
 
@@ -156,11 +156,11 @@ namespace Penzle.Core.Models.Filters
                     {
                         memberExpr = nestedExpr;
                     }
-                    
+
                     return VisitMember(memberExpr, isUnary, prefix, postfix);
                 }
             }
-         
+
             throw new Exception($"Expression does not refer to a property or field '{memberExpression}'.");
         }
 
@@ -185,6 +185,11 @@ namespace Penzle.Core.Models.Filters
                 if (value is string strValue)
                 {
                     value = $"{prefix}{strValue}{postfix}";
+                }
+
+                else if (value is DateTime time)
+                {
+                    value = time.ToString("yyyy-MM-dd HH:mm:ss.fffffff");
                 }
 
                 return WhereExpressionValue.Create(value.ToString());
