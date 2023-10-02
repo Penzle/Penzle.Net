@@ -2,7 +2,6 @@
 
 The Penzle .NET SDK is a library that allows developers to easily integrate with the Penzle Content Delivery and Content Management APIs. This SDK is designed for .NET developers who want to create, update and retrieve content from the Penzle platform.
 
-![Run Build and Test](https://github.com/Penzle/Penzle.Net/actions/workflows/run-build-and-test.ci.yml/badge.svg)
 [![Build status](https://ci.appveyor.com/api/projects/status/edbdt6fl1omedpfi/branch/main?svg=true)](https://ci.appveyor.com/project/admir-live/penzle-net/branch/main)
 
 ![NuGet Downloads](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads&style=plastic](https://img.shields.io/nuget/dt/Penzle.Net?label=NuGet%20Downloads))

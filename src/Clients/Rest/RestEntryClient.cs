@@ -1,4 +1,6 @@
-﻿namespace Penzle.Core.Clients.Rest;
+﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
+
+namespace Penzle.Core.Clients.Rest;
 
 /// <summary>
 ///     Represent a REST entry client that contains application programming interfaces (APIs) for management and delivery
@@ -98,7 +100,7 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
     /// <inheritdoc>
     ///     <cref>IManagementEntryClient.CreateEntry</cref>
     /// </inheritdoc>
-    public Task<Guid> CreateEntry(object entry, CancellationToken cancellationToken = default)
+    public Task<Guid> CreateEntry<TEntity>(CreateEntryRequest<TEntity> entry, CancellationToken cancellationToken = default) where TEntity : new()
     {
         return Connection.Post<Guid>(uri: ApiUrls.CreateEntry(), body: entry, accepts: null, contentType: null, parameters: null, cancellationToken: cancellationToken);
     }
@@ -106,7 +108,7 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
     /// <inheritdoc>
     ///     <cref>IManagementEntryClient.UpdateEntry</cref>
     /// </inheritdoc>
-    public ValueTask<HttpStatusCode> UpdateEntry(Guid entryId, object entry, CancellationToken cancellationToken = default)
+    public ValueTask<HttpStatusCode> UpdateEntry<TEntity>(Guid entryId, UpdateEntryRequest<TEntity> entry, CancellationToken cancellationToken = default) where TEntity : new()
     {
         return Connection.Put(uri: ApiUrls.UpdateEntry(entryId: entryId), body: entry, parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
     }

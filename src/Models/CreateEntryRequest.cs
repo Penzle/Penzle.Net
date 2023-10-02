@@ -2,6 +2,7 @@
 
 public class CreateEntryRequest<TEntity> where TEntity : new()
 {
+    public Guid? Id { get; set; }
     public string UrlAlias { get; set; }
     public string Language { get; set; }
     public string Name { get; set; }

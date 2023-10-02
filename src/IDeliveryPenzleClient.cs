@@ -2,7 +2,7 @@
 
 /// <summary>
 ///     A delivery client for the initial release of the Penzle application programming interface. You may obtain further
-///     information on the API by visiting the following website: http://doc.penzle.com/sdk.
+///     information on the API by visiting the following website: https://github.com/Penzle/Penzle.Net.
 /// </summary>
 public interface IDeliveryPenzleClient
 {
