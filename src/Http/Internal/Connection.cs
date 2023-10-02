@@ -36,6 +36,7 @@ public class Connection : IConnection
         UserAgent = FormatUserAgent(new ProductHeaderValue("Penzle.Core.Net"));
         Credentials = credentialStore.GetCredentials().GetAwaiter().GetResult();
         CredentialStore = credentialStore;
+        ApiOptions = apiOptions;
         SetBaseAddress(baseAddress, apiOptions);
     }
 
