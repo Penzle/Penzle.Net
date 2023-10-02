@@ -27,6 +27,7 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
     public async Task<PagedList<TEntry>> GetPaginationListEntries<TEntry>(string template, QueryEntryBuilder<TEntry> query = null, CancellationToken cancellationToken = default) where TEntry : new()
     {
         query ??= new QueryEntryBuilder<TEntry>();
+        SetQueryFromPenzleClient(query);
         if (typeof(TEntry).IsGenericType)
         {
             return await Connection.Get<PagedList<TEntry>>(uri: ApiUrls.GetEntries(template: template, queryEntryBuilder: query), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
@@ -48,17 +49,23 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
     /// <inheritdoc>
     ///     <cref>IManagementEntryClient.GetEntry{TEntry}(System.Guid,Penzle.Core.Models.QueryEntryBuilder,System.Threading.CancellationToken)</cref>
     /// </inheritdoc>
-    public Task<TEntry> GetEntry<TEntry>(Guid entryId, string language = null, CancellationToken cancellationToken = default) where TEntry : new()
+    public Task<TEntry> GetEntry<TEntry>(Guid entryId, QueryEntryBuilder queryEntryBuilder = null, CancellationToken cancellationToken = default) where TEntry : new()
     {
-        return Connection.Get<TEntry>(uri: ApiUrls.GetEntry(entryId: entryId, language: language), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
+        queryEntryBuilder ??= new QueryEntryBuilder();
+        SetSignleQueryFromPenzleClient(queryEntryBuilder);
+
+        return Connection.Get<TEntry>(uri: ApiUrls.GetEntry(entryId: entryId, queryEntryBuilder: queryEntryBuilder), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc>
     ///     <cref>IManagementEntryClient.GetEntry{TEntry}(System.Guid,Penzle.Core.Models.QueryEntryBuilder,System.Threading.CancellationToken)</cref>
     /// </inheritdoc>
-    public Task<TEntry> GetEntry<TEntry>(string uri, string language = null, CancellationToken cancellationToken = default) where TEntry : new()
+    public Task<TEntry> GetEntry<TEntry>(string uri, QueryEntryBuilder queryEntryBuilder = null, CancellationToken cancellationToken = default) where TEntry : new()
     {
-        return Connection.Get<TEntry>(uri: ApiUrls.GetEntryByAliasUrl(uri: uri, language: language), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
+        queryEntryBuilder ??= new QueryEntryBuilder();
+        SetSignleQueryFromPenzleClient(queryEntryBuilder);
+
+        return Connection.Get<TEntry>(uri: ApiUrls.GetEntryByAliasUrl(uri: uri, queryEntryBuilder: queryEntryBuilder), parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
     }
 
     /// <inheritdoc>
@@ -112,5 +119,31 @@ internal sealed class RestEntryClient : RestBaseClient, IManagementEntryClient, 
     public ValueTask<HttpStatusCode> DeleteEntry(Guid entryId, CancellationToken cancellationToken = default)
     {
         return Connection.Delete(uri: ApiUrls.DeleteEntry(entryId: entryId), body: null, parameters: null, accepts: null, contentType: null, cancellationToken: cancellationToken);
+    }
+
+    private void SetSignleQueryFromPenzleClient(QueryEntryBuilder query)
+    {
+        if (Connection.ApiOptions.UsePreviewMode)
+        {
+            query.UsePreviewMode();
+        }
+
+        if (!string.IsNullOrEmpty(Connection.ApiOptions.DefaultLanguage))
+        {
+            query.WithLanguage(Connection.ApiOptions.DefaultLanguage);
+        }
+    }
+
+    private void SetQueryFromPenzleClient<TEntry>(QueryEntryBuilder<TEntry> query)
+    {
+        if (Connection.ApiOptions.UsePreviewMode)
+        {
+            query.UsePreviewMode();
+        }
+
+        if (!string.IsNullOrEmpty(Connection.ApiOptions.DefaultLanguage))
+        {
+            query.WithLanguage(Connection.ApiOptions.DefaultLanguage);
+        }
     }
 }

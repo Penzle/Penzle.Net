@@ -2,6 +2,7 @@
 
 public interface IConnection
 {
+    public ApiOptions ApiOptions { get; }
     public string UserAgent { get; set; }
     public IHttpClient HttpClient { get; set; }
     Uri BaseAddress { get; set; }

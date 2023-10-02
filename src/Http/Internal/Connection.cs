@@ -8,7 +8,7 @@ public class Connection : IConnection
     private readonly IJsonSerializer _jsonSerializer;
     private readonly Uri _penzleCloudApi = new("https://api.penzle.com");
     private readonly IPlatformInformation _platformInformation;
-
+    public ApiOptions ApiOptions { get; }
     public Connection()
     {
         _jsonSerializer = new MicrosoftJsonSerializer();
@@ -36,6 +36,7 @@ public class Connection : IConnection
         UserAgent = FormatUserAgent(new ProductHeaderValue("Penzle.Core.Net"));
         Credentials = credentialStore.GetCredentials().GetAwaiter().GetResult();
         CredentialStore = credentialStore;
+        ApiOptions = apiOptions;
         SetBaseAddress(baseAddress, apiOptions);
     }
 

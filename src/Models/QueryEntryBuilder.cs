@@ -3,11 +3,50 @@ using System.Linq.Expressions;
 
 namespace Penzle.Core.Models;
 
+public sealed class QueryEntryBuilder
+{
+    /// <summary>
+    /// A collection of query parameters to include in the query entry.
+    /// </summary>
+    public readonly ICollection<IQueryParameter> QueryParameters;
+
+    /// <summary>
+    ///     Initializes a new instance of the QueryEntryBuilder class.
+    /// </summary>
+    public QueryEntryBuilder()
+    {
+        QueryParameters = new List<IQueryParameter>();
+    }
+
+    public static QueryEntryBuilder New => new();
+
+    public QueryEntryBuilder UsePreviewMode()
+    {
+        QueryParameters.Add(new PreviewModeFilter());
+        return this;
+    }
+
+    public QueryEntryBuilder WithLanguage(string language)
+    {
+        QueryParameters.Add(new LanguageFilter(language, false));
+        return this;
+    }
+
+    /// <summary>
+    /// Builds the query entry as a string.
+    /// </summary>
+    /// <returns>A string representing the query entry.</returns>
+    public string Build()
+    {
+        return string.Join("&", QueryParameters.Select(x => x.GetParameter()));
+    }
+}
+
 /// <summary>
 /// A builder class for creating query entries for a data source.
 /// </summary>
 /// <typeparam name="TSource">The type of the data source.</typeparam>
-public sealed class QueryEntryBuilder<TSource> 
+public sealed class QueryEntryBuilder<TSource>
 {
     /// <summary>
     /// A collection of query parameters to include in the query entry.
@@ -93,6 +132,18 @@ public sealed class QueryEntryBuilder<TSource>
     public QueryEntryBuilder<TSource> PageSize(int pageSize)
     {
         QueryParameters.Add(new PageSizeFilter(pageSize));
+        return this;
+    }
+
+    public QueryEntryBuilder<TSource> UsePreviewMode()
+    {
+        QueryParameters.Add(new PreviewModeFilter());
+        return this;
+    }
+
+    public QueryEntryBuilder<TSource> WithLanguage(string language)
+    {
+        QueryParameters.Add(new LanguageFilter(language, true));
         return this;
     }
 

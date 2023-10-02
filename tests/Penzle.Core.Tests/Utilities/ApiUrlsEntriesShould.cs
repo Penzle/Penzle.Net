@@ -13,7 +13,7 @@ public class ApiUrlsEntriesShould
         const string Language = "en-US";
 
         // Act
-        var uri = ApiUrls.GetEntry(entryId: entryId, language: Language);
+        var uri = ApiUrls.GetEntry(entryId, QueryEntryBuilder.New.WithLanguage(Language));
 
         // Assert
         uri.Should().NotBeNull();
@@ -48,11 +48,11 @@ public class ApiUrlsEntriesShould
         const string Language = "en-US";
 
         // Act
-        var uri = ApiUrls.GetEntryByAliasUrl(uri: Url, language: Language);
+        var uri = ApiUrls.GetEntryByAliasUrl(Url, QueryEntryBuilder.New.WithLanguage(Language));
 
         // Assert
         uri.Should().NotBeNull();
-        uri.OriginalString.Should().Be("entries/url?language=en-US&aliasUrl=articles/2021/01/01/first-article");
+        uri.OriginalString.Should().Be("entries/?slug=articles/2021/01/01/first-article&language=en-US");
     }
 
     [Fact]
