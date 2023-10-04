@@ -14,8 +14,8 @@ namespace Penzle.Core.Models.Filters
         {
             [ExpressionType.Equal] = "=",
             [ExpressionType.NotEqual] = "[neq]=",
-            [ExpressionType.GreaterThan] = "[gte]=",
-            [ExpressionType.GreaterThanOrEqual] = "[gt]=",
+            [ExpressionType.GreaterThan] = "[gt]=",
+            [ExpressionType.GreaterThanOrEqual] = "[gte]=",
             [ExpressionType.LessThan] = "[lt]=",
             [ExpressionType.LessThanOrEqual] = "[lte]=",
             [ExpressionType.AndAlso] = "&",
