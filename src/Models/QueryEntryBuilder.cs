@@ -1,5 +1,7 @@
-﻿using Penzle.Core.Models.Filters;
+﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
+
 using System.Linq.Expressions;
+using Penzle.Core.Models.Filters;
 
 namespace Penzle.Core.Models;
 
@@ -23,6 +25,12 @@ public sealed class QueryEntryBuilder
     public QueryEntryBuilder UsePreviewMode()
     {
         QueryParameters.Add(new PreviewModeFilter());
+        return this;
+    }
+
+    public QueryEntryBuilder Include(int depthLevel)
+    {
+        QueryParameters.Add(new IncludeFilter(depthLevel));
         return this;
     }
 
@@ -144,6 +152,12 @@ public sealed class QueryEntryBuilder<TSource>
     public QueryEntryBuilder<TSource> WithLanguage(string language)
     {
         QueryParameters.Add(new LanguageFilter(language, true));
+        return this;
+    }
+
+    public QueryEntryBuilder<TSource> Include(int depthLevel)
+    {
+        QueryParameters.Add(new IncludeFilter(depthLevel));
         return this;
     }
 
