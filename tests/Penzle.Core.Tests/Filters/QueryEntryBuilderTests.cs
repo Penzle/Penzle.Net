@@ -423,5 +423,21 @@ namespace Penzle.Core.Tests.Filters
             // Assert
             Assert.Equal("filter[where][and][system.id][in]=585e4435-b2c8-4e66-bb66-4e61f028a5bd,b77259e1-d4ac-4aa8-a8dd-bfff0ab214eb", result.ToLower());
         }
+
+
+        [Fact]
+        public void Where_Should_Add_Work_With_Contains_On_Fields_Level()
+        {
+            // Arrange
+            var builder = QueryEntryBuilder<Entry<Person>>.New;
+            var listOfIds = new List<int>() { 1, 2, 3 };
+
+            // Act
+            builder.Where(x => x.Fields.Id.Contains(listOfIds));
+            var result = builder.Build();
+
+            // Assert
+            Assert.Equal("filter[where][and][fields.id][in]=1,2,3", result.ToLower());
+        }
     }
 }
