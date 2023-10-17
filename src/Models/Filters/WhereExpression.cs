@@ -162,11 +162,18 @@ namespace Penzle.Core.Models.Filters
 
         private WhereExpressionValue VisitConvertMember(Expression memberExpression, bool isUnary, string prefix, string postfix)
         {
-
             if (memberExpression is UnaryExpression unaryExpr)
             {
                 if (unaryExpr.Operand is MemberExpression memberExpr)
                 {
+
+                    if (memberExpr.Expression is MemberExpression member && member.Member is FieldInfo)
+                    {
+                        while (memberExpr.Expression is MemberExpression nestedExpr)
+                        {
+                            memberExpr = nestedExpr;
+                        }
+                    }
 
                     return VisitMember(memberExpr, isUnary, prefix, postfix);
                 }
@@ -195,8 +202,7 @@ namespace Penzle.Core.Models.Filters
         {
             if (memberExpression.Member is PropertyInfo property)
             {
-                var fullName = GetFullPropertyName(memberExpression);
-
+                var fullName = GetFullPropertyName(memberExpression).ToLower();
                 var propertyName = string.Format(RqlFromat, fullName);
 
                 if (isUnary && memberExpression.Type == typeof(bool))
