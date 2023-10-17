@@ -1,21 +1,14 @@
 ﻿// Copyright (c) 2022 Penzle LLC. All Rights Reserved. Licensed under the MIT license. See License.txt in the project root for license information.
-using Xunit;
-using Moq;
-using FluentAssertions;
-using Penzle.Core;
-using System;
 
 namespace Penzle.Core.Tests.Clients
 {
     public class DeliveryPenzleClientTests
     {
-        private Mock<IConnection> _mockConnection;
         private Mock<IHttpClient> _mockHttpClient;
         private Mock<IJsonSerializer> _mockJsonSerializer;
 
         public DeliveryPenzleClientTests()
         {
-            _mockConnection = new Mock<IConnection>();
             _mockHttpClient = new Mock<IHttpClient>();
             _mockJsonSerializer = new Mock<IJsonSerializer>();
         }
@@ -49,7 +42,7 @@ namespace Penzle.Core.Tests.Clients
 
             // Act
             var client = DeliveryPenzleClient.Factory(apiDeliveryKey, apiOptions, baseAddress);
-            
+
             // Assert
             client.Should().NotBeNull();
             client.Entry.Should().NotBeNull();

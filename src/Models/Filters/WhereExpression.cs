@@ -20,8 +20,12 @@ namespace Penzle.Core.Models.Filters
             [ExpressionType.LessThanOrEqual] = "[lte]=",
             [ExpressionType.AndAlso] = "&",
             [ExpressionType.OrElse] = "&",
-            [ExpressionType.Not] = "NOT",
             [ExpressionType.Call] = "[in]="
+        };
+
+        private static readonly Dictionary<ExpressionType, string> NegationOperatorMap = new()
+        {
+            [ExpressionType.Call] = "[nin]="
         };
 
         private readonly Expression _expression;
@@ -63,16 +67,18 @@ namespace Penzle.Core.Models.Filters
                 ExpressionType.MemberAccess => VisitMember((MemberExpression)expression, isUnary, prefix, postfix),
 
                 ExpressionType.Call => VisitMethod((MethodCallExpression)expression, isUnary, prefix, postfix),
+                ExpressionType.Not => VisitUnary((UnaryExpression)expression, isUnary),
 
                 ExpressionType.Convert => VisitConvertMember(expression, isUnary, prefix, postfix),
 
                 _ => UnhandledExpressionType(expression)
             };
 
+
         private WhereExpressionValue UnhandledExpressionType(Expression expression) => WhereExpressionValue.New;
 
-        private WhereExpressionValue VisitUnary(UnaryExpression methodCallExpression, bool isUnary, ref int i)
-            => WhereExpressionValue.Concat(OperatorMap.GetValueOrDefault(methodCallExpression.NodeType), Visit(methodCallExpression.Operand, true));
+        private WhereExpressionValue VisitUnary(UnaryExpression methodCallExpression, bool isUnary)
+            => WhereExpressionValue.Concat(OperatorMap.GetValueOrDefault(methodCallExpression.NodeType), Visit(methodCallExpression.Operand, !isUnary));
 
 
         private WhereExpressionValue VisitMethod(MethodCallExpression methodCall, bool isUnary, string prefix, string postfix)
@@ -90,7 +96,7 @@ namespace Penzle.Core.Models.Filters
                    "Contains" when methodCall.Arguments.Count == 2 && typeof(IEnumerable).IsAssignableFrom(methodCall.Arguments[1].Type) =>
                    WhereExpressionValue.Concat(
                            Visit(methodCall.Arguments[0]),
-                           OperatorMap.GetValueOrDefault(ExpressionType.Call),
+                           isUnary ? OperatorMap.GetValueOrDefault(ExpressionType.Call) : NegationOperatorMap.GetValueOrDefault(ExpressionType.Call),
                            WhereExpressionValue.IsCollection(values: (IEnumerable)GetValue(methodCall.Arguments[1]))),
 
                    _ => throw new Exception($"Unsupported method call '{methodCall.Method.Name}'")
@@ -102,10 +108,19 @@ namespace Penzle.Core.Models.Filters
             var expressionLeft = Visit(binaryExpression.Left);
             var expressionRight = Visit(binaryExpression.Right);
 
-
             if (binaryExpression.NodeType == ExpressionType.OrElse)
             {
+                if ((expressionOperator == OperatorMap[ExpressionType.Equal] || expressionOperator == OperatorMap[ExpressionType.NotEqual]) && expressionRight.Value == "NULL")
+                {
+                    return WhereExpressionValue.ConcatOr(expressionLeft, expressionOperator == OperatorMap[ExpressionType.Equal] ? "[empty]" : "[nempty]", WhereExpressionValue.New);
+                }
+
                 return WhereExpressionValue.ConcatOr(expressionLeft, expressionOperator, expressionRight);
+            }
+
+            if ((expressionOperator == OperatorMap[ExpressionType.Equal] || expressionOperator == OperatorMap[ExpressionType.NotEqual]) && expressionRight.Value == "NULL")
+            {
+                return WhereExpressionValue.Concat(expressionLeft, expressionOperator == OperatorMap[ExpressionType.Equal] ? "[empty]" : "[nempty]", WhereExpressionValue.New);
             }
 
             return WhereExpressionValue.Concat(expressionLeft, expressionOperator, expressionRight);
@@ -147,15 +162,11 @@ namespace Penzle.Core.Models.Filters
 
         private WhereExpressionValue VisitConvertMember(Expression memberExpression, bool isUnary, string prefix, string postfix)
         {
+
             if (memberExpression is UnaryExpression unaryExpr)
             {
                 if (unaryExpr.Operand is MemberExpression memberExpr)
                 {
-                    // Traverse the expression tree if the expression is a nested MemberExpression
-                    while (memberExpr.Expression is MemberExpression nestedExpr)
-                    {
-                        memberExpr = nestedExpr;
-                    }
 
                     return VisitMember(memberExpr, isUnary, prefix, postfix);
                 }
@@ -164,11 +175,29 @@ namespace Penzle.Core.Models.Filters
             throw new Exception($"Expression does not refer to a property or field '{memberExpression}'.");
         }
 
+        private static string GetFullPropertyName(Expression expression)
+        {
+            switch (expression)
+            {
+                case MemberExpression memberExpression:
+                    var parentName = GetFullPropertyName(memberExpression.Expression);
+                    var currentName = memberExpression.Member.Name;
+                    return string.IsNullOrEmpty(parentName) ? currentName : $"{parentName}.{currentName}";
+                case UnaryExpression unaryExpression:
+                    return GetFullPropertyName(unaryExpression.Operand);
+                default:
+                    return "";
+            }
+        }
+
+
         private WhereExpressionValue VisitMember(MemberExpression memberExpression, bool isUnary, string prefix, string postfix)
         {
             if (memberExpression.Member is PropertyInfo property)
             {
-                var propertyName = string.Format(RqlFromat, property.GetFieldName());
+                var fullName = GetFullPropertyName(memberExpression);
+
+                var propertyName = string.Format(RqlFromat, fullName);
 
                 if (isUnary && memberExpression.Type == typeof(bool))
                 {
@@ -203,7 +232,6 @@ namespace Penzle.Core.Models.Filters
             var objectMember = Expression.Convert(member, typeof(object));
             var getterLambda = Expression.Lambda<Func<object>>(objectMember);
             var getterValue = getterLambda.Compile();
-
             return getterValue();
         }
     }
