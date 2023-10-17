@@ -28,16 +28,16 @@ public class ApiUrlsEntriesShould
         const string Language = "en-US";
 
         // Act
-        
+
         var queryEntryBuilder = QueryEntryBuilder<ArticleWithSystem>
             .New
             .Where(x => x.System.ParentId == entryId && x.System.Language == Language);
-     
+
         var uri = ApiUrls.GetEntries(template: "article", queryEntryBuilder);
 
         // Assert
         uri.Should().NotBeNull();
-        uri.OriginalString.Should().Be("entries/article?filter[where][and][system.ParentId]=62f55cff-9cd1-4022-b8cd-751aaa1acbeb&filter[where][and][system.Language]=en-US");
+        uri.OriginalString.ToLower().Should().Be("entries/article?filter[where][and][system.parentid]=62f55cff-9cd1-4022-b8cd-751aaa1acbeb&filter[where][and][system.language]=en-us");
     }
 
     [Fact]

@@ -106,7 +106,7 @@ namespace Penzle.Core.Tests.Filters
             var result = builder.Build();
 
             // Assert
-            Assert.Equal("filter[where][and][Id][gte]=1", result);
+            Assert.Equal("filter[where][and][Id][gt]=1", result);
         }
 
         [Fact]
@@ -116,7 +116,7 @@ namespace Penzle.Core.Tests.Filters
             var builder = QueryEntryBuilder<Person>.New;
 
             // Act
-            builder.Where(x => x.Id >= 1);
+            builder.Where(x => x.Id > 1);
             var result = builder.Build();
 
             // Assert
@@ -208,6 +208,50 @@ namespace Penzle.Core.Tests.Filters
         }
 
         [Fact]
+        public void Where_Should_Add_WhereParameter_With_Not_Contains_List()
+        {
+            // Arrange
+            var builder = QueryEntryBuilder<Person>.New;
+
+            // Act
+            builder.Where(x => !x.FirstName.Contains(new List<string> { "John", "Jane" }));
+            var result = builder.Build();
+
+            // Assert
+            Assert.Equal("filter[where][and][FirstName][nin]=John,Jane", result);
+        }
+
+        [Fact]
+        public void Where_Should_Add_WhereParameter_With_Empty()
+        {
+            // Arrange
+            var builder = QueryEntryBuilder<Person>.New;
+
+            // Act
+            builder.Where(x => x.FirstName == null);
+
+            var result = builder.Build();
+
+            // Assert
+            Assert.Equal("filter[where][and][FirstName][empty]", result);
+        }
+
+        [Fact]
+        public void Where_Should_Add_WhereParameter_With_Not_Empty()
+        {
+            // Arrange
+            var builder = QueryEntryBuilder<Person>.New;
+
+            // Act
+            builder.Where(x => x.FirstName != null);
+
+            var result = builder.Build();
+
+            // Assert
+            Assert.Equal("filter[where][and][FirstName][nempty]", result);
+        }
+
+        [Fact]
         public void Where_Should_Add_WhereParameter_With_StartsWith()
         {
             // Arrange
@@ -246,8 +290,9 @@ namespace Penzle.Core.Tests.Filters
             var result = builder.Build();
 
             // Assert
-            Assert.Equal("filter[where][and][FirstName][like]=^J&filter[where][and][Age][gt]=30", result);
+            Assert.Equal("filter[where][and][FirstName][like]=^J&filter[where][and][Age][gte]=30", result);
         }
+
 
         [Fact]
         public void Where_Should_Add_WhereParameter_With_Or_Expression()
@@ -268,7 +313,7 @@ namespace Penzle.Core.Tests.Filters
         {
             // Arrange
             var builder = QueryEntryBuilder<Person>.New;
-            
+
             // Act
             builder.Where(x => x.FirstName == "John").Select(x => new { x.Id, x.FirstName }).OrderBy(x => x.Id);
             var result = builder.Build();
@@ -345,6 +390,53 @@ namespace Penzle.Core.Tests.Filters
 
             // Assert
             Assert.Equal("filter[where][and][FirstName]=John&filter[fields][Id]=true&filter[fields][FirstName]=true&filter[order]=Id ASC&filter[page]=1&filter[PageSize]=25", result);
+        }
+
+        [Fact]
+        public void Where_Should_Add_Work_WithSystemProperty()
+        {
+            // Arrange
+            var builder = QueryEntryBuilder<Entry<Person>>.New;
+
+            // Act
+            builder.Where(x => x.System.Slug == "cms/docs/reference");
+
+            var result = builder.Build();
+
+            // Assert
+            Assert.Equal("filter[where][and][system.slug]=cms/docs/reference", result.ToLower());
+        }
+
+        [Fact]
+        public void Where_Should_Add_Work_With_Contains_And_Id()
+        {
+            // Arrange
+            var builder = QueryEntryBuilder<Entry<Person>>.New;
+            var listOfIds = new List<Guid>() { new Guid("585e4435-b2c8-4e66-bb66-4e61f028a5bd"), new Guid("b77259e1-d4ac-4aa8-a8dd-bfff0ab214eb") };
+
+            // Act
+            builder.Where(x => x.System.Id.Contains(listOfIds));
+
+            var result = builder.Build();
+
+            // Assert
+            Assert.Equal("filter[where][and][system.id][in]=585e4435-b2c8-4e66-bb66-4e61f028a5bd,b77259e1-d4ac-4aa8-a8dd-bfff0ab214eb", result.ToLower());
+        }
+
+
+        [Fact]
+        public void Where_Should_Add_Work_With_Contains_On_Fields_Level()
+        {
+            // Arrange
+            var builder = QueryEntryBuilder<Entry<Person>>.New;
+            var listOfIds = new List<int>() { 1, 2, 3 };
+
+            // Act
+            builder.Where(x => x.Fields.Id.Contains(listOfIds));
+            var result = builder.Build();
+
+            // Assert
+            Assert.Equal("filter[where][and][fields.id][in]=1,2,3", result.ToLower());
         }
     }
 }

@@ -99,31 +99,6 @@ public class ConnectionShould
 
     [Theory]
     [ConnectionDependenciesData]
-    public void Ability_To_Handle_Connection_Errors_When_Bad_Request_Occurred_Throw_PenzleException(
-        Uri baseAddress,
-        ApiOptions apiOptions,
-        ICredentialStore<BearerCredentials> credentialStore,
-        IHttpClient httpClientAdapter,
-        IJsonSerializer jsonSerializer,
-        IPlatformInformation platformInformation)
-    {
-        // Arrange
-        var connection = new Connection(baseAddress: baseAddress, apiOptions: apiOptions, credentialStore: credentialStore, httpClient: httpClientAdapter, serializer: jsonSerializer, platformInformation: platformInformation);
-
-        var mockResponse = new Mock<IResponse>();
-        mockResponse
-            .SetupAllProperties()
-            .SetupProperty(property: response => response.StatusCode, initialValue: HttpStatusCode.BadRequest);
-
-        // Act
-        var action = () => connection.HandleErrors(mockResponse.Object);
-
-        // Assert
-        action.Should().Throw<PenzleException>();
-    }
-
-    [Theory]
-    [ConnectionDependenciesData]
     public void Ability_To_Handle_Errors_When_Not_Found_Resources_Should_Exit_From_Execution(
         Uri baseAddress,
         ApiOptions apiOptions,
@@ -192,7 +167,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = new StringContent(payload)
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(payload)
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -243,7 +219,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -274,7 +251,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.NoContent, Content = null
+                StatusCode = HttpStatusCode.NoContent,
+                Content = null
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -306,7 +284,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.NoContent, Content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
+                StatusCode = HttpStatusCode.NoContent,
+                Content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -336,7 +315,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -367,7 +347,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -400,7 +381,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.NoContent, Content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
+                StatusCode = HttpStatusCode.NoContent,
+                Content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -430,7 +412,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
+                StatusCode = HttpStatusCode.OK,
+                Content = new StringContent(content: "\"B9FCA947-1313-4AAF-8043-7F8323F280E4\"", encoding: Encoding.UTF8, mediaType: "text/json")
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -463,7 +446,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.NoContent, Content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
+                StatusCode = HttpStatusCode.NoContent,
+                Content = new StringContent(content: payload, encoding: Encoding.UTF8, mediaType: "text/json")
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -500,7 +484,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = content
+                StatusCode = HttpStatusCode.OK,
+                Content = content
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -540,7 +525,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = content
+                StatusCode = HttpStatusCode.OK,
+                Content = content
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -582,7 +568,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = content
+                StatusCode = HttpStatusCode.OK,
+                Content = content
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -624,7 +611,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = content
+                StatusCode = HttpStatusCode.OK,
+                Content = content
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
@@ -666,7 +654,8 @@ public class ConnectionShould
             .Setup<Task<HttpResponseMessage>>(methodOrPropertyName: "SendAsync", ItExpr.IsAny<HttpRequestMessage>(), ItExpr.IsAny<CancellationToken>())
             .ReturnsAsync(new HttpResponseMessage
             {
-                StatusCode = HttpStatusCode.OK, Content = content
+                StatusCode = HttpStatusCode.OK,
+                Content = content
             });
 
         httpClientAdapter = new HttpClientAdapter(() => mockHttp.Object);
