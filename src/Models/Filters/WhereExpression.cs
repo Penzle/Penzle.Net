@@ -203,7 +203,6 @@ namespace Penzle.Core.Models.Filters
             if (memberExpression.Member is PropertyInfo property)
             {
                 var fullName = GetFullPropertyName(memberExpression).ToLower();
-                fullName = fullName.StartsWith("fields.") ? fullName.Substring("fields.".Length) : fullName;
                 var propertyName = string.Format(RqlFromat, fullName);
 
                 if (isUnary && memberExpression.Type == typeof(bool))
